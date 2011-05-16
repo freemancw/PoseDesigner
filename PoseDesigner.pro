@@ -14,7 +14,6 @@ LIBS += -L"C:/Program Files (x86)/OpenNI/Lib" -lopenNI
 
 INCLUDEPATH += "C:/Program Files (x86)/OpenNI/Include"
 
-
 SOURCES +=\
     GLWidget.cpp \
     Main.cpp \
@@ -37,3 +36,11 @@ HEADERS  += \
 FORMS    += mainwindow.ui \
     kinectoptionsdialog.ui \
     aboutdialog.ui
+
+RESOURCES += \
+    resources.qrc
+
+OTHER_FILES += \
+    iconresource.rc
+
+RC_FILE = iconresource.rc

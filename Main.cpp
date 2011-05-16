@@ -15,7 +15,6 @@ Created:    May 13, 2011
 #include <MainWindow.h>
 #include <KinectInfo.h>
 
-static const char* splashImage = "C:/Users/Clinton/Desktop/Splash.bmp";
 static const char* splashText  = "Initializing Kinect...";
 
 int main(int argc, char *argv[])
@@ -24,7 +23,7 @@ int main(int argc, char *argv[])
     //QApplication::setStyle(new QCleanlooksStyle);
 
     // create splash screen and show it
-    QPixmap pixmap(splashImage);
+    QPixmap pixmap(":/images/gui/splash/splash.bmp");
     QSplashScreen splash(pixmap);
     splash.show();
     splash.showMessage(splashText, Qt::AlignBottom | Qt::AlignLeft);

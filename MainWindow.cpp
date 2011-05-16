@@ -125,6 +125,7 @@ void MainWindow::on_buttonRemoveSample_clicked()
 {
     QListWidget *lw = this->ui->listWidget;
     lw->takeItem(lw->row(lw->currentItem()));
+    samples.pop_back();
 }
 
 void MainWindow::on_buttonCalculate_clicked()

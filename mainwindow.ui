@@ -260,8 +260,8 @@
        <string>...</string>
       </property>
       <property name="icon">
-       <iconset>
-        <normaloff>../../Users/Clinton/Desktop/add.png</normaloff>../../Users/Clinton/Desktop/add.png</iconset>
+       <iconset resource="resources.qrc">
+        <normaloff>:/images/gui/icons/add.png</normaloff>:/images/gui/icons/add.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -300,8 +300,8 @@
        <string>Set Timer</string>
       </property>
       <property name="icon">
-       <iconset>
-        <normaloff>../../Users/Clinton/Desktop/timer.png</normaloff>../../Users/Clinton/Desktop/timer.png</iconset>
+       <iconset resource="resources.qrc">
+        <normaloff>:/images/gui/icons/timer.png</normaloff>:/images/gui/icons/timer.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -323,8 +323,8 @@
        <string>...</string>
       </property>
       <property name="icon">
-       <iconset>
-        <normaloff>../../Users/Clinton/Desktop/remove.png</normaloff>../../Users/Clinton/Desktop/remove.png</iconset>
+       <iconset resource="resources.qrc">
+        <normaloff>:/images/gui/icons/remove.png</normaloff>:/images/gui/icons/remove.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -346,8 +346,8 @@
        <string>Recalculate</string>
       </property>
       <property name="icon">
-       <iconset>
-        <normaloff>../../Users/Clinton/Desktop/math.png</normaloff>../../Users/Clinton/Desktop/math.png</iconset>
+       <iconset resource="resources.qrc">
+        <normaloff>:/images/gui/icons/math.png</normaloff>:/images/gui/icons/math.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -369,8 +369,8 @@
        <string>Kinect Settings</string>
       </property>
       <property name="icon">
-       <iconset>
-        <normaloff>../../Users/Clinton/Desktop/kinect.png</normaloff>../../Users/Clinton/Desktop/kinect.png</iconset>
+       <iconset resource="resources.qrc">
+        <normaloff>:/images/gui/icons/kinect.png</normaloff>:/images/gui/icons/kinect.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -454,8 +454,8 @@
   </widget>
   <action name="actionCapture">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/open.png</normaloff>../../Users/Clinton/Desktop/open.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/open.png</normaloff>:/images/gui/icons/open.png</iconset>
    </property>
    <property name="text">
     <string>Open</string>
@@ -469,8 +469,8 @@
   </action>
   <action name="actionSaveAs">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/saveas.png</normaloff>../../Users/Clinton/Desktop/saveas.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/saveas.png</normaloff>:/images/gui/icons/saveas.png</iconset>
    </property>
    <property name="text">
     <string>Save As...</string>
@@ -481,8 +481,8 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/save.png</normaloff>../../Users/Clinton/Desktop/save.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/save.png</normaloff>:/images/gui/icons/save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -496,8 +496,8 @@
   </action>
   <action name="actionNew">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/new.png</normaloff>../../Users/Clinton/Desktop/new.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/new.png</normaloff>:/images/gui/icons/new.png</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -511,8 +511,8 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/exit.png</normaloff>../../Users/Clinton/Desktop/exit.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/exit.png</normaloff>:/images/gui/icons/exit.png</iconset>
    </property>
    <property name="text">
     <string>Exit</string>
@@ -523,8 +523,8 @@
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/undo.png</normaloff>../../Users/Clinton/Desktop/undo.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/undo.png</normaloff>:/images/gui/icons/undo.png</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
@@ -538,8 +538,8 @@
   </action>
   <action name="actionCopy">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/copy.png</normaloff>../../Users/Clinton/Desktop/copy.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/copy.png</normaloff>:/images/gui/icons/copy.png</iconset>
    </property>
    <property name="text">
     <string>Copy</string>
@@ -553,8 +553,8 @@
   </action>
   <action name="actionCut">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/cut.png</normaloff>../../Users/Clinton/Desktop/cut.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/cut.png</normaloff>:/images/gui/icons/cut.png</iconset>
    </property>
    <property name="text">
     <string>Cut</string>
@@ -568,8 +568,8 @@
   </action>
   <action name="actionPaste">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/paste.png</normaloff>../../Users/Clinton/Desktop/paste.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/paste.png</normaloff>:/images/gui/icons/paste.png</iconset>
    </property>
    <property name="text">
     <string>Paste</string>
@@ -583,8 +583,8 @@
   </action>
   <action name="actionDelete">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/delete.png</normaloff>../../Users/Clinton/Desktop/delete.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/delete.png</normaloff>:/images/gui/icons/delete.png</iconset>
    </property>
    <property name="text">
     <string>Delete</string>
@@ -598,8 +598,8 @@
   </action>
   <action name="actionRedo">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/redo.png</normaloff>../../Users/Clinton/Desktop/redo.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/redo.png</normaloff>:/images/gui/icons/redo.png</iconset>
    </property>
    <property name="text">
     <string>Redo</string>
@@ -613,8 +613,8 @@
   </action>
   <action name="actionSelect_All">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/selectall.png</normaloff>../../Users/Clinton/Desktop/selectall.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/selectall.png</normaloff>:/images/gui/icons/selectall.png</iconset>
    </property>
    <property name="text">
     <string>Select All</string>
@@ -628,8 +628,8 @@
   </action>
   <action name="actionAbout_PoseDesigner">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/information.png</normaloff>../../Users/Clinton/Desktop/information.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/information.png</normaloff>:/images/gui/icons/information.png</iconset>
    </property>
    <property name="text">
     <string>About PoseDesigner</string>
@@ -640,8 +640,8 @@
   </action>
   <action name="actionPoseDesigner_Help">
    <property name="icon">
-    <iconset>
-     <normaloff>../../Users/Clinton/Desktop/question.png</normaloff>../../Users/Clinton/Desktop/question.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/images/gui/icons/question.png</normaloff>:/images/gui/icons/question.png</iconset>
    </property>
    <property name="text">
     <string>PoseDesigner Help</string>
@@ -660,7 +660,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
  <designerdata>
   <property name="gridDeltaX">

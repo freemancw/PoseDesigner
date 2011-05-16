@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>gui/icons/add.png</file>
+        <file>gui/icons/copy.png</file>
+        <file>gui/icons/cut.png</file>
+        <file>gui/icons/delete.png</file>
+        <file>gui/icons/exit.png</file>
+        <file>gui/icons/information.png</file>
+        <file>gui/icons/kinect.png</file>
+        <file>gui/icons/logo.png</file>
+        <file>gui/icons/math.png</file>
+        <file>gui/icons/new.png</file>
+        <file>gui/icons/open.png</file>
+        <file>gui/icons/paste.png</file>
+        <file>gui/icons/question.png</file>
+        <file>gui/icons/redo.png</file>
+        <file>gui/icons/remove.png</file>
+        <file>gui/icons/save.png</file>
+        <file>gui/icons/saveas.png</file>
+        <file>gui/icons/selectall.png</file>
+        <file>gui/icons/timer.png</file>
+        <file>gui/icons/undo.png</file>
+        <file>gui/splash/splash.bmp</file>
+    </qresource>
+</RCC>

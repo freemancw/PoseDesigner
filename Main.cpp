@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     //QApplication::setStyle(new QCleanlooksStyle);
 
     // create splash screen and show it
-    QPixmap pixmap(":/images/gui/splash/splash.bmp");
+    QPixmap pixmap(":/images/gui/splash/splash.png");
     QSplashScreen splash(pixmap);
     splash.show();
     splash.showMessage(splashText, Qt::AlignBottom | Qt::AlignLeft);

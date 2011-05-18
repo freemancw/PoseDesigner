@@ -20,6 +20,7 @@
         <file>gui/icons/selectall.png</file>
         <file>gui/icons/timer.png</file>
         <file>gui/icons/undo.png</file>
-        <file>gui/splash/splash.bmp</file>
+        <file>gui/logos/posedesigner.png</file>
+        <file>gui/splash/splash.png</file>
     </qresource>
 </RCC>

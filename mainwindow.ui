@@ -21,8 +21,8 @@
    <string>untitled.pose - PoseDesigner</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>../../Users/Clinton/Desktop/logo.png</normaloff>../../Users/Clinton/Desktop/logo.png</iconset>
+   <iconset resource="resources.qrc">
+    <normaloff>:/images/gui/logos/posedesigner.png</normaloff>:/images/gui/logos/posedesigner.png</iconset>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -62,7 +62,7 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>0</y>
+            <y>-166</y>
             <width>451</width>
             <height>842</height>
            </rect>
@@ -169,74 +169,109 @@
              <property name="alternatingRowColors">
               <bool>true</bool>
              </property>
+             <property name="gridStyle">
+              <enum>Qt::SolidLine</enum>
+             </property>
              <property name="sortingEnabled">
               <bool>true</bool>
              </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
              <property name="rowCount">
-              <number>16</number>
+              <number>0</number>
              </property>
              <property name="columnCount">
-              <number>9</number>
+              <number>15</number>
              </property>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
-             <row/>
+             <attribute name="horizontalHeaderCascadingSectionResizes">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>120</number>
+             </attribute>
+             <attribute name="horizontalHeaderMinimumSectionSize">
+              <number>50</number>
+             </attribute>
+             <attribute name="horizontalHeaderStretchLastSection">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="verticalHeaderDefaultSectionSize">
+              <number>30</number>
+             </attribute>
              <column>
               <property name="text">
-               <string>Left Shoulder</string>
+               <string>Neck to Head</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Left Elbow</string>
+               <string>Shoulder to Shoulder</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Left Hip</string>
+               <string>Hip to Hip</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Left Knee</string>
+               <string>(L) Shoulder to Elbow</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Waist</string>
+               <string>(L) Elbow to Hand</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Right Shoulder</string>
+               <string>(L) Shoulder to Waist</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Right Elbow</string>
+               <string>(L) Waist to Hip</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Right Hip</string>
+               <string>(L) Hip to Knee</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Right Knee</string>
+               <string>(L) Knee to Foot</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Shoulder to Elbow</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Elbow to Hand</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Shoulder to Waist</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Waist to Hip</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Hip to Knee</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Knee to Foot</string>
               </property>
              </column>
             </widget>

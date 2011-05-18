@@ -22,7 +22,8 @@ SOURCES +=\
     KinectDrawer.cpp \
     KinectOptionsDialog.cpp \
     PoseSample.cpp \
-    AboutDialog.cpp
+    AboutDialog.cpp \
+    Vector3.cpp
 
 HEADERS  += \
     GLWidget.h \
@@ -31,7 +32,8 @@ HEADERS  += \
     KinectDrawer.h \
     KinectOptionsDialog.h \
     PoseSample.h \
-    AboutDialog.h
+    AboutDialog.h \
+    Vector3.h
 
 FORMS    += mainwindow.ui \
     kinectoptionsdialog.ui \
@@ -41,6 +43,7 @@ RESOURCES += \
     resources.qrc
 
 OTHER_FILES += \
-    iconresource.rc
+    iconresource.rc \
+    tasklist.tasks
 
 RC_FILE = iconresource.rc

@@ -24,6 +24,7 @@ Created:    May 13, 2011
 #include <AboutDialog.h>
 #include <ui_mainwindow.h>
 #include <KinectDrawer.h>
+#include <KinectInfo.h>
 #include <PoseSample.h>
 
 static std::vector<PoseSample> samples;
@@ -73,6 +74,7 @@ void MainWindow::on_buttonTakeSample_clicked()
     // first, grab relevant portion of GLWidget framebuffer, this is important
     // to do first because a person who is timing themselves won't be able to
     // hit confirm and have his image saved correctly
+    PoseSample newSample;
     GLWidget *kw = ui->kinectWidget;
     QImage image;
 
@@ -81,15 +83,25 @@ void MainWindow::on_buttonTakeSample_clicked()
                                        (kw->height() - side) / 2,
                                        side, side);
 
-    bool accept;
+    xn::SkeletonCapability sc = ki.userGenerator.GetSkeletonCap();
+    if(sc.IsTracking(1))
+    {
+        // this only works because it's contiguous
+        XnSkeletonJoint j;
+        for(int i = XN_SKEL_HEAD; i <= XN_SKEL_RIGHT_FOOT; i++)
+        {
+            j = (XnSkeletonJoint)i;
+            sc.GetSkeletonJointPosition(1, j, newSample.getJPositions()[j]);
+        }
+        newSample.calculateVectors();
+    }
 
+    bool accept;
     QString text = QInputDialog::getText(this, tr("New Sample"),
                                          tr("Sample name:"), QLineEdit::Normal,
                                          "New Sample", &accept);
     if(accept && !text.isEmpty())
     {
-        PoseSample newSample;
-
         // then set name and pass in image
         newSample.setName(text.toStdString());
         newSample.setImage(image);
@@ -100,6 +112,49 @@ void MainWindow::on_buttonTakeSample_clicked()
         QListWidgetItem *wi = new QListWidgetItem(text, ui->listWidget);
         //wi->setFlags(wi->flags() | Qt::ItemIsEditable);
         ui->listWidget->addItem(wi);
+
+
+        int row = ui->tableWidget->rowCount();
+        int col = 0;
+
+        // init the row
+        ui->tableWidget->insertRow(row);
+        ui->tableWidget->setVerticalHeaderItem(row, new QTableWidgetItem(text));
+
+
+        QTableWidgetItem *newItem;
+        SkeletonVector sv;
+        for(col = 0; col <= R_KNEE_FOOT; col++)
+        {
+            sv = (SkeletonVector)col;
+            newItem = new QTableWidgetItem
+            (QString::fromStdString(newSample.getJVector(sv).toString()));
+            ui->tableWidget->setItem(row, col, newItem);
+        }
+        /*
+        newItem = new QTableWidgetItem
+        (QString::fromStdString(newSample.getJVector(NECK_HEAD).toString()));
+        ui->tableWidget->setItem(row, col++, newItem);
+
+        newItem = new QTableWidgetItem
+        (QString::fromStdString(newSample.getJVector(SHOULDER_SHOULDER).toString()));
+        ui->tableWidget->setItem(row, col++, newItem);
+
+        newItem = new QTableWidgetItem
+        (QString::fromStdString(newSample.getJVector(HIP_HIP).toString()));
+        ui->tableWidget->setItem(row, col++, newItem);
+
+        newItem = new QTableWidgetItem
+        (QString::fromStdString(newSample.getJVector(L_SHOULDER_ELBOW).toString()));
+        ui->tableWidget->setItem(row, col++, newItem);
+
+        newItem = new QTableWidgetItem
+        (QString::fromStdString(newSample.getJVector(L_ELBOW_HAND).toString()));
+        ui->tableWidget->setItem(row, col++, newItem);
+
+        for()
+        */
+
         samples.push_back(newSample);
     }
 }
@@ -123,9 +178,14 @@ void MainWindow::on_buttonTakeSampleTimer_clicked()
 
 void MainWindow::on_buttonRemoveSample_clicked()
 {
+    // TODO: need check here to make sure something is actually selected
+    // in the list widget
     QListWidget *lw = this->ui->listWidget;
     lw->takeItem(lw->row(lw->currentItem()));
+    ui->tableWidget->removeRow(samples.size()-1);
+   // qDebug("%d", samples.size());
     samples.pop_back();
+   // qDebug("%d", samples.size());
 }
 
 void MainWindow::on_buttonCalculate_clicked()

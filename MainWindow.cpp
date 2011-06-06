@@ -19,7 +19,6 @@ Created:    May 13, 2011
 // local
 #include <MainWindow.h>
 #include <ui_mainwindow.h>
-
 #include <KinectOptionsDialog.h>
 #include <AboutDialog.h>
 #include <HelpDialog.h>
@@ -29,16 +28,22 @@ Created:    May 13, 2011
 #include <Pose.h>
 #include <PoseSample.h>
 
-static Pose currentPose;
+static Pose currentPose; // this needs to change
+static KinectInfo* kinectInfo;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    initKinect();
+
+    kinectInfo = KinectInfo::getInstance();
+
     ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
+    KinectInfo::destroyInstance();
     delete ui;
 }
 

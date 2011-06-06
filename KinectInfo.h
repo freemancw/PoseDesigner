@@ -36,6 +36,34 @@ private:
     XnBool bQuit;
     XnBool bConnected;
 
+    // actual callbacks
+    void userNewUser
+    (xn::UserGenerator& generator, XnUserID nId, void* pCookie);
+    void userLostUser
+    (xn::UserGenerator& generator, XnUserID nId, void* pCookie);
+    void userPoseDetected
+    (xn::PoseDetectionCapability& capability, const XnChar* strPose,
+     XnUserID nId, void* pCookie);
+    void userCalibrationStart
+    (xn::SkeletonCapability& capability, XnUserID nId, void* pCookie);
+    void userCalibrationEnd
+    (xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess,
+     void* pCookie);
+
+    // wrappers
+    friend void __stdcall userNewUser
+    (xn::UserGenerator& generator, XnUserID nId, void* pCookie);
+    friend void __stdcall userLostUser
+    (xn::UserGenerator& generator, XnUserID nId, void* pCookie);
+    friend void __stdcall userPoseDetected
+    (xn::PoseDetectionCapability& capability, const XnChar* strPose,
+     XnUserID nId, void* pCookie);
+    friend void __stdcall userCalibrationStart
+    (xn::SkeletonCapability& capability, XnUserID nId, void* pCookie);
+    friend void __stdcall userCalibrationEnd
+    (xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess,
+     void* pCookie);
+
 public:
     // getters
     inline xn::Context& getContext() { return context; }
@@ -66,9 +94,11 @@ public:
     inline void setConnected(XnBool b) { bConnected = b; }
 
     static KinectInfo* getInstance();
+    static void destroyInstance();
 
 protected:
     KinectInfo();
+    ~KinectInfo();
 };
 
 

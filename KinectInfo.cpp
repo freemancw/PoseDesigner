@@ -209,6 +209,11 @@ KinectInfo::KinectInfo()
     // do stuff
 }
 
+KinectInfo::~KinectInfo()
+{
+    // undo stuff
+}
+
 KinectInfo* KinectInfo::instance = NULL;
 
 KinectInfo* KinectInfo::getInstance()
@@ -217,6 +222,11 @@ KinectInfo* KinectInfo::getInstance()
         instance = new KinectInfo();
 
     return instance;
+}
+
+void KinectInfo::destroyInstance()
+{
+    delete instance;
 }
 
 

@@ -21,18 +21,15 @@ int main(int argc, char *argv[])
 {
     QApplication pdApp(argc, argv);
 
-    QPixmap pixmap(":/images/gui/splash/splash.png");
-    QSplashScreen splash(pixmap);
+    QPixmap splashGraphic(":/images/gui/splash/splash.png");
+    QSplashScreen splash(splashGraphic);
     splash.show();
     splash.showMessage(splashText, Qt::AlignBottom | Qt::AlignLeft, Qt::white);
-
-    pdApp.processEvents();
-
-    initKinect();
 
     MainWindow pdWindow;
     pdWindow.showMaximized();
 
     splash.finish(&pdWindow);
+
     return pdApp.exec();
 }

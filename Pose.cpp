@@ -14,7 +14,6 @@ Created:    May 19, 2011
 // local
 #include <Pose.h>
 #include <PoseSample.h>
-
 #include <Vector3.h>
 
 void Pose::calculateStatistics()

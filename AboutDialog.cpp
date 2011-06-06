@@ -7,8 +7,8 @@ Created:    May 15, 2011
 */
 
 // local
-#include "AboutDialog.h"
-#include "ui_aboutdialog.h"
+#include <AboutDialog.h>
+#include <ui_aboutdialog.h>
 
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent),

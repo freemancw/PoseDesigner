@@ -29,7 +29,6 @@ public:
 private slots:
     void on_actionPoseDesigner_Help_triggered();
     void on_actionAbout_PoseDesigner_triggered();
-
     void on_buttonTakeSample_clicked();
     void on_buttonTakeSampleTimer_clicked();
     void on_buttonRemoveSample_clicked();

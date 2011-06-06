@@ -27,9 +27,7 @@ public:
 
 private slots:
     void on_drawBackground_toggled(bool checked);
-
     void on_drawSkeleton_toggled(bool checked);
-
     void on_drawPixels_toggled(bool checked);
 
 private:

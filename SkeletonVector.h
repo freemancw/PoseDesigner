@@ -9,7 +9,7 @@ Created:    May 20, 2011
 #ifndef SKELETONVECTOR_H
 #define SKELETONVECTOR_H
 
-typedef enum
+enum SkeletonVector
 {
     NECK_HEAD,
     SHOULDER_SHOULDER,
@@ -27,8 +27,7 @@ typedef enum
     R_HIP_KNEE,
     R_KNEE_FOOT,
     SKEL_VEC_MAX
-}
-SkeletonVector;
+};
 
 // perhaps change this at some point to look the same as the OpenNI stuff,
 // since we cant change those enums... i.e. don't use a MAX value to stop,

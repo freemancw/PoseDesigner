@@ -14,7 +14,7 @@ Created:    May 14, 2011
 #include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
 
-typedef struct
+struct kinectInfo_t
 {
     xn::Context context;
     xn::DepthGenerator depthGenerator;
@@ -32,8 +32,7 @@ typedef struct
     XnBool bRecord;
     XnBool bQuit;
     XnBool bConnected;
-}
-kinectInfo_t;
+};
 
 extern kinectInfo_t ki;
 

@@ -7,8 +7,8 @@ Created:    May 15, 2011
 */
 
 // local
-#include "KinectOptionsDialog.h"
-#include "ui_kinectoptionsdialog.h"
+#include <KinectOptionsDialog.h>
+#include <ui_kinectoptionsdialog.h>
 
 #include <KinectInfo.h>
 

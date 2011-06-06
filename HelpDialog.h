@@ -1,9 +1,19 @@
+/*
+===============================================================================
+File:       HelpDialog.h
+Author:     Clinton Freeman
+Created:    June 6, 2011
+===============================================================================
+*/
+
 #ifndef HELPDIALOG_H
 #define HELPDIALOG_H
 
+// Qt
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
     class HelpDialog;
 }
 

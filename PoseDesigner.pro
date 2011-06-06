@@ -50,6 +50,7 @@ RESOURCES += \
 
 OTHER_FILES += \
     iconresource.rc \
-    tasklist.tasks
+    tasklist.tasks \
+    posedesigner.ico
 
 RC_FILE = iconresource.rc

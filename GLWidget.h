@@ -9,6 +9,7 @@ Created:    May 13, 2011
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
+// Qt
 #include <QGLWidget>
 
 class GLWidget : public QGLWidget
@@ -30,4 +31,4 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
 };
 
-#endif
+#endif // GLWIDGET_H

@@ -62,9 +62,9 @@
           <property name="geometry">
            <rect>
             <x>0</x>
-            <y>-166</y>
+            <y>0</y>
             <width>451</width>
-            <height>842</height>
+            <height>676</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -137,9 +137,9 @@
             </layout>
            </item>
            <item>
-            <widget class="QLabel" name="label_3">
+            <widget class="QLabel" name="sampleData">
              <property name="text">
-              <string>Sample Statistics</string>
+              <string>Sample Data</string>
              </property>
             </widget>
            </item>
@@ -154,7 +154,7 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>522</height>
+               <height>0</height>
               </size>
              </property>
              <property name="verticalScrollBarPolicy">
@@ -199,6 +199,111 @@
              <attribute name="verticalHeaderDefaultSectionSize">
               <number>30</number>
              </attribute>
+             <column>
+              <property name="text">
+               <string>Neck to Head</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Shoulder to Shoulder</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Hip to Hip</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(L) Shoulder to Elbow</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(L) Elbow to Hand</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(L) Shoulder to Waist</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(L) Waist to Hip</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(L) Hip to Knee</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(L) Knee to Foot</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Shoulder to Elbow</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Elbow to Hand</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Shoulder to Waist</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Waist to Hip</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Hip to Knee</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>(R) Knee to Foot</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="sampleStats">
+             <property name="text">
+              <string>Sample Statistics</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="statsWidget">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <attribute name="horizontalHeaderDefaultSectionSize">
+              <number>120</number>
+             </attribute>
+             <row>
+              <property name="text">
+               <string>Mean</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Standard Deviation</string>
+              </property>
+             </row>
              <column>
               <property name="text">
                <string>Neck to Head</string>
@@ -444,6 +549,9 @@
      <bold>false</bold>
      <kerning>true</kerning>
     </font>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">

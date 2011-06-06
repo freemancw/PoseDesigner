@@ -9,10 +9,10 @@ Created:    May 15, 2011
 #ifndef KINECTDRAWER_H
 #define KINECTDRAWER_H
 
-// Qt includes
+// Qt
 #include <QtOpenGL>
 
-// OpenNI includes
+// OpenNI
 #include <XnCppWrapper.h>
 
 extern char* pDepthTexBuf;

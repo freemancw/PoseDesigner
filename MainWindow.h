@@ -9,6 +9,7 @@ Created:    May 13, 2011
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+// Qt
 #include <QtGui>
 #include <QMainWindow>
 
@@ -30,13 +31,9 @@ private slots:
     void on_actionAbout_PoseDesigner_triggered();
 
     void on_buttonTakeSample_clicked();
-
     void on_buttonTakeSampleTimer_clicked();
-
     void on_buttonRemoveSample_clicked();
-
     void on_buttonCalculate_clicked();
-
     void on_buttonKinectSettings_clicked();
 
     void on_listWidget_currentItemChanged

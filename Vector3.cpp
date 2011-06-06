@@ -6,6 +6,7 @@ Created: 	May 7, 2011
 ===============================================================================
 */
 
+// local
 #include <Vector3.h>
 
 const Vector3 Vector3::XAXIS = Vector3(1.0, 0.0, 0.0);

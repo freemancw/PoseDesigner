@@ -6,10 +6,10 @@ Created:    May 14, 2011
 ===============================================================================
 */
 
-// Qt includes
+// Qt
 #include <QDebug>
 
-// local includes
+// local
 #include <KinectInfo.h>
 
 kinectInfo_t ki;
@@ -68,11 +68,13 @@ void initKinect()
         XnChar strError[1024];
         errors.ToString(strError, 1024);
         qDebug("%s\n", strError);
+        ki.bConnected = false;
         return;
     }
     else if(nRetVal != XN_STATUS_OK)
     {
         qDebug("Open failed: %s\n", xnGetStatusString(nRetVal));
+        ki.bConnected = false;
         return;
     }
 
@@ -122,6 +124,7 @@ void initKinect()
 
     nRetVal = ki.context.StartGeneratingAll();
     CHECK_RC(nRetVal, "StartGenerating");
+    ki.bConnected = true;
 }
 
 /**

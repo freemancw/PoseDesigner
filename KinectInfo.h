@@ -9,6 +9,7 @@ Created:    May 14, 2011
 #ifndef KINECTINFO_H
 #define KINECTINFO_H
 
+// OpenNI
 #include <XnOpenNI.h>
 #include <XnCodecIDs.h>
 #include <XnCppWrapper.h>
@@ -30,6 +31,7 @@ typedef struct
     XnBool bPause;
     XnBool bRecord;
     XnBool bQuit;
+    XnBool bConnected;
 }
 kinectInfo_t;
 

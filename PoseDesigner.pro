@@ -23,7 +23,9 @@ SOURCES +=\
     KinectOptionsDialog.cpp \
     PoseSample.cpp \
     AboutDialog.cpp \
-    Vector3.cpp
+    Vector3.cpp \
+    Pose.cpp \
+    HelpDialog.cpp
 
 HEADERS  += \
     GLWidget.h \
@@ -33,11 +35,15 @@ HEADERS  += \
     KinectOptionsDialog.h \
     PoseSample.h \
     AboutDialog.h \
-    Vector3.h
+    Vector3.h \
+    Pose.h \
+    SkeletonVector.h \
+    HelpDialog.h
 
 FORMS    += mainwindow.ui \
     kinectoptionsdialog.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    helpdialog.ui
 
 RESOURCES += \
     resources.qrc

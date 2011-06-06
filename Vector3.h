@@ -9,10 +9,10 @@ Created: 	May 7, 2011
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
-// OpenNI includes
+// OpenNI
 #include <XnCppWrapper.h>
 
-// system includes
+// system
 #include <assert.h>
 #include <math.h>
 #include <string>

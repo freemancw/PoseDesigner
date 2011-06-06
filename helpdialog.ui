@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AboutDialog</class>
- <widget class="QDialog" name="AboutDialog">
+ <class>HelpDialog</class>
+ <widget class="QDialog" name="HelpDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>276</width>
-    <height>241</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About PoseDesigner</string>
+   <string>PoseDesigner Help</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2"/>
  </widget>
  <resources/>
  <connections/>

@@ -1,9 +1,19 @@
+/*
+===============================================================================
+File:       KinectOptionsDialog.h
+Author:     Clinton Freeman
+Created:    May 13, 2011
+===============================================================================
+*/
+
 #ifndef KINECTOPTIONSDIALOG_H
 #define KINECTOPTIONSDIALOG_H
 
+// Qt
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
     class KinectOptionsDialog;
 }
 

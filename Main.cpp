@@ -6,12 +6,12 @@ Created:    May 13, 2011
 ===============================================================================
 */
 
-// Qt includes
+// Qt
 #include <QtGui/QApplication>
 #include <QSplashScreen>
 #include <QCleanlooksStyle>
 
-// local includes
+// local
 #include <MainWindow.h>
 #include <KinectInfo.h>
 
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QPixmap pixmap(":/images/gui/splash/splash.png");
     QSplashScreen splash(pixmap);
     splash.show();
-    splash.showMessage(splashText, Qt::AlignBottom | Qt::AlignLeft);
+    splash.showMessage(splashText, Qt::AlignBottom | Qt::AlignLeft, Qt::white);
     pdApp.processEvents();
 
     // initialize connection with Kinect

@@ -9,40 +9,23 @@ Created:    May 16, 2011
 #ifndef POSESAMPLE_H
 #define POSESAMPLE_H
 
-// Qt includes
+// Qt
 #include <QtGui>
 
-// system includes
+// system
 #include <map>
 #include <string>
 
-// local includes
+// local
 #include <KinectInfo.h>
+#include <SkeletonVector.h>
 #include <Vector3.h>
 
-// all supposedly horizontal connections between joints are left-to-right.
-// all supposedly vertical connections between joints are down-to-up for the
-// upper body, and up-to-down for the lower body. it simply was too verbose
-// to put this information into the enum names
-typedef enum
+inline XnSkeletonJoint& operator++(XnSkeletonJoint& sj, int)
 {
-    NECK_HEAD,
-    SHOULDER_SHOULDER,
-    HIP_HIP,
-    L_SHOULDER_ELBOW,
-    L_ELBOW_HAND,
-    L_SHOULDER_WAIST,
-    L_WAIST_HIP,
-    L_HIP_KNEE,
-    L_KNEE_FOOT,
-    R_SHOULDER_ELBOW,
-    R_ELBOW_HAND,
-    R_SHOULDER_WAIST,
-    R_WAIST_HIP,
-    R_HIP_KNEE,
-    R_KNEE_FOOT
+    int temp = sj;
+    return sj = static_cast<XnSkeletonJoint>(++temp);
 }
-SkeletonVector;
 
 class PoseSample
 {

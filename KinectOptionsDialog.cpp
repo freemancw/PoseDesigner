@@ -1,3 +1,12 @@
+/*
+===============================================================================
+File:       KinectOptionsDialog.cpp
+Author:     Clinton Freeman
+Created:    May 15, 2011
+===============================================================================
+*/
+
+// local
 #include "KinectOptionsDialog.h"
 #include "ui_kinectoptionsdialog.h"
 

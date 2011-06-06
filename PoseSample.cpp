@@ -6,10 +6,10 @@ Created:    May 16, 2011
 ===============================================================================
 */
 
-// OpenNI includes
+// OpenNI
 #include <XnCppWrapper.h>
 
-// local includes
+// local
 #include <PoseSample.h>
 #include <Vector3.h>
 

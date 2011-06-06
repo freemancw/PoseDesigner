@@ -1,9 +1,19 @@
+/*
+===============================================================================
+File:       AboutDialog.h
+Author:     Clinton Freeman
+Created:    May 13, 2011
+===============================================================================
+*/
+
 #ifndef ABOUTDIALOG_H
 #define ABOUTDIALOG_H
 
+// Qt
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
     class AboutDialog;
 }
 

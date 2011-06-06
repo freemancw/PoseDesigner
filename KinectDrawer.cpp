@@ -6,13 +6,13 @@ Created:    May 15, 2011
 ===============================================================================
 */
 
-// Qt includes
+// Qt
 #include <QtOpenGL>
 
-// system includes
+// system
 #include <math.h>
 
-// local includes
+// local
 #include <KinectDrawer.h>
 #include <KinectInfo.h>
 
@@ -68,6 +68,9 @@ void KinectDrawer::drawFrame()
 
     xn::SceneMetaData sceneMD;
     xn::DepthMetaData depthMD;
+
+    if(!ki.bConnected)
+        return;
 
     ki.depthGenerator.GetMetaData(depthMD);
     this->setupProjection(depthMD.XRes(), depthMD.YRes());

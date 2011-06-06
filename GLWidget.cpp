@@ -6,12 +6,12 @@ Created:    May 13, 2011
 ===============================================================================
 */
 
-// Qt includes
+// Qt
 #include <QtGui>
 #include <QtOpenGL>
 #include <QTimer>
 
-// local includes
+// local
 #include <GLWidget.h>
 #include <KinectDrawer.h>
 

@@ -25,30 +25,15 @@ private:
 public:
     void calculateStatistics();
 
+    // getters
+    inline PoseSample& getSample(std::string name) { return samples[name]; }
+    inline PoseSample& getMean() { return mean; }
+    inline PoseSample& getStdDev() { return stddev; }
+
+    // setters/modifiers
     inline void addSample(std::string name, PoseSample& sample)
-    {
-        samples[name] = sample;
-    }
-
-    inline PoseSample& getSample(std::string name)
-    {
-        return samples[name];
-    }
-
-    inline void removeSample(std::string name)
-    {
-        samples.erase(name);
-    }
-
-    inline PoseSample& getMean()
-    {
-        return mean;
-    }
-
-    inline PoseSample& getStdDev()
-    {
-        return stddev;
-    }
+    { samples[name] = sample; }
+    inline void removeSample(std::string name) { samples.erase(name); }
 };
 
 #endif // POSE_H

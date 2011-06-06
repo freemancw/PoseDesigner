@@ -37,42 +37,20 @@ private:
     std::map<SkeletonVector, Vector3> jVectors;
 
 public:
-    inline std::string getName()
-    {
-        return name;
-    }
-
-    inline void setName(std::string& name)
-    {
-        this->name = name;
-    }
-
-    inline QImage getImage()
-    {
-        return image;
-    }
-
-    inline void setImage(QImage& image)
-    {
-        this->image = image;
-    }
-
-    inline std::map<XnSkeletonJoint, XnSkeletonJointPosition>& getJPositions()
-    {
-        return jPositions;
-    }
-
-    inline std::map<SkeletonVector, Vector3>& getJVectors()
-    {
-        return jVectors;
-    }
-
-    inline Vector3& getJVector(SkeletonVector v)
-    {
-        return jVectors[v];
-    }
-
     void calculateVectors();
+
+    // getters
+    inline std::string getName() { return name; }
+    inline QImage getImage() { return image; }
+    inline std::map<XnSkeletonJoint, XnSkeletonJointPosition>& getJPositions()
+    { return jPositions; }
+    inline std::map<SkeletonVector, Vector3>& getJVectors()
+    { return jVectors; }
+    inline Vector3& getJVector(SkeletonVector v) { return jVectors[v]; }
+
+    // setters
+    inline void setName(std::string& name) { this->name = name; }
+    inline void setImage(QImage& image) { this->image = image; }
 };
 
 #endif // POSESAMPLE_H

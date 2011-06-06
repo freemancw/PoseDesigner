@@ -197,3 +197,45 @@ static void __stdcall userCalibrationEnd
     }
 }
 
+
+
+
+
+
+// new class stuff
+
+KinectInfo::KinectInfo()
+{
+    // do stuff
+}
+
+KinectInfo* KinectInfo::instance = NULL;
+
+KinectInfo* KinectInfo::getInstance()
+{
+    if(instance == NULL)
+        instance = new KinectInfo();
+
+    return instance;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

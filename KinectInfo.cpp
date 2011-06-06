@@ -42,9 +42,6 @@ static void __stdcall userCalibrationEnd
 static const char * XMLPATH =
 "C:/Program Files (x86)/OpenNI/Data/SamplesConfig.xml";
 
-/**
- * Connect with device, register callbacks.
- */
 void initKinect()
 {
     // initialize config values
@@ -127,9 +124,6 @@ void initKinect()
     ki.bConnected = true;
 }
 
-/**
- * A new user is found.
- */
 static void __stdcall userNewUser
 (xn::UserGenerator& generator, XnUserID nId, void* pCookie)
 {
@@ -142,18 +136,12 @@ static void __stdcall userNewUser
         ki.userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
 }
 
-/**
- * A user is lost.
- */
 static void __stdcall userLostUser
 (xn::UserGenerator& generator, XnUserID nId, void* pCookie)
 {
     qDebug("Lost user %d\n", nId);
 }
 
-/**
- * A pose was detected for a certain user.
- */
 static void __stdcall userPoseDetected
 (xn::PoseDetectionCapability& capability, const XnChar* strPose,
  XnUserID nId, void* pCookie)
@@ -164,18 +152,12 @@ static void __stdcall userPoseDetected
     ki.userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
 }
 
-/**
- * Calibration has started for a certain user.
- */
 static void __stdcall userCalibrationStart
 (xn::SkeletonCapability& capability, XnUserID nId, void* pCookie)
 {
     qDebug("Calibration started for user %d\n", nId);
 }
 
-/**
- * Calibration either succeeded or failed for a certain user.
- */
 static void __stdcall userCalibrationEnd
 (xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess,
  void* pCookie)
@@ -206,14 +188,141 @@ static void __stdcall userCalibrationEnd
 
 KinectInfo::KinectInfo()
 {
-    // do stuff
+    // initialize config values
+    bNeedsPose = false;
+    bDrawBackground = true;
+    bDrawPixels = true;
+    bDrawSkeleton = true;
+    bPrintID = false;
+    bPrintState = false;
+    bPaused = false;
+    bRecording = false;
+    bQuit = false;
+
+    XnStatus nRetVal = XN_STATUS_OK;
+    xn::EnumerationErrors errors;
+
+    // attempt to initialize context
+    nRetVal = context.InitFromXmlFile(XMLPATH, &errors);
+    if(nRetVal == XN_STATUS_NO_NODE_PRESENT)
+    {
+        XnChar strError[1024];
+        errors.ToString(strError, 1024);
+        qDebug("%s\n", strError);
+        bConnected = false;
+        return;
+    }
+    else if(nRetVal != XN_STATUS_OK)
+    {
+        qDebug("Open failed: %s\n", xnGetStatusString(nRetVal));
+        bConnected = false;
+        return;
+    }
+
+    // attempt to initialize depth generator
+    nRetVal = context.FindExistingNode(XN_NODE_TYPE_DEPTH, depthGenerator);
+    CHECK_RC(nRetVal, "Find depth generator");
+
+    // attempt to initialize user generator
+    nRetVal = context.FindExistingNode(XN_NODE_TYPE_USER, userGenerator);
+    if(nRetVal != XN_STATUS_OK)
+    {
+        nRetVal = userGenerator.Create(context);
+        CHECK_RC(nRetVal, "Find user generator");
+    }
+
+    if (!userGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON))
+    {
+        qDebug("Supplied user generator doesn't support skeleton\n");
+        return;
+    }
+
+    // register callbacks
+    XnCallbackHandle hUserCallbacks, hCalibrationCallbacks, hPoseCallbacks;
+
+    userGenerator.RegisterUserCallbacks
+    (wrapNewUser, wrapLostUser, NULL, hUserCallbacks);
+
+    userGenerator.GetSkeletonCap().RegisterCalibrationCallbacks
+    (wrapCalibrationStart, wrapCalibrationEnd, NULL, hCalibrationCallbacks);
+
+    if(userGenerator.GetSkeletonCap().NeedPoseForCalibration())
+    {
+        bNeedsPose = true;
+        if(userGenerator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION))
+        {
+            qDebug("Pose required, but not supported\n");
+            return;
+        }
+
+        userGenerator.GetPoseDetectionCap().RegisterToPoseCallbacks
+        (wrapPoseDetected, NULL, NULL, hPoseCallbacks);
+        userGenerator.GetSkeletonCap().GetCalibrationPose(strPose);
+    }
+
+    userGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_ALL);
+
+    nRetVal = context.StartGeneratingAll();
+    CHECK_RC(nRetVal, "StartGenerating");
+    bConnected = true;
 }
 
-KinectInfo::~KinectInfo()
+KinectInfo::~KinectInfo(){}
+
+// actual callbacks
+void KinectInfo::newUser
+(xn::UserGenerator &generator, XnUserID nId, void *pCookie)
 {
-    // undo stuff
+    qDebug("New User %d\n", nId);
+
+    if(bNeedsPose)
+        userGenerator.GetPoseDetectionCap().StartPoseDetection(strPose, nId);
+    else
+        userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
 }
 
+void KinectInfo::lostUser
+(xn::UserGenerator &generator, XnUserID nId, void *pCookie)
+{
+    qDebug("Lost user %d\n", nId);
+}
+
+void KinectInfo::poseDetected
+(xn::PoseDetectionCapability &capability, const XnChar *strPose,
+ XnUserID nId, void *pCookie)
+{
+    qDebug("Pose %s detected for user %d\n", strPose, nId);
+
+    userGenerator.GetPoseDetectionCap().StopPoseDetection(nId);
+    userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
+}
+
+void KinectInfo::calibrationStart
+(xn::SkeletonCapability &capability, XnUserID nId, void *pCookie)
+{
+    qDebug("Calibration started for user %d\n", nId);
+}
+
+void KinectInfo::calibrationEnd
+(xn::SkeletonCapability &capability, XnUserID nId,
+ XnBool bSuccess, void *pCookie)
+{
+    if(bSuccess)
+    {
+        qDebug("Calibration complete, start tracking user %d\n", nId);
+        userGenerator.GetSkeletonCap().StartTracking(nId);
+    }
+    else
+    {
+        qDebug("Calibration failed for user %d\n", nId);
+        if(bNeedsPose)
+            userGenerator.GetPoseDetectionCap().StartPoseDetection(strPose, nId);
+        else
+            userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
+    }
+}
+
+// singleton stuff
 KinectInfo* KinectInfo::instance = NULL;
 
 KinectInfo* KinectInfo::getInstance()
@@ -227,6 +336,39 @@ KinectInfo* KinectInfo::getInstance()
 void KinectInfo::destroyInstance()
 {
     delete instance;
+}
+
+// dummy wrappers to pass to OpenNI callbacks, not very interesting
+static void __stdcall wrapNewUser
+(xn::UserGenerator& generator, XnUserID nId, void* pCookie)
+{
+    KinectInfo::getInstance()->newUser(generator, nId, pCookie);
+}
+
+static void __stdcall wrapLostUser
+(xn::UserGenerator& generator, XnUserID nId, void* pCookie)
+{
+    KinectInfo::getInstance()->lostUser(generator, nId, pCookie);
+}
+
+static void __stdcall wrapPoseDetected
+(xn::PoseDetectionCapability& capability, const XnChar* strPose,
+ XnUserID nId, void* pCookie)
+{
+    KinectInfo::getInstance()->poseDetected(capability, strPose, nId, pCookie);
+}
+
+static void __stdcall wrapCalibrationStart
+(xn::SkeletonCapability& capability, XnUserID nId, void* pCookie)
+{
+    KinectInfo::getInstance()->calibrationStart(capability, nId, pCookie);
+}
+
+static void __stdcall wrapCalibrationEnd
+(xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess,
+ void* pCookie)
+{
+    KinectInfo::getInstance()->calibrationEnd(capability, nId, bSuccess, pCookie);
 }
 
 

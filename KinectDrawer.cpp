@@ -254,25 +254,13 @@ void KinectDrawer::drawDepthMap
 
             xnOSMemSet(strLabel, 0, sizeof(strLabel));
             if(!ki.bPrintState)
-            {
-                // tracking
-                sprintf(strLabel, "%d", aUsers[i]);
-            }
+                sprintf_s(strLabel, "%d", aUsers[i]);
             else if(ki.userGenerator.GetSkeletonCap().IsTracking(aUsers[i]))
-            {
-                // tracking
-                sprintf(strLabel, "%d - Tracking", aUsers[i]);
-            }
+                sprintf_s(strLabel, "%d - Tracking", aUsers[i]);
             else if(ki.userGenerator.GetSkeletonCap().IsCalibrating(aUsers[i]))
-            {
-                // calibrating
-                sprintf(strLabel, "%d - Calibrating...", aUsers[i]);
-            }
+                sprintf_s(strLabel, "%d - Calibrating...", aUsers[i]);
             else
-            {
-                // nothing
-                sprintf(strLabel, "%d - Looking for pose", aUsers[i]);
-            }
+                sprintf_s(strLabel, "%d - Looking for pose", aUsers[i]);
 
             glColor4f(1.0 - Colors[i%nColors][0], 1.0 - Colors[i%nColors][1],
                       1.0 - Colors[i%nColors][2], 1.0);
@@ -323,7 +311,7 @@ void KinectDrawer::drawTexture
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
     glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
-    this->drawRectangle(topLeftX, topLeftY, bottomRightX, bottomRightY);
+    drawRectangle(topLeftX, topLeftY, bottomRightX, bottomRightY);
 
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }

@@ -49,12 +49,15 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_buttonTakeSample_clicked()
 {   
+    if(!ki.bConnected)
+        return;
+
     PoseSample newSample;
     QImage image;
-    GLWidget *kw;
+    //GLWidget *kw;
 
     // shorten expressions
-    kw = ui->kinectWidget;
+    GLWidget* kw = ui->kinectWidget;
 
     // first, grab relevant portion of GLWidget framebuffer. this is important
     // to do first because a person who is timing themselves won't be able to
@@ -121,6 +124,9 @@ void MainWindow::on_buttonTakeSample_clicked()
 
 void MainWindow::on_buttonTakeSampleTimer_clicked()
 {
+    if(!ki.bConnected)
+        return;
+
     bool accept;
     int time = QInputDialog::getInt(this, tr("Timed Sample"),
                                     tr("How long to wait:"),
@@ -138,6 +144,9 @@ void MainWindow::on_buttonTakeSampleTimer_clicked()
 
 void MainWindow::on_buttonRemoveSample_clicked()
 {
+    if(!ki.bConnected)
+        return;
+
     // TODO: need check here to make sure something is actually selected
     // in the list widget
     QListWidget *lw = ui->listWidget;
@@ -158,6 +167,9 @@ void MainWindow::on_buttonRemoveSample_clicked()
 
 void MainWindow::on_buttonCalculate_clicked()
 {
+    if(!ki.bConnected)
+        return;
+
     currentPose.calculateStatistics();
     // add a row in the table
     //int row = ui->statsWidget->rowCount();
@@ -184,6 +196,9 @@ void MainWindow::on_buttonCalculate_clicked()
 
 void MainWindow::on_buttonKinectSettings_clicked()
 {
+    if(!ki.bConnected)
+        return;
+
     KinectOptionsDialog *koDialog = new KinectOptionsDialog(this);
     koDialog->show();
 }
@@ -224,3 +239,15 @@ void MainWindow::on_actionAbout_PoseDesigner_triggered()
     aDialog->show();
 }
 
+
+void MainWindow::on_actionCapture_triggered()
+{
+    QFileDialog::getOpenFileName(this,
+        tr("Open Pose"), "./", tr("Pose Files (*.pose)"));
+}
+
+void MainWindow::on_actionSaveAs_triggered()
+{
+    QFileDialog::getSaveFileName(this,
+        tr("Save Pose As"), "./", tr("Pose Files (*.pose)"));
+}

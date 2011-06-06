@@ -38,6 +38,10 @@ private slots:
     void on_listWidget_currentItemChanged
     (QListWidgetItem* current, QListWidgetItem* previous);
 
+    void on_actionCapture_triggered();
+
+    void on_actionSaveAs_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

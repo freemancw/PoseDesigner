@@ -16,7 +16,6 @@ Created:    May 14, 2011
 
 class KinectInfo
 {
-private:
     static KinectInfo* instance;
 
     xn::Context context;
@@ -37,30 +36,30 @@ private:
     XnBool bConnected;
 
     // actual callbacks
-    void userNewUser
+    void newUser
     (xn::UserGenerator& generator, XnUserID nId, void* pCookie);
-    void userLostUser
+    void lostUser
     (xn::UserGenerator& generator, XnUserID nId, void* pCookie);
-    void userPoseDetected
+    void poseDetected
     (xn::PoseDetectionCapability& capability, const XnChar* strPose,
      XnUserID nId, void* pCookie);
-    void userCalibrationStart
+    void calibrationStart
     (xn::SkeletonCapability& capability, XnUserID nId, void* pCookie);
-    void userCalibrationEnd
+    void calibrationEnd
     (xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess,
      void* pCookie);
 
     // wrappers
-    friend void __stdcall userNewUser
+    friend void __stdcall wrapNewUser
     (xn::UserGenerator& generator, XnUserID nId, void* pCookie);
-    friend void __stdcall userLostUser
+    friend void __stdcall wrapLostUser
     (xn::UserGenerator& generator, XnUserID nId, void* pCookie);
-    friend void __stdcall userPoseDetected
+    friend void __stdcall wrapPoseDetected
     (xn::PoseDetectionCapability& capability, const XnChar* strPose,
      XnUserID nId, void* pCookie);
-    friend void __stdcall userCalibrationStart
+    friend void __stdcall wrapCalibrationStart
     (xn::SkeletonCapability& capability, XnUserID nId, void* pCookie);
-    friend void __stdcall userCalibrationEnd
+    friend void __stdcall wrapCalibrationEnd
     (xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess,
      void* pCookie);
 

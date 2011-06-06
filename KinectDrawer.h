@@ -31,6 +31,8 @@ private:
     void drawLimb
     (XnUserID user, XnSkeletonJoint joint1, XnSkeletonJoint joint2);
 
+    void drawSkeleton(XnUserID user);
+
     void drawDepthMap
     (const xn::DepthMetaData& dmd, const xn::SceneMetaData& smd);
 

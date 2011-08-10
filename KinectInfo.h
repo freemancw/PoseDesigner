@@ -100,6 +100,8 @@ protected:
     ~KinectInfo();
 };
 
+//extern KinectInfo* kinectInfo;
+
 
 struct kinectInfo_t
 {
@@ -121,8 +123,9 @@ struct kinectInfo_t
     XnBool bConnected;
 };
 
-extern kinectInfo_t ki;
+extern kinectInfo_t kinectInfo;
 
 void initKinect();
+
 
 #endif // KINECTINFO_H

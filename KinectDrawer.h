@@ -19,7 +19,6 @@ extern char* pDepthTexBuf;
 
 class KinectDrawer
 {
-private:
     GLuint initTexture(void** buf, int& width, int& height);
 
     void drawRectangle

@@ -69,26 +69,26 @@ void KinectDrawer::drawFrame()
     xn::SceneMetaData sceneMD;
     xn::DepthMetaData depthMD;
 
-    if(!ki.bConnected)
+    if(!kinectInfo.bConnected)
         return;
 
-    ki.depthGenerator.GetMetaData(depthMD);
-    this->setupProjection(depthMD.XRes(), depthMD.YRes());
+    kinectInfo.depthGenerator.GetMetaData(depthMD);
+    setupProjection(depthMD.XRes(), depthMD.YRes());
 
     glDisable(GL_TEXTURE_2D);
 
-    if(!ki.bPause)
+    if(!kinectInfo.bPause)
     {
         // read next available data
-        ki.context.WaitAndUpdateAll();
+        kinectInfo.context.WaitAndUpdateAll();
     }
 
     // process new data
-    ki.depthGenerator.GetMetaData(depthMD);
-    ki.userGenerator.GetUserPixels(0, sceneMD);
+    kinectInfo.depthGenerator.GetMetaData(depthMD);
+    kinectInfo.userGenerator.GetUserPixels(0, sceneMD);
 
-    this->setupModelview();
-    this->drawDepthMap(depthMD, sceneMD);
+    setupModelview();
+    drawDepthMap(depthMD, sceneMD);
 
     //glFlush();
 }
@@ -182,7 +182,7 @@ void KinectDrawer::drawDepthMap
 
     pDepth = dmd.Data();
 
-    if(ki.bDrawPixels)
+    if(kinectInfo.bDrawPixels)
     {
         XnUInt32 nIndex = 0;
 
@@ -195,7 +195,7 @@ void KinectDrawer::drawDepthMap
                 pDestImage[1] = 0;
                 pDestImage[2] = 0;
 
-                if(ki.bDrawBackground || *pLabels != 0)
+                if(kinectInfo.bDrawBackground || *pLabels != 0)
                 {
                     nValue = *pDepth;
                     XnLabel label = *pLabels;
@@ -243,21 +243,21 @@ void KinectDrawer::drawDepthMap
     char strLabel[50] = "";
     XnUserID aUsers[15];
     XnUInt16 nUsers = 15;
-    ki.userGenerator.GetUsers(aUsers, nUsers);
+    kinectInfo.userGenerator.GetUsers(aUsers, nUsers);
     for(int i = 0; i < nUsers; ++i)
     {
-        if(ki.bPrintID)
+        if(kinectInfo.bPrintID)
         {
             XnPoint3D com;
-            ki.userGenerator.GetCoM(aUsers[i], com);
-            ki.depthGenerator.ConvertRealWorldToProjective(1, &com, &com);
+            kinectInfo.userGenerator.GetCoM(aUsers[i], com);
+            kinectInfo.depthGenerator.ConvertRealWorldToProjective(1, &com, &com);
 
             xnOSMemSet(strLabel, 0, sizeof(strLabel));
-            if(!ki.bPrintState)
+            if(!kinectInfo.bPrintState)
                 sprintf_s(strLabel, "%d", aUsers[i]);
-            else if(ki.userGenerator.GetSkeletonCap().IsTracking(aUsers[i]))
+            else if(kinectInfo.userGenerator.GetSkeletonCap().IsTracking(aUsers[i]))
                 sprintf_s(strLabel, "%d - Tracking", aUsers[i]);
-            else if(ki.userGenerator.GetSkeletonCap().IsCalibrating(aUsers[i]))
+            else if(kinectInfo.userGenerator.GetSkeletonCap().IsCalibrating(aUsers[i]))
                 sprintf_s(strLabel, "%d - Calibrating...", aUsers[i]);
             else
                 sprintf_s(strLabel, "%d - Looking for pose", aUsers[i]);
@@ -268,8 +268,8 @@ void KinectDrawer::drawDepthMap
             glRasterPos2i(com.X, com.Y);
         }
 
-        if(ki.bDrawSkeleton &&
-           ki.userGenerator.GetSkeletonCap().IsTracking(aUsers[i]))
+        if(kinectInfo.bDrawSkeleton &&
+           kinectInfo.userGenerator.GetSkeletonCap().IsTracking(aUsers[i]))
         {
             glBegin(GL_LINES);
 
@@ -354,17 +354,17 @@ void KinectDrawer::drawLimb
 {
     XnSkeletonJointPosition jointP1, jointP2;
 
-    if(!ki.userGenerator.GetSkeletonCap().IsTracking(user))
+    if(!kinectInfo.userGenerator.GetSkeletonCap().IsTracking(user))
     {
         qDebug("drawLimb: user %d not tracked!\n", user);
         return;
     }
 
     // get joint positions
-    ki.userGenerator.GetSkeletonCap().GetSkeletonJointPosition
+    kinectInfo.userGenerator.GetSkeletonCap().GetSkeletonJointPosition
     (user, joint1, jointP1);
 
-    ki.userGenerator.GetSkeletonCap().GetSkeletonJointPosition
+    kinectInfo.userGenerator.GetSkeletonCap().GetSkeletonJointPosition
     (user, joint2, jointP2);
 
     if(jointP1.fConfidence < JOINTCONFIDENCE ||
@@ -374,7 +374,7 @@ void KinectDrawer::drawLimb
     XnPoint3D pt[2];
     pt[0] = jointP1.position;
     pt[1] = jointP2.position;
-    ki.depthGenerator.ConvertRealWorldToProjective(2, pt, pt);
+    kinectInfo.depthGenerator.ConvertRealWorldToProjective(2, pt, pt);
 
     // this function ought to be located within glBegin/glEnd statements
     glVertex3i(pt[0].X, pt[0].Y, 0);

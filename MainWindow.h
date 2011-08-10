@@ -13,6 +13,9 @@ Created:    May 13, 2011
 #include <QtGui>
 #include <QMainWindow>
 
+// local
+#include <KinectInfo.h>
+
 namespace Ui
 {
     class MainWindow;
@@ -22,6 +25,7 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    //KinectInfo* ki;
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -41,6 +45,8 @@ private slots:
     void on_actionCapture_triggered();
 
     void on_actionSaveAs_triggered();
+
+    void on_actionExit_triggered();
 
 private:
     Ui::MainWindow *ui;

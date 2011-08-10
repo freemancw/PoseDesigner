@@ -12,6 +12,8 @@ Created:    May 14, 2011
 // local
 #include <KinectInfo.h>
 
+kinectInfo_t kinectInfo;
+
 kinectInfo_t ki;
 
 // callbacks
@@ -32,6 +34,7 @@ static void __stdcall userCalibrationEnd
 (xn::SkeletonCapability& capability, XnUserID nId, XnBool bSuccess,
  void* pCookie);
 
+
 #define CHECK_RC(nRetVal, what)						     \
         if (nRetVal != XN_STATUS_OK)      				     \
         {								     \
@@ -41,6 +44,7 @@ static void __stdcall userCalibrationEnd
 
 static const char * XMLPATH =
 "C:/Program Files (x86)/OpenNI/Data/SamplesConfig.xml";
+
 
 void initKinect()
 {
@@ -122,6 +126,8 @@ void initKinect()
     nRetVal = ki.context.StartGeneratingAll();
     CHECK_RC(nRetVal, "StartGenerating");
     ki.bConnected = true;
+
+    kinectInfo = ki;
 }
 
 static void __stdcall userNewUser
@@ -182,7 +188,7 @@ static void __stdcall userCalibrationEnd
 
 
 
-
+/*
 
 // new class stuff
 
@@ -374,7 +380,7 @@ static void __stdcall wrapCalibrationEnd
 
 
 
-
+*/
 
 
 

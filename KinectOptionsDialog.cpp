@@ -26,15 +26,18 @@ KinectOptionsDialog::~KinectOptionsDialog()
 
 void KinectOptionsDialog::on_drawBackground_toggled(bool checked)
 {
-    ki.bDrawBackground = checked;
+    kinectInfo.bDrawBackground = checked;
+    //kinectInfo->setDrawBackground(checked);
 }
 
 void KinectOptionsDialog::on_drawSkeleton_toggled(bool checked)
 {
-    ki.bDrawSkeleton = checked;
+    kinectInfo.bDrawSkeleton = checked;
+    //kinectInfo->setDrawSkeleton(checked);
 }
 
 void KinectOptionsDialog::on_drawPixels_toggled(bool checked)
 {
-    ki.bDrawPixels = checked;
+    kinectInfo.bDrawPixels = checked;
+    //kinectInfo->setDrawPixels(checked);
 }

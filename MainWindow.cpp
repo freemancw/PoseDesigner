@@ -28,35 +28,232 @@ Created:    May 13, 2011
 #include <Pose.h>
 #include <PoseSample.h>
 
-// xml test
+// xml
 #include <pugixml.hpp>
 
-static Pose currentPose; // this needs to change
+static Pose currentPose;
 static QString currentFilename;
+
+// new way
 //KinectInfo* kinectInfo;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    // this uses the older kinectInfo_t struct which would be nice to replace
+    // with KinectInfo class
     initKinect();
+
+    // new way of doing things, broken ATM
     //kinectInfo = KinectInfo::getInstance();
+
     ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
+    // need to have some sort of kinect shut down code here, I think this is
+    //what's blowing up when you close out the application
+
+    kinectInfo.context.Shutdown();
+    // new way
     //KinectInfo::destroyInstance();
     delete ui;
 }
 
+/*
+===============================================================================
+Menubar Actions
+===============================================================================
+*/
+
+// File->New
+void MainWindow::on_actionNew_triggered()
+{
+    if(!ui->listWidget->count())
+        return;
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("The document has been modified.");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        if(ret == QMessageBox::Save)
+        {
+            on_actionSave_triggered();
+        }
+        else if(ret == QMessageBox::Discard)
+        {
+            ui->listWidget->clear();
+            ui->tableWidget->clearContents();
+            ui->tableWidget->setRowCount(0);
+            ui->statsWidget->clearContents();
+        }
+    }
+}
+
+// File->Open
+void MainWindow::on_actionOpen_triggered()
+{
+    QFileDialog::getOpenFileName(this,
+        tr("Open Pose"), "./", tr("Pose Files (*.pose)")); //bl
+}
+
+
+// the stuff immediately below is for saving functionality, need to move the
+// vector names elsewhere
+
+const char *SkeletonVectorNames[] =
+{
+    "NECK_HEAD",
+    "SHOULDER_SHOULDER",
+    "HIP_HIP",
+    "L_SHOULDER_ELBOW",
+    "L_ELBOW_HAND",
+    "L_SHOULDER_WAIST",
+    "L_WAIST_HIP",
+    "L_HIP_KNEE",
+    "L_KNEE_FOOT",
+    "R_SHOULDER_ELBOW",
+    "R_ELBOW_HAND",
+    "R_SHOULDER_WAIST",
+    "R_WAIST_HIP",
+    "R_HIP_KNEE",
+    "R_KNEE_FOOT",
+    "SKEL_VEC_MAX"
+};
+
+void saveFile(QString filename)
+{
+    pugi::xml_document xmlDoc;
+    pugi::xml_node pose = xmlDoc.append_child("pose");
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        pugi::xml_node vector = pose.append_child(SkeletonVectorNames[col]);
+        pugi::xml_node mean = vector.append_child("mean");
+        pugi::xml_node mvalue = mean.append_child(pugi::node_pcdata);
+        mvalue.set_value(currentPose.getMean().getJVector(col).toString().c_str());
+        pugi::xml_node stddev = vector.append_child(("std_dev"));
+        pugi::xml_node sdvalue = stddev.append_child(pugi::node_pcdata);
+        sdvalue.set_value(currentPose.getStdDev().getJVector(col).toString().c_str());
+    }
+
+    xmlDoc.save_file(filename.toStdString().c_str());
+}
+
+// File->Save
+void MainWindow::on_actionSave_triggered()
+{
+    if(!currentFilename.isEmpty())
+        saveFile(currentFilename);
+    else
+        on_actionSaveAs_triggered();
+}
+
+// File->Save As...
+void MainWindow::on_actionSaveAs_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+        tr("Save Pose As"), "./", tr("Pose Files (*.pose)"));
+
+    saveFile(filename);
+
+    this->setWindowTitle(filename + " - PoseDesigner");
+    currentFilename = filename;
+}
+
+// File->Exit
+void MainWindow::on_actionExit_triggered(){}
+
+// Edit->Undo
+void MainWindow::on_actionUndo_triggered(){}
+
+// Edit->Redo
+void MainWindow::on_actionRedo_triggered(){}
+
+// Edit->Cut
+void MainWindow::on_actionCut_triggered(){}
+
+// Edit->Copy
+void MainWindow::on_actionCopy_triggered(){}
+
+// Edit->Paste
+void MainWindow::on_actionPaste_triggered(){}
+
+// Edit->Delete
+void MainWindow::on_actionDelete_triggered(){}
+
+// Edit->Select All
+void MainWindow::on_actionSelect_All_triggered(){}
+
+// Help->PoseDesigner Help
+void MainWindow::on_actionPoseDesigner_Help_triggered()
+{
+    HelpDialog *hDialog = new HelpDialog(this);
+    hDialog->show();
+}
+
+// Help->About PoseDesigner
+void MainWindow::on_actionAbout_PoseDesigner_triggered()
+{
+    AboutDialog *aDialog = new AboutDialog(this);
+    aDialog->show();
+}
+
+/*
+===============================================================================
+"Big Buttons in the Middle" Actions
+===============================================================================
+*/
+
+// Helper for adding and removing samples
+void MainWindow::calculateStats()
+{
+    currentPose.calculateStatistics();
+
+    // populate the columns
+    QTableWidgetItem *newItem;
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        newItem = new QTableWidgetItem
+        (QString::fromStdString(currentPose.getMean().getJVector(col).toString()));
+        ui->statsWidget->setItem(0, col, newItem);
+    }
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        newItem = new QTableWidgetItem
+        (QString::fromStdString(currentPose.getStdDev().getJVector(col).toString()));
+        ui->statsWidget->setItem(1, col, newItem);
+    }
+}
+
+// Take Sample
 void MainWindow::on_buttonTakeSample_clicked()
 {   
     if(!kinectInfo.bConnected)
         return;
 
+    xn::SkeletonCapability sc = kinectInfo.userGenerator.GetSkeletonCap();
+
+    // make sure we actually have data to sample, otherwise inform user
+    if(!sc.IsTracking(1))
+    {
+        QMessageBox msgBox;
+        msgBox.setText("First user not found (blue user).");
+        msgBox.setInformativeText("Please register skeleton first.");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+        return;
+    }
+
     PoseSample newSample;
     QImage image;
-    //GLWidget *kw;
 
     // shorten expressions
     GLWidget* kw = ui->kinectWidget;
@@ -69,8 +266,7 @@ void MainWindow::on_buttonTakeSample_clicked()
                                        (kw->height() - side) / 2,
                                        side, side);
 
-    // shorten expressions, this should be a pointer, really
-    xn::SkeletonCapability sc = kinectInfo.userGenerator.GetSkeletonCap();
+
     // currently we only track the first user
     if(sc.IsTracking(1))
     {
@@ -121,9 +317,13 @@ void MainWindow::on_buttonTakeSample_clicked()
 
         // add it to the sample collection for this pose
         currentPose.addSample(text.toStdString(), newSample);
+
+        // recalculate statistics
+        calculateStats();
     }
 }
 
+// Take Sample Timer
 void MainWindow::on_buttonTakeSampleTimer_clicked()
 {
     if(!kinectInfo.bConnected)
@@ -144,6 +344,7 @@ void MainWindow::on_buttonTakeSampleTimer_clicked()
     }
 }
 
+// Remove Sample
 void MainWindow::on_buttonRemoveSample_clicked()
 {
     if(!kinectInfo.bConnected)
@@ -153,6 +354,26 @@ void MainWindow::on_buttonRemoveSample_clicked()
     // in the list widget
     QListWidget *lw = ui->listWidget;
     QTableWidget *tw = ui->tableWidget;
+
+    // empty list
+    if(!lw->count())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("No samples to remove.");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+        return;
+    }
+
+    // populated list but nothing selected
+    if(lw->selectedItems().isEmpty())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Please select a sample from the list and try again.");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+        return;
+    }
 
     // get the name of the item
     QString name = lw->currentItem()->text();
@@ -165,8 +386,19 @@ void MainWindow::on_buttonRemoveSample_clicked()
 
     // remove it from the list
     lw->takeItem(lw->row(lw->currentItem()));
+
+    // if samples remain, recalculate stats
+    if(lw->count())
+        calculateStats();
+    // otherwise clear them
+    else
+    {
+        tw->clearContents();
+        ui->statsWidget->clearContents();
+    }
 }
 
+// Calculate Statistics (remove this)
 void MainWindow::on_buttonCalculate_clicked()
 {
     if(!kinectInfo.bConnected)
@@ -196,6 +428,7 @@ void MainWindow::on_buttonCalculate_clicked()
     }
 }
 
+// Kinect Settings
 void MainWindow::on_buttonKinectSettings_clicked()
 {
     if(!kinectInfo.bConnected)
@@ -205,6 +438,13 @@ void MainWindow::on_buttonKinectSettings_clicked()
     koDialog->show();
 }
 
+/*
+===============================================================================
+Various Widget Actions
+===============================================================================
+*/
+
+// User highlighted a different sample
 void MainWindow::on_listWidget_currentItemChanged
 (QListWidgetItem* current, QListWidgetItem* previous)
 {
@@ -227,113 +467,4 @@ void MainWindow::on_listWidget_currentItemChanged
 
     ui->samplePreview->setScene(scene);
     ui->samplePreview->update();
-}
-
-void MainWindow::on_actionPoseDesigner_Help_triggered()
-{
-    HelpDialog *hDialog = new HelpDialog(this);
-    hDialog->show();
-}
-
-void MainWindow::on_actionAbout_PoseDesigner_triggered()
-{
-    AboutDialog *aDialog = new AboutDialog(this);
-    aDialog->show();
-}
-
-
-void MainWindow::on_actionCapture_triggered()
-{
-    QFileDialog::getOpenFileName(this,
-        tr("Open Pose"), "./", tr("Pose Files (*.pose)")); //bl
-}
-
-const char *SkeletonVectorNames[] =
-{
-    "NECK_HEAD",
-    "SHOULDER_SHOULDER",
-    "HIP_HIP",
-    "L_SHOULDER_ELBOW",
-    "L_ELBOW_HAND",
-    "L_SHOULDER_WAIST",
-    "L_WAIST_HIP",
-    "L_HIP_KNEE",
-    "L_KNEE_FOOT",
-    "R_SHOULDER_ELBOW",
-    "R_ELBOW_HAND",
-    "R_SHOULDER_WAIST",
-    "R_WAIST_HIP",
-    "R_HIP_KNEE",
-    "R_KNEE_FOOT",
-    "SKEL_VEC_MAX"
-};
-
-void saveFile(QString filename)
-{
-    pugi::xml_document xmlDoc;
-    pugi::xml_node pose = xmlDoc.append_child("pose");
-
-    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
-    {
-        pugi::xml_node vector = pose.append_child(SkeletonVectorNames[col]);
-        pugi::xml_node mean = vector.append_child("mean");
-        pugi::xml_node mvalue = mean.append_child(pugi::node_pcdata);
-        mvalue.set_value(currentPose.getMean().getJVector(col).toString().c_str());
-        pugi::xml_node stddev = vector.append_child(("std_dev"));
-        pugi::xml_node sdvalue = stddev.append_child(pugi::node_pcdata);
-        sdvalue.set_value(currentPose.getStdDev().getJVector(col).toString().c_str());
-    }
-
-    xmlDoc.save_file(filename.toStdString().c_str());
-}
-
-void MainWindow::on_actionSaveAs_triggered()
-{
-    QString filename = QFileDialog::getSaveFileName(this,
-        tr("Save Pose As"), "./", tr("Pose Files (*.pose)"));
-
-    saveFile(filename);
-
-    this->setWindowTitle(filename + " - PoseDesigner");
-    currentFilename = filename;
-}
-
-void MainWindow::on_actionExit_triggered()
-{
-
-}
-
-void MainWindow::on_actionNew_triggered()
-{
-    if(!ui->listWidget->count())
-        return;
-    else
-    {
-        QMessageBox msgBox;
-        msgBox.setText("The document has been modified.");
-        msgBox.setInformativeText("Do you want to save your changes?");
-        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        msgBox.setDefaultButton(QMessageBox::Save);
-        int ret = msgBox.exec();
-
-        if(ret == QMessageBox::Save)
-        {
-            on_actionSave_triggered();
-        }
-        else if(ret == QMessageBox::Discard)
-        {
-            ui->listWidget->clear();
-            ui->tableWidget->clearContents();
-            ui->tableWidget->setRowCount(0);
-            ui->statsWidget->clearContents();
-        }
-    }
-}
-
-void MainWindow::on_actionSave_triggered()
-{
-    if(!currentFilename.isEmpty())
-        saveFile(currentFilename);
-    else
-        on_actionSaveAs_triggered();
 }

@@ -33,29 +33,42 @@ public:
     ~MainWindow();
 
 private slots:
+    // Menubar Actions
+
+    // File
+    void on_actionNew_triggered();
+    void on_actionOpen_triggered();
+    void on_actionSave_triggered();
+    void on_actionSaveAs_triggered();
+    void on_actionExit_triggered();
+
+    // Edit
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
+    void on_actionCut_triggered();
+    void on_actionCopy_triggered();
+    void on_actionPaste_triggered();
+    void on_actionDelete_triggered();
+    void on_actionSelect_All_triggered();
+
+    // Help
     void on_actionPoseDesigner_Help_triggered();
     void on_actionAbout_PoseDesigner_triggered();
+
+    // "Big Buttons in the Middle" Actions
     void on_buttonTakeSample_clicked();
     void on_buttonTakeSampleTimer_clicked();
     void on_buttonRemoveSample_clicked();
     void on_buttonCalculate_clicked();
     void on_buttonKinectSettings_clicked();
 
+    // Various Widget Actions
     void on_listWidget_currentItemChanged
     (QListWidgetItem* current, QListWidgetItem* previous);
 
-    void on_actionCapture_triggered();
-
-    void on_actionSaveAs_triggered();
-
-    void on_actionExit_triggered();
-
-    void on_actionNew_triggered();
-
-    void on_actionSave_triggered();
-
 private:
     Ui::MainWindow *ui;
+    void calculateStats();
 };
 
 #endif // MAINWINDOW_H

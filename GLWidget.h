@@ -3,6 +3,8 @@
 File:       GLWidget.h
 Author:     Clinton Freeman
 Created:    May 13, 2011
+
+Comments:   Nothing particularly exciting/useful here.
 ===============================================================================
 */
 

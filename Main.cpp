@@ -3,6 +3,7 @@
 File:       Main.cpp
 Author:     Clinton Freeman
 Created:    May 13, 2011
+
 Comments:   This file doesn't really do much in terms of useful functionality.
             The main point of interest is the splash screen - it would be neat
             to have a progress bar that is linked to actual loading - not sure

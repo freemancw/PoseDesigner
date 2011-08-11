@@ -3,6 +3,8 @@
 File:       HelpDialog.h
 Author:     Clinton Freeman
 Created:    June 6, 2011
+
+Comments:   This file is primarily updated by the GUI editor.
 ===============================================================================
 */
 

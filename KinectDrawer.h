@@ -3,6 +3,8 @@
 File:       KinectDrawer.h
 Author:     Clinton Freeman
 Created:    May 15, 2011
+
+Comments:
 ===============================================================================
 */
 

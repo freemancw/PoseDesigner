@@ -3,6 +3,15 @@
 File:       SkeletonVector.h
 Author:     Clinton Freeman
 Created:    May 20, 2011
+
+Comments:   A SkeletonVector is just a useful enumeration for identifying the
+            3D vectors generated inside of PoseSamples. A convention for this
+            was not provided by OpenNI, so I just made one up. The names are
+            fairly obvious, an example being L_SHOULDER_ELBOW, which identifies
+            a vector that originates at the left shoulder and extends to the
+            left elbow. As is typically the case with 3D conventions it
+            shouldn't matter exactly what goes where so long as you're
+            consistent.
 ===============================================================================
 */
 

@@ -3,6 +3,14 @@
 File:       KinectInfo.h
 Author:     Clinton Freeman
 Created:    May 14, 2011
+
+Comments:   This file contains two things that represent the same thing: a
+            KinectInfo class and a kinectInfo_t struct. I would much prefer
+            to use the class since this is the "proper C++ thing to do", but it
+            turns out that for a variety of reasons unbeknownst to me at the
+            time of this writing, it's a major pain in the ass to do so. It's
+            a worthy goal to pursue a conversion to the class form, and most
+            of the work should be done.
 ===============================================================================
 */
 

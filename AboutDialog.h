@@ -3,6 +3,8 @@
 File:       AboutDialog.h
 Author:     Clinton Freeman
 Created:    May 13, 2011
+
+Comments:   This file is primarily updated by the GUI editor.
 ===============================================================================
 */
 

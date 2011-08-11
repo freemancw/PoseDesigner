@@ -3,6 +3,23 @@
 File:       Pose.h
 Author:     Clinton Freeman
 Created:    May 19, 2011
+
+Comments:   A Pose is composed of some number of PoseSamples, which is
+            represented as a std::map in which individual samples are
+            identified by whatever string the user entered as its name when the
+            sample was taken.
+
+            In addition to the map of PoseSamples, a number of specifically
+            numerated statistical PoseSamples are defined as private member
+            variables: currently just the mean and standard deviation.
+
+            The user can add and remove samples, and at some point decide to
+            calculate or re-calculate the statistical values. The current
+            way this is done is that the user takes a number of samples and
+            then presses a "calculate" button to generate the statistics on the
+            current sample pool. **It may actually be quite better if those
+            values were simply updated automatically as samples are added or
+            removed.**
 ===============================================================================
 */
 
@@ -20,7 +37,7 @@ class Pose
 {
 private:
     std::map<std::string, PoseSample> samples;
-    PoseSample mean, tolerance, stddev;
+    PoseSample mean, stddev;
 
 public:
     void calculateStatistics();

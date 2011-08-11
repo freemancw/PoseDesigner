@@ -30,7 +30,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0" rowspan="6">
-     <widget class="QGroupBox" name="groupBox">
+     <widget class="QGroupBox" name="poseInfoBox">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -77,7 +77,7 @@
            <item>
             <layout class="QGridLayout" name="gridLayout">
              <item row="0" column="0">
-              <widget class="QLabel" name="label">
+              <widget class="QLabel" name="samplesLabel">
                <property name="text">
                 <string>Samples</string>
                </property>
@@ -100,7 +100,7 @@
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="samplePreviewLabel">
                <property name="text">
                 <string>Selected Sample Preview</string>
                </property>
@@ -137,7 +137,7 @@
             </layout>
            </item>
            <item>
-            <widget class="QLabel" name="sampleData">
+            <widget class="QLabel" name="sampleDataLabel">
              <property name="text">
               <string>Sample Data</string>
              </property>
@@ -277,7 +277,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="sampleStats">
+            <widget class="QLabel" name="sampleStatsLabel">
              <property name="text">
               <string>Sample Statistics</string>
              </property>

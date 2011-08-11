@@ -25,7 +25,8 @@ SOURCES +=\
     AboutDialog.cpp \
     Vector3.cpp \
     Pose.cpp \
-    HelpDialog.cpp
+    HelpDialog.cpp \
+    pugixml.cpp
 
 HEADERS  += \
     GLWidget.h \
@@ -38,7 +39,9 @@ HEADERS  += \
     Vector3.h \
     Pose.h \
     SkeletonVector.h \
-    HelpDialog.h
+    HelpDialog.h \
+    pugixml.hpp \
+    pugiconfig.hpp
 
 FORMS    += mainwindow.ui \
     kinectoptionsdialog.ui \

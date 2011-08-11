@@ -28,7 +28,11 @@ Created:    May 13, 2011
 #include <Pose.h>
 #include <PoseSample.h>
 
+// xml test
+#include <pugixml.hpp>
+
 static Pose currentPose; // this needs to change
+static QString currentFilename;
 //KinectInfo* kinectInfo;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
@@ -244,13 +248,92 @@ void MainWindow::on_actionCapture_triggered()
         tr("Open Pose"), "./", tr("Pose Files (*.pose)")); //bl
 }
 
+const char *SkeletonVectorNames[] =
+{
+    "NECK_HEAD",
+    "SHOULDER_SHOULDER",
+    "HIP_HIP",
+    "L_SHOULDER_ELBOW",
+    "L_ELBOW_HAND",
+    "L_SHOULDER_WAIST",
+    "L_WAIST_HIP",
+    "L_HIP_KNEE",
+    "L_KNEE_FOOT",
+    "R_SHOULDER_ELBOW",
+    "R_ELBOW_HAND",
+    "R_SHOULDER_WAIST",
+    "R_WAIST_HIP",
+    "R_HIP_KNEE",
+    "R_KNEE_FOOT",
+    "SKEL_VEC_MAX"
+};
+
+void saveFile(QString filename)
+{
+    pugi::xml_document xmlDoc;
+    pugi::xml_node pose = xmlDoc.append_child("pose");
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        pugi::xml_node vector = pose.append_child(SkeletonVectorNames[col]);
+        pugi::xml_node mean = vector.append_child("mean");
+        pugi::xml_node mvalue = mean.append_child(pugi::node_pcdata);
+        mvalue.set_value(currentPose.getMean().getJVector(col).toString().c_str());
+        pugi::xml_node stddev = vector.append_child(("std_dev"));
+        pugi::xml_node sdvalue = stddev.append_child(pugi::node_pcdata);
+        sdvalue.set_value(currentPose.getStdDev().getJVector(col).toString().c_str());
+    }
+
+    xmlDoc.save_file(filename.toStdString().c_str());
+}
+
 void MainWindow::on_actionSaveAs_triggered()
 {
-    QFileDialog::getSaveFileName(this,
+    QString filename = QFileDialog::getSaveFileName(this,
         tr("Save Pose As"), "./", tr("Pose Files (*.pose)"));
+
+    saveFile(filename);
+
+    this->setWindowTitle(filename + " - PoseDesigner");
+    currentFilename = filename;
 }
 
 void MainWindow::on_actionExit_triggered()
 {
 
+}
+
+void MainWindow::on_actionNew_triggered()
+{
+    if(!ui->listWidget->count())
+        return;
+    else
+    {
+        QMessageBox msgBox;
+        msgBox.setText("The document has been modified.");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        if(ret == QMessageBox::Save)
+        {
+            on_actionSave_triggered();
+        }
+        else if(ret == QMessageBox::Discard)
+        {
+            ui->listWidget->clear();
+            ui->tableWidget->clearContents();
+            ui->tableWidget->setRowCount(0);
+            ui->statsWidget->clearContents();
+        }
+    }
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    if(!currentFilename.isEmpty())
+        saveFile(currentFilename);
+    else
+        on_actionSaveAs_triggered();
 }

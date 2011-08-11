@@ -17,9 +17,13 @@ Comments:   A Pose is composed of some number of PoseSamples, which is
             calculate or re-calculate the statistical values. The current
             way this is done is that the user takes a number of samples and
             then presses a "calculate" button to generate the statistics on the
-            current sample pool. **It may actually be quite better if those
-            values were simply updated automatically as samples are added or
-            removed.**
+            current sample pool.
+
+            Feature: It may actually be quite better if those values were
+            simply updated automatically as samples are added or removed.
+
+            Bug: Since individual samples are identified by their names we need
+            to check for when the user chooses the same name twice.
 ===============================================================================
 */
 

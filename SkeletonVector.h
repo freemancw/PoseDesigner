@@ -38,6 +38,8 @@ enum SkeletonVector
     SKEL_VEC_MAX
 };
 
+//extern const char **SkeletonVectorNames;
+
 // perhaps change this at some point to look the same as the OpenNI stuff,
 // since we cant change those enums... i.e. don't use a MAX value to stop,
 // and have the for loop termination condition be <= instead of just <

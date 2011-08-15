@@ -29,7 +29,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0" rowspan="6">
+    <item row="0" column="0" rowspan="5">
      <widget class="QGroupBox" name="poseInfoBox">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -411,7 +411,7 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="2" rowspan="6">
+    <item row="0" column="2" rowspan="5">
      <widget class="GLWidget" name="kinectWidget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -475,29 +475,6 @@
      </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QToolButton" name="buttonCalculate">
-      <property name="toolTip">
-       <string>Recalculate Sample Statistics</string>
-      </property>
-      <property name="statusTip">
-       <string>Recalculate Sample Statistics</string>
-      </property>
-      <property name="text">
-       <string>Recalculate</string>
-      </property>
-      <property name="icon">
-       <iconset resource="resources.qrc">
-        <normaloff>:/images/gui/icons/math.png</normaloff>:/images/gui/icons/math.png</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>64</width>
-        <height>64</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
      <widget class="QToolButton" name="buttonKinectSettings">
       <property name="toolTip">
        <string>Adjust Kinect Settings</string>

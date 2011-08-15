@@ -14,7 +14,7 @@ Created:    May 14, 2011
 
 kinectInfo_t kinectInfo;
 
-kinectInfo_t ki;
+//kinectInfo_t ki;
 
 // callbacks
 static void __stdcall userNewUser
@@ -43,55 +43,56 @@ static void __stdcall userCalibrationEnd
         }
 
 static const char * XMLPATH =
-"C:/Program Files (x86)/OpenNI/Data/SamplesConfig.xml";
+"./data/config.xml";
+//"C:/Program Files (x86)/OpenNI/Data/SamplesConfig.xml";
 
 
 void initKinect()
 {
     // initialize config values
-    ki.bNeedPose = false;
-    ki.bDrawBackground = true;
-    ki.bDrawPixels = true;
-    ki.bDrawSkeleton = true;
-    ki.bPrintID = false;
-    ki.bPrintState = false;
-    ki.bPause = false;
-    ki.bRecord = false;
-    ki.bQuit = false;
+    kinectInfo.bNeedPose = false;
+    kinectInfo.bDrawBackground = true;
+    kinectInfo.bDrawPixels = true;
+    kinectInfo.bDrawSkeleton = true;
+    kinectInfo.bPrintID = false;
+    kinectInfo.bPrintState = false;
+    kinectInfo.bPause = false;
+    kinectInfo.bRecord = false;
+    kinectInfo.bQuit = false;
 
     XnStatus nRetVal = XN_STATUS_OK;
     xn::EnumerationErrors errors;
 
     // attempt to initialize context
-    nRetVal = ki.context.InitFromXmlFile(XMLPATH, &errors);
+    nRetVal = kinectInfo.context.InitFromXmlFile(XMLPATH, &errors);
     if(nRetVal == XN_STATUS_NO_NODE_PRESENT)
     {
         XnChar strError[1024];
         errors.ToString(strError, 1024);
         qDebug("%s\n", strError);
-        ki.bConnected = false;
+        kinectInfo.bConnected = false;
         return;
     }
     else if(nRetVal != XN_STATUS_OK)
     {
         qDebug("Open failed: %s\n", xnGetStatusString(nRetVal));
-        ki.bConnected = false;
+        kinectInfo.bConnected = false;
         return;
     }
 
     // attempt to initialize depth generator
-    nRetVal = ki.context.FindExistingNode(XN_NODE_TYPE_DEPTH, ki.depthGenerator);
+    nRetVal = kinectInfo.context.FindExistingNode(XN_NODE_TYPE_DEPTH, kinectInfo.depthGenerator);
     CHECK_RC(nRetVal, "Find depth generator");
 
     // attempt to initialize user generator
-    nRetVal = ki.context.FindExistingNode(XN_NODE_TYPE_USER, ki.userGenerator);
+    nRetVal = kinectInfo.context.FindExistingNode(XN_NODE_TYPE_USER, kinectInfo.userGenerator);
     if(nRetVal != XN_STATUS_OK)
     {
-        nRetVal = ki.userGenerator.Create(ki.context);
+        nRetVal = kinectInfo.userGenerator.Create(kinectInfo.context);
         CHECK_RC(nRetVal, "Find user generator");
     }
 
-    if (!ki.userGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON))
+    if (!kinectInfo.userGenerator.IsCapabilitySupported(XN_CAPABILITY_SKELETON))
     {
         qDebug("Supplied user generator doesn't support skeleton\n");
         return;
@@ -100,34 +101,32 @@ void initKinect()
     // register callbacks
     XnCallbackHandle hUserCallbacks, hCalibrationCallbacks, hPoseCallbacks;
 
-    ki.userGenerator.RegisterUserCallbacks
+    kinectInfo.userGenerator.RegisterUserCallbacks
     (userNewUser, userLostUser, NULL, hUserCallbacks);
 
-    ki.userGenerator.GetSkeletonCap().RegisterCalibrationCallbacks
+    kinectInfo.userGenerator.GetSkeletonCap().RegisterCalibrationCallbacks
     (userCalibrationStart, userCalibrationEnd, NULL, hCalibrationCallbacks);
 
-    if(ki.userGenerator.GetSkeletonCap().NeedPoseForCalibration())
+    if(kinectInfo.userGenerator.GetSkeletonCap().NeedPoseForCalibration())
     {
-        ki.bNeedPose = true;
-        if(!ki.userGenerator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION))
+        kinectInfo.bNeedPose = true;
+        if(!kinectInfo.userGenerator.IsCapabilitySupported(XN_CAPABILITY_POSE_DETECTION))
         {
             qDebug("Pose required, but not supported\n");
             return;
         }
 
-        ki.userGenerator.GetPoseDetectionCap().RegisterToPoseCallbacks
+        kinectInfo.userGenerator.GetPoseDetectionCap().RegisterToPoseCallbacks
         (userPoseDetected, NULL, NULL, hPoseCallbacks);
 
-        ki.userGenerator.GetSkeletonCap().GetCalibrationPose(ki.strPose);
+        kinectInfo.userGenerator.GetSkeletonCap().GetCalibrationPose(kinectInfo.strPose);
     }
 
-    ki.userGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_ALL);
+    kinectInfo.userGenerator.GetSkeletonCap().SetSkeletonProfile(XN_SKEL_PROFILE_ALL);
 
-    nRetVal = ki.context.StartGeneratingAll();
+    nRetVal = kinectInfo.context.StartGeneratingAll();
     CHECK_RC(nRetVal, "StartGenerating");
-    ki.bConnected = true;
-
-    kinectInfo = ki;
+    kinectInfo.bConnected = true;
 }
 
 static void __stdcall userNewUser
@@ -136,10 +135,10 @@ static void __stdcall userNewUser
     qDebug("New User %d\n", nId);
 
     // new user found
-    if(ki.bNeedPose)
-        ki.userGenerator.GetPoseDetectionCap().StartPoseDetection(ki.strPose, nId);
+    if(kinectInfo.bNeedPose)
+        kinectInfo.userGenerator.GetPoseDetectionCap().StartPoseDetection(kinectInfo.strPose, nId);
     else
-        ki.userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
+        kinectInfo.userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
 }
 
 static void __stdcall userLostUser
@@ -154,8 +153,8 @@ static void __stdcall userPoseDetected
 {
     qDebug("Pose %s detected for user %d\n", strPose, nId);
 
-    ki.userGenerator.GetPoseDetectionCap().StopPoseDetection(nId);
-    ki.userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
+    kinectInfo.userGenerator.GetPoseDetectionCap().StopPoseDetection(nId);
+    kinectInfo.userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
 }
 
 static void __stdcall userCalibrationStart
@@ -172,16 +171,16 @@ static void __stdcall userCalibrationEnd
     {
         // calibration succeeded
         qDebug("Calibration complete, start tracking user %d\n", nId);
-        ki.userGenerator.GetSkeletonCap().StartTracking(nId);
+        kinectInfo.userGenerator.GetSkeletonCap().StartTracking(nId);
     }
     else
     {
         // calibration failed
         qDebug("Calibration failed for user %d\n", nId);
-        if(ki.bNeedPose)
-            ki.userGenerator.GetPoseDetectionCap().StartPoseDetection(ki.strPose, nId);
+        if(kinectInfo.bNeedPose)
+            kinectInfo.userGenerator.GetPoseDetectionCap().StartPoseDetection(kinectInfo.strPose, nId);
         else
-            ki.userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
+            kinectInfo.userGenerator.GetSkeletonCap().RequestCalibration(nId, true);
     }
 }
 

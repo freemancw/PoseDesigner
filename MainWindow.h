@@ -59,7 +59,6 @@ private slots:
     void on_buttonTakeSample_clicked();
     void on_buttonTakeSampleTimer_clicked();
     void on_buttonRemoveSample_clicked();
-    void on_buttonCalculate_clicked();
     void on_buttonKinectSettings_clicked();
 
     // Various Widget Actions

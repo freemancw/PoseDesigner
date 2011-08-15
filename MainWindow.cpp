@@ -52,9 +52,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
 MainWindow::~MainWindow()
 {
-    // need to have some sort of kinect shut down code here, I think this is
-    //what's blowing up when you close out the application
-
     kinectInfo.context.Shutdown();
     // new way
     //KinectInfo::destroyInstance();
@@ -71,27 +68,31 @@ Menubar Actions
 void MainWindow::on_actionNew_triggered()
 {
     if(!ui->listWidget->count())
-        return;
-    else
     {
-        QMessageBox msgBox;
-        msgBox.setText("The document has been modified.");
-        msgBox.setInformativeText("Do you want to save your changes?");
-        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-        msgBox.setDefaultButton(QMessageBox::Save);
-        int ret = msgBox.exec();
+        this->setWindowTitle(tr("untitled.pose - PoseDesigner"));
+        return;
+    }
 
-        if(ret == QMessageBox::Save)
-        {
-            on_actionSave_triggered();
-        }
-        else if(ret == QMessageBox::Discard)
-        {
-            ui->listWidget->clear();
-            ui->tableWidget->clearContents();
-            ui->tableWidget->setRowCount(0);
-            ui->statsWidget->clearContents();
-        }
+    QMessageBox msgBox;
+    msgBox.setText("The document has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+
+    if(ret == QMessageBox::Save)
+    {
+        on_actionSave_triggered();
+        return;
+    }
+    else if(ret == QMessageBox::Discard)
+    {
+        ui->listWidget->clear();
+        ui->tableWidget->clearContents();
+        ui->tableWidget->setRowCount(0);
+        ui->statsWidget->clearContents();
+        currentFilename = QString();
+        this->setWindowTitle(tr("untitled.pose - PoseDesigner"));
     }
 }
 
@@ -101,7 +102,6 @@ void MainWindow::on_actionOpen_triggered()
     QFileDialog::getOpenFileName(this,
         tr("Open Pose"), "./", tr("Pose Files (*.pose)")); //bl
 }
-
 
 // the stuff immediately below is for saving functionality, need to move the
 // vector names elsewhere
@@ -395,36 +395,6 @@ void MainWindow::on_buttonRemoveSample_clicked()
     {
         tw->clearContents();
         ui->statsWidget->clearContents();
-    }
-}
-
-// Calculate Statistics (remove this)
-void MainWindow::on_buttonCalculate_clicked()
-{
-    if(!kinectInfo.bConnected)
-        return;
-
-    currentPose.calculateStatistics();
-    // add a row in the table
-    //int row = ui->statsWidget->rowCount();
-    //ui->statsWidget->insertRow(row);
-    //ui->statsWidget->setVerticalHeaderItem(row, new QTableWidgetItem("Mean"));
-
-    // populate the columns
-    QTableWidgetItem *newItem;
-
-    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
-    {
-        newItem = new QTableWidgetItem
-        (QString::fromStdString(currentPose.getMean().getJVector(col).toString()));
-        ui->statsWidget->setItem(0, col, newItem);
-    }
-
-    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
-    {
-        newItem = new QTableWidgetItem
-        (QString::fromStdString(currentPose.getStdDev().getJVector(col).toString()));
-        ui->statsWidget->setItem(1, col, newItem);
     }
 }
 

@@ -8,6 +8,7 @@ Created:    May 13, 2011
 
 // Qt
 #include <QtGui>
+#include <QtXml>
 
 // OpenNI
 #include <XnCppWrapper.h>
@@ -27,9 +28,6 @@ Created:    May 13, 2011
 #include <KinectInfo.h>
 #include <Pose.h>
 #include <PoseSample.h>
-
-// xml
-#include <pugixml.hpp>
 
 static Pose currentPose;
 static QString currentFilename;
@@ -64,9 +62,14 @@ Menubar Actions
 ===============================================================================
 */
 
-// File->New
+//File->New
 void MainWindow::on_actionNew_triggered()
 {
+    // first thing we need to know is whether or not the user has modified
+    // the current document. the only way a user can modify a document is
+    // to add or remove samples. TODO: we need a mechanism to flag
+    // modifications.
+
     if(!ui->listWidget->count())
     {
         this->setWindowTitle(tr("untitled.pose - PoseDesigner"));
@@ -100,7 +103,7 @@ void MainWindow::on_actionNew_triggered()
 void MainWindow::on_actionOpen_triggered()
 {
     QFileDialog::getOpenFileName(this,
-        tr("Open Pose"), "./", tr("Pose Files (*.pose)")); //bl
+        tr("Open Pose"), "./", tr("Pose Files (*.pose)"));
 }
 
 // the stuff immediately below is for saving functionality, need to move the
@@ -128,6 +131,32 @@ const char *SkeletonVectorNames[] =
 
 void saveFile(QString filename)
 {
+    QFile outFile(filename);
+
+    if(!outFile.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        qDebug() << "Unable to write to file " << filename << ".";
+        return;
+    }
+
+    QTextStream outStream(&outFile);
+    QDomDocument outXML;
+
+    QDomNode root = outXML.createElement("pose");
+    outXML.appendChild(root);
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        QDomNode vector = outXML.createElement(SkeletonVectorNames[col]);
+        root.appendChild(vector);
+    }
+
+    outXML.save(outStream, 0);
+    outFile.close();
+
+
+
+            /*
     pugi::xml_document xmlDoc;
     pugi::xml_node pose = xmlDoc.append_child("pose");
 
@@ -143,6 +172,7 @@ void saveFile(QString filename)
     }
 
     xmlDoc.save_file(filename.toStdString().c_str());
+    */
 }
 
 // File->Save
@@ -160,6 +190,9 @@ void MainWindow::on_actionSaveAs_triggered()
     QString filename = QFileDialog::getSaveFileName(this,
         tr("Save Pose As"), "./", tr("Pose Files (*.pose)"));
 
+    if(filename.isEmpty())
+        return;
+
     saveFile(filename);
 
     this->setWindowTitle(filename + " - PoseDesigner");
@@ -167,7 +200,10 @@ void MainWindow::on_actionSaveAs_triggered()
 }
 
 // File->Exit
-void MainWindow::on_actionExit_triggered(){}
+void MainWindow::on_actionExit_triggered()
+{
+
+}
 
 // Edit->Undo
 void MainWindow::on_actionUndo_triggered(){}
@@ -290,7 +326,7 @@ void MainWindow::on_buttonTakeSample_clicked()
     if(accept && !text.isEmpty())
     {
         // then set name and pass in image
-        newSample.setName(text.toStdString());
+        newSample.setName(text);
         newSample.setImage(image);
 
         // expand upon this
@@ -316,7 +352,7 @@ void MainWindow::on_buttonTakeSample_clicked()
         }
 
         // add it to the sample collection for this pose
-        currentPose.addSample(text.toStdString(), newSample);
+        currentPose.addSample(text, newSample);
 
         // recalculate statistics
         calculateStats();
@@ -379,7 +415,7 @@ void MainWindow::on_buttonRemoveSample_clicked()
     QString name = lw->currentItem()->text();
 
     // remove it from the current pose's samples
-    currentPose.removeSample(name.toStdString());
+    currentPose.removeSample(name);
 
     // remove it from the data table
     tw->removeRow(lw->row(lw->currentItem()));
@@ -428,7 +464,7 @@ void MainWindow::on_listWidget_currentItemChanged
         return;
     }
 
-    std::string name = ui->listWidget->currentItem()->text().toStdString();
+    QString name = ui->listWidget->currentItem()->text();
     QImage image = currentPose.getSample(name).getImage();
     QSize size = QSize(ui->samplePreview->width()-2,
                        ui->samplePreview->height()-2);

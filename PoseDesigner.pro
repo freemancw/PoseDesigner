@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += opengl
+QT       += xml
 
 TARGET = PoseDesigner
 TEMPLATE = app
@@ -26,7 +27,7 @@ SOURCES +=\
     Vector3.cpp \
     Pose.cpp \
     HelpDialog.cpp \
-    pugixml.cpp
+    SkeletonVector.cpp
 
 HEADERS  += \
     GLWidget.h \
@@ -39,9 +40,7 @@ HEADERS  += \
     Vector3.h \
     Pose.h \
     SkeletonVector.h \
-    HelpDialog.h \
-    pugixml.hpp \
-    pugiconfig.hpp
+    HelpDialog.h
 
 FORMS    += mainwindow.ui \
     kinectoptionsdialog.ui \

@@ -17,6 +17,10 @@ KinectOptionsDialog::KinectOptionsDialog(QWidget *parent) :
     ui(new Ui::KinectOptionsDialog)
 {
     ui->setupUi(this);
+
+    ui->drawBackground->setChecked(kinectInfo.bDrawBackground);
+    ui->drawSkeleton->setChecked(kinectInfo.bDrawSkeleton);
+    ui->drawPixels->setChecked(kinectInfo.bDrawPixels);
 }
 
 KinectOptionsDialog::~KinectOptionsDialog()

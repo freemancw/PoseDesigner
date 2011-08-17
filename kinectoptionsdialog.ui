@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>176</width>
-    <height>158</height>
+    <height>112</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,20 +43,6 @@
        </property>
        <property name="checked">
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="printID">
-       <property name="text">
-        <string>Print ID</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="printState">
-       <property name="text">
-        <string>Print State</string>
        </property>
       </widget>
      </item>

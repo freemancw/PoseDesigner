@@ -18,6 +18,9 @@ Comments:   A SkeletonVector is just a useful enumeration for identifying the
 #ifndef SKELETONVECTOR_H
 #define SKELETONVECTOR_H
 
+// Qt
+#include <QDataStream>
+
 enum SkeletonVector
 {
     NECK_HEAD,
@@ -37,6 +40,9 @@ enum SkeletonVector
     R_KNEE_FOOT,
     SKEL_VEC_MAX
 };
+
+QDataStream &operator<<(QDataStream &, const SkeletonVector &);
+QDataStream &operator>>(QDataStream &, SkeletonVector &);
 
 //extern const char **SkeletonVectorNames;
 

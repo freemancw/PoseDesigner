@@ -24,9 +24,8 @@ Comments:   A Pose is composed of some number of PoseSamples, which is
 #ifndef POSE_H
 #define POSE_H
 
-// system
-#include <string>
-#include <map>
+// Qt
+#include <QDataStream>
 
 // local
 #include <PoseSample.h>
@@ -34,21 +33,25 @@ Comments:   A Pose is composed of some number of PoseSamples, which is
 class Pose
 {
 private:
-    std::map<std::string, PoseSample> samples;
+    QMap<QString, PoseSample> samples;
     PoseSample mean, stddev;
 
 public:
     void calculateStatistics();
 
     // getters
-    inline PoseSample& getSample(std::string name) { return samples[name]; }
+    inline PoseSample& getSample(QString name) { return samples[name]; }
+    inline QMap<QString, PoseSample>& getSamples() { return samples; }
     inline PoseSample& getMean() { return mean; }
     inline PoseSample& getStdDev() { return stddev; }
 
     // setters/modifiers
-    inline void addSample(std::string name, PoseSample& sample)
+    inline void addSample(QString name, PoseSample& sample)
     { samples[name] = sample; }
-    inline void removeSample(std::string name) { samples.erase(name); }
+    inline void removeSample(QString name) { samples.remove(name); }
 };
+
+QDataStream &operator<<(QDataStream &, Pose &);
+QDataStream &operator>>(QDataStream &, Pose &);
 
 #endif // POSE_H

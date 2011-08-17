@@ -36,10 +36,6 @@ Comments:   A PoseSample is composed of several things, the most important of
 // Qt
 #include <QtGui>
 
-// system
-#include <map>
-#include <string>
-
 // local
 #include <KinectInfo.h>
 #include <SkeletonVector.h>
@@ -51,30 +47,54 @@ inline XnSkeletonJoint& operator++(XnSkeletonJoint& sj, int)
     return sj = static_cast<XnSkeletonJoint>(++temp);
 }
 
+QDataStream &operator<<(QDataStream &, XnSkeletonJoint &);
+QDataStream &operator>>(QDataStream &, XnSkeletonJoint &);
+
+QDataStream &operator<<(QDataStream &, const XnVector3D &);
+QDataStream &operator>>(QDataStream &, XnVector3D &);
+
+QDataStream &operator<<(QDataStream &, const XnSkeletonJointPosition &);
+QDataStream &operator>>(QDataStream &, XnSkeletonJointPosition &);
+
 class PoseSample
 {
 private:
-    std::string name;
+    QString name;
     QImage image;
 
-    std::map<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
-    std::map<SkeletonVector, Vector3> jVectors;
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
+    QMap<SkeletonVector, Vector3> jVectors;
 
 public:
     void calculateVectors();
 
     // getters
-    inline std::string getName() { return name; }
-    inline QImage getImage() { return image; }
-    inline std::map<XnSkeletonJoint, XnSkeletonJointPosition>& getJPositions()
+    inline QString getName() const
+    { return name; }
+
+    inline QImage getImage() const
+    { return image; }
+
+    inline QMap<XnSkeletonJoint, XnSkeletonJointPosition>& getJPositions()
     { return jPositions; }
-    inline std::map<SkeletonVector, Vector3>& getJVectors()
+
+    inline QMap<SkeletonVector, Vector3>& getJVectors()
     { return jVectors; }
-    inline Vector3& getJVector(SkeletonVector v) { return jVectors[v]; }
+
+    inline Vector3& getJVector(SkeletonVector sv)
+    { return jVectors[sv]; }
 
     // setters
-    inline void setName(std::string& name) { this->name = name; }
-    inline void setImage(QImage& image) { this->image = image; }
+    inline void setName(QString const &name) { this->name = name; }
+    inline void setImage(QImage const &image) { this->image = image; }
+    inline void setJPositions(QMap<XnSkeletonJoint, XnSkeletonJointPosition> const &jPositions)
+    { this->jPositions = jPositions; }
+    inline void setJVectors(QMap<SkeletonVector, Vector3> const &jVectors)
+    { this->jVectors = jVectors; }
+    inline void setJVector(SkeletonVector sv, Vector3 const &v) { jVectors[sv] = v; }
 };
+
+QDataStream &operator<<(QDataStream &, const PoseSample &);
+QDataStream &operator>>(QDataStream &, PoseSample &);
 
 #endif // POSESAMPLE_H

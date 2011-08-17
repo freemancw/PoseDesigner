@@ -25,4 +25,7 @@
         <file>gui/textures/darkbackground.png</file>
         <file>gui/logos/boogie.png</file>
     </qresource>
+    <qresource prefix="/fonts">
+        <file>gui/fonts/Pacifico.ttf</file>
+    </qresource>
 </RCC>

@@ -559,8 +559,6 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionPoseDesigner_Help"/>
-    <addaction name="separator"/>
     <addaction name="actionAbout_PoseDesigner"/>
    </widget>
    <addaction name="menuFile"/>

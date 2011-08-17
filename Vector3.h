@@ -14,6 +14,9 @@ Comments:   Just your run-of-the-mill 3D vector class. Much of this was either
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
+// QT
+#include <QDataStream>
+
 // OpenNI
 #include <XnCppWrapper.h>
 
@@ -222,5 +225,8 @@ public:
         return ss.str();
     }
 };
+
+QDataStream &operator<<(QDataStream &, const Vector3 &);
+QDataStream &operator>>(QDataStream &, Vector3 &);
 
 #endif //VECTOR3_H

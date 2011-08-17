@@ -8,6 +8,7 @@ Created:    May 14, 2011
 
 // Qt
 #include <QDebug>
+#include <QDir>
 
 // local
 #include <KinectInfo.h>
@@ -49,6 +50,8 @@ static const char * XMLPATH =
 
 void initKinect()
 {
+    qDebug() << QDir::currentPath();
+
     // initialize config values
     kinectInfo.bNeedPose = false;
     kinectInfo.bDrawBackground = true;

@@ -13,6 +13,19 @@ Created:    May 16, 2011
 #include <PoseSample.h>
 #include <Vector3.h>
 
+QDataStream &operator<<(QDataStream &out, const XnVector3D &p)
+{
+    out << p.X << p.Y << p.Z;
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, XnVector3D &p)
+{
+    in >> p.X >> p.Y >> p.Z;
+    return in;
+}
+
+
 void PoseSample::calculateVectors()
 {
     jVectors[NECK_HEAD] = Vector3(jPositions[XN_SKEL_HEAD]) -
@@ -25,14 +38,10 @@ void PoseSample::calculateVectors()
 
     jVectors[SHOULDER_SHOULDER].normalize();
 
-    //qDebug(jVectors[SHOULDER_SHOULDER].toString().c_str());
-
     jVectors[HIP_HIP] = Vector3(jPositions[XN_SKEL_RIGHT_HIP]) -
                         Vector3(jPositions[XN_SKEL_LEFT_HIP]);
 
     jVectors[HIP_HIP].normalize();
-
-    //qDebug(jVectors[HIP_HIP].toString().c_str());
 
     // left
 
@@ -98,3 +107,56 @@ void PoseSample::calculateVectors()
 
     jVectors[R_KNEE_FOOT].normalize();
 }
+
+
+//XnSkeletonJointPosition
+QDataStream &operator<<(QDataStream &out, const XnSkeletonJointPosition &sjp)
+{
+    out << sjp.position << sjp.fConfidence;
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, XnSkeletonJointPosition &sjp)
+{
+    in >> sjp.position >> sjp.fConfidence;
+    return in;
+}
+
+QDataStream &operator<<(QDataStream &out, PoseSample &p)
+{
+    out << p.getName() << p.getImage() << p.getJPositions() << p.getJVectors();
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, PoseSample &p)
+{
+    QString name;
+    QImage image;
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
+    QMap<SkeletonVector, Vector3> jVectors;
+
+    in >> name >> image >> jPositions >> jVectors;
+
+    p.setName(name);
+    p.setImage(image);
+    p.setJPositions(jPositions);
+    p.setJVectors(jVectors);
+
+    return in;
+}
+
+//XnSkeletonJoint
+QDataStream &operator<<(QDataStream &out, XnSkeletonJoint &sj)
+{
+    out << quint32(sj);
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, XnSkeletonJoint &sj)
+{
+    quint32 sin;
+    in >> sin;
+    sj = (XnSkeletonJoint)sin;
+    return in;
+}
+

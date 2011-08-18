@@ -224,6 +224,7 @@ public:
         ss << x << ", " << y << ", " << z;
         return ss.str();
     }
+
 };
 
 QDataStream &operator<<(QDataStream &, const Vector3 &);

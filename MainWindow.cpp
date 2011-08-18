@@ -102,8 +102,44 @@ void MainWindow::on_actionNew_triggered()
 // File->Open
 void MainWindow::on_actionOpen_triggered()
 {
-    QFileDialog::getOpenFileName(this,
+    QString filename = QFileDialog::getOpenFileName(this,
         tr("Open Pose"), "./", tr("Pose Files (*.pose)"));
+
+    QFile inFile(filename);
+
+    if(!inFile.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Unable to read file " << filename << ".";
+        return;
+    }
+
+    QDataStream inStream(&inFile);
+
+    //Vector3 v;
+
+   // inStream >> v;
+
+   // qDebug() << v;
+
+    //inStream >> currentPose;
+
+    //qDebug() << currentPose.getMean().getName();
+    //qDebug() << currentPose.getStdDev().getName();
+    //qDebug() << currentPose.getSamples().count();
+
+    //QMap<QString, PoseSample>::iterator iter;
+
+
+    /*
+    for(iter = currentPose.getSamples().begin(); iter != currentPose.getSamples().end(); iter++)
+    {
+        qDebug() << iter.value().getName() << "blah";
+    }
+    */
+
+    //qDebug() << "ahh";
+
+    inFile.close();
 }
 
 // the stuff immediately below is for saving functionality, need to move the
@@ -139,9 +175,18 @@ void saveFile(QString filename)
         return;
     }
 
-    QTextStream outStream(&outFile);
-    QDomDocument outXML;
+    QDataStream outStream(&outFile);
 
+   // Vector3 v(1.2, 2.9, 3.4);
+
+   // outStream << v;
+
+    //outStream << currentPose;
+
+    //QTextStream outStream(&outFile);
+    //QDomDocument outXML;
+
+    /*
     QDomNode root = outXML.createElement("pose");
     outXML.appendChild(root);
 
@@ -152,6 +197,7 @@ void saveFile(QString filename)
     }
 
     outXML.save(outStream, 0);
+    */
     outFile.close();
 
 
@@ -256,15 +302,15 @@ void MainWindow::calculateStats()
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        newItem = new QTableWidgetItem
-        (QString::fromStdString(currentPose.getMean().getJVector(col).toString()));
+        QVector3D vec = currentPose.getMean().getJVector(col);
+        newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
         ui->statsWidget->setItem(0, col, newItem);
     }
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        newItem = new QTableWidgetItem
-        (QString::fromStdString(currentPose.getStdDev().getJVector(col).toString()));
+        QVector3D vec = currentPose.getStdDev().getJVector(col);
+        newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
         ui->statsWidget->setItem(1, col, newItem);
     }
 }
@@ -312,7 +358,7 @@ void MainWindow::on_buttonTakeSample_clicked()
         for(XnSkeletonJoint sj = XN_SKEL_HEAD; sj <= XN_SKEL_RIGHT_FOOT; sj++)
         {
             qDebug("%d", sj);
-            sc.GetSkeletonJointPosition(1, sj, newSample.getJPositions()[sj]);
+            sc.GetSkeletonJointPosition(1, sj, newSample.getJPositions_nc()[sj]); // gross hack to get around const
         }
 
         newSample.calculateVectors();
@@ -346,8 +392,8 @@ void MainWindow::on_buttonTakeSample_clicked()
         QTableWidgetItem *newItem;
         for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
         {
-            newItem = new QTableWidgetItem
-            (QString::fromStdString(newSample.getJVector(col).toString()));
+            QVector3D vec = newSample.getJVector(col);
+            newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
             ui->tableWidget->setItem(row, col, newItem);
         }
 

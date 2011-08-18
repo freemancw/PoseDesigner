@@ -37,6 +37,12 @@ private:
     PoseSample mean, stddev;
 
 public:
+    inline Pose()
+    {
+        mean.setName("Mean");
+        stddev.setName("Standard Deviation");
+    }
+
     void calculateStatistics();
 
     // getters

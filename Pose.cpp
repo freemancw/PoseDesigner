@@ -12,13 +12,12 @@ Created:    May 19, 2011
 // local
 #include <Pose.h>
 #include <PoseSample.h>
-#include <Vector3.h>
 
 void Pose::calculateStatistics()
 {
     for(SkeletonVector sv = NECK_HEAD; sv < SKEL_VEC_MAX; sv++)
     {
-        mean.getJVector(sv) = stddev.getJVector(sv) = Vector3::ZERO;
+        mean.getJVector(sv) = stddev.getJVector(sv) = QVector3D();
         QMap<QString, PoseSample>::iterator iter;
 
         for(iter = samples.begin(); iter != samples.end(); iter++)
@@ -33,20 +32,34 @@ void Pose::calculateStatistics()
         }
 
         stddev.getJVector(sv) /= samples.size();
-        stddev.getJVector(sv).x = sqrt(stddev.getJVector(sv).x);
-        stddev.getJVector(sv).y = sqrt(stddev.getJVector(sv).y);
-        stddev.getJVector(sv).z = sqrt(stddev.getJVector(sv).z);
+        stddev.getJVector(sv).setX(sqrt(stddev.getJVector(sv).x()));
+        stddev.getJVector(sv).setY(sqrt(stddev.getJVector(sv).y()));
+        stddev.getJVector(sv).setZ(sqrt(stddev.getJVector(sv).z()));
     }
 }
 
+/*
 QDataStream &operator<<(QDataStream &out, Pose &p)
 {
-    out << p.getMean() << p.getStdDev() << p.getSamples();
+    qDebug() << "Outputting: Pose";
+
+    out << p.getMean() << p.getStdDev();
 
     return out;
 }
 
 QDataStream &operator>>(QDataStream &in, Pose &p)
 {
+    PoseSample mean, stddev;
+    QMap<QString, PoseSample> samples;
+
+    in >> mean >> stddev;
+
+    p.getMean() = mean;
+    p.getStdDev() = stddev;
+    qDebug() << p.getStdDev().getName();
+    //p.getSamples() = samples;
+
     return in;
 }
+*/

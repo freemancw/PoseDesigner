@@ -57,6 +57,7 @@ public:
     inline void removeSample(QString name) { samples.remove(name); }
 };
 
+QDebug operator<<(QDebug, Pose &);
 QDataStream &operator<<(QDataStream &, Pose &);
 QDataStream &operator>>(QDataStream &, Pose &);
 

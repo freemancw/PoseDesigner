@@ -106,6 +106,44 @@ QDataStream &operator>>(QDataStream &in, XnVector3D &p)
 }
 
 //XnSkeletonJoint
+static const QString XnSkeletonJointNames[] =
+{
+    "XN_SKEL_HEAD",
+    "XN_SKEL_NECK",
+    "XN_SKEL_TORSO",
+    "XN_SKEL_WAIST",
+
+    "XN_SKEL_LEFT_COLLAR",
+    "XN_SKEL_LEFT_SHOULDER",
+    "XN_SKEL_LEFT_ELBOW",
+    "XN_SKEL_LEFT_WRIST",
+    "XN_SKEL_LEFT_HAND",
+    "XN_SKEL_LEFT_FINGERTIP",
+
+    "XN_SKEL_RIGHT_COLLAR",
+    "XN_SKEL_RIGHT_SHOULDER",
+    "XN_SKEL_RIGHT_ELBOW",
+    "XN_SKEL_RIGHT_WRIST",
+    "XN_SKEL_RIGHT_HAND",
+    "XN_SKEL_RIGHT_FINGERTIP",
+
+    "XN_SKEL_LEFT_HIP",
+    "XN_SKEL_LEFT_KNEE",
+    "XN_SKEL_LEFT_ANKLE",
+    "XN_SKEL_LEFT_FOOT",
+
+    "XN_SKEL_RIGHT_HIP",
+    "XN_SKEL_RIGHT_KNEE",
+    "XN_SKEL_RIGHT_ANKLE",
+    "XN_SKEL_RIGHT_FOOT"
+};
+
+QDebug operator<<(QDebug d, XnSkeletonJoint &sj)
+{
+    d << XnSkeletonJointNames[sj];
+    return d;
+}
+
 QDataStream &operator<<(QDataStream &out, XnSkeletonJoint &sj)
 {
     out << quint32(sj);
@@ -121,6 +159,12 @@ QDataStream &operator>>(QDataStream &in, XnSkeletonJoint &sj)
 }
 
 //XnSkeletonJointPosition
+QDebug operator<<(QDebug d, XnSkeletonJointPosition &sjp)
+{
+    d << "fConfidence: " << sjp.fConfidence << ", Position: " << sjp.position;
+    return d;
+}
+
 QDataStream &operator<<(QDataStream &out, const XnSkeletonJointPosition &sjp)
 {
     out << sjp.position << (float)sjp.fConfidence;
@@ -134,6 +178,29 @@ QDataStream &operator>>(QDataStream &in, XnSkeletonJointPosition &sjp)
 }
 
 //PoseSample
+QDebug operator<<(QDebug d, PoseSample &p)
+{
+    d << "Name: " << p.getName();
+
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition>::iterator pIter;
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions = p.getJPositions();
+
+    for(pIter = jPositions.begin(); pIter != jPositions.end(); ++pIter)
+    {
+        d << pIter.key() << " " << pIter.value();
+    }
+
+    QMap<SkeletonVector, QVector3D>::iterator vIter;
+    QMap<SkeletonVector, QVector3D> jVectors = p.getJVectors();
+
+    for(vIter = jVectors.begin(); vIter != jVectors.end(); ++vIter)
+    {
+        d << vIter.key() << " " << vIter.value();
+    }
+
+    return d;
+}
+
 QDataStream &operator<<(QDataStream &out, const PoseSample &p)
 {
     out << p.getName() << p.getImage() << p.getJPositions() << p.getJVectors();

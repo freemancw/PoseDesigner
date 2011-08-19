@@ -38,6 +38,25 @@ void Pose::calculateStatistics()
     }
 }
 
+QDebug operator<<(QDebug d, Pose &p)
+{
+    d << "Mean: ";
+    d << p.getMean();
+    d << "Standard Deviation: ";
+    d << p.getStdDev();
+    d << "Samples: ";
+
+    QMap<QString, PoseSample>::iterator iter;
+    QMap<QString, PoseSample> samples = p.getSamples();
+
+    for(iter = samples.begin(); iter != samples.end(); ++iter)
+    {
+        d << iter.key() << " " << iter.value();
+    }
+
+    return d;
+}
+
 QDataStream &operator<<(QDataStream &out, Pose &p)
 {
     out << p.getMean() << p.getStdDev() << p.getSamples();

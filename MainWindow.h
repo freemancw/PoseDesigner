@@ -62,8 +62,8 @@ private slots:
     void on_buttonKinectSettings_clicked();
 
     // Various Widget Actions
-    void on_listWidget_currentItemChanged
-    (QListWidgetItem* current, QListWidgetItem* previous);
+    void on_sampleList_currentItemChanged
+    (QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
     Ui::MainWindow *ui;

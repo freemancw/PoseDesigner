@@ -84,7 +84,7 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QListWidget" name="listWidget">
+              <widget class="QListWidget" name="sampleList">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
                  <horstretch>0</horstretch>
@@ -144,7 +144,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="tableWidget">
+            <widget class="QTableWidget" name="sampleTable">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -284,7 +284,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QTableWidget" name="statsWidget">
+            <widget class="QTableWidget" name="statsTable">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>

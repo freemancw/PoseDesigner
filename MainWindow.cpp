@@ -71,7 +71,7 @@ void MainWindow::on_actionNew_triggered()
     // to add or remove samples. TODO: we need a mechanism to flag
     // modifications.
 
-    if(!ui->listWidget->count())
+    if(!ui->sampleList->count())
     {
         this->setWindowTitle(tr("untitled.pose - PoseDesigner"));
         return;
@@ -91,10 +91,10 @@ void MainWindow::on_actionNew_triggered()
     }
     else if(ret == QMessageBox::Discard)
     {
-        ui->listWidget->clear();
-        ui->tableWidget->clearContents();
-        ui->tableWidget->setRowCount(0);
-        ui->statsWidget->clearContents();
+        ui->sampleList->clear();
+        ui->sampleTable->clearContents();
+        ui->sampleTable->setRowCount(0);
+        ui->statsTable->clearContents();
         currentFilename = QString();
         this->setWindowTitle(tr("untitled.pose - PoseDesigner"));
     }
@@ -106,6 +106,9 @@ void MainWindow::on_actionOpen_triggered()
     QString filename = QFileDialog::getOpenFileName(this,
         tr("Open Pose"), "./", tr("Pose Files (*.pose)"));
 
+    if(filename.isEmpty())
+        return;
+
     QFile inFile(filename);
 
     if(!inFile.open(QIODevice::ReadOnly))
@@ -114,195 +117,67 @@ void MainWindow::on_actionOpen_triggered()
         return;
     }
 
+
+    // should probably see if the current file has been modified before
+    // continuing
+
     QDataStream inStream(&inFile);
-
     inStream >> currentPose;
-
-
-
-
-
-
-
-
-    /*
-    QMap<QString, QVector3D> qm;
-
-    inStream >> qm;
-
-    QMap<QString, QVector3D>::iterator iter;
-
-    qDebug() << qm.count();
-
-    for(iter = qm.begin(); iter != qm.end(); ++iter)
-    {
-        qDebug() << "Key: " << iter.key() << " Value: " << iter.value();
-    }
-    */
-
-
-    //PoseSample samp1;
-
-    /*
-    QMap<SkeletonVector, QVector3D> qm;
-
-    inStream >> qm;
-
-    QMap<SkeletonVector, QVector3D>::iterator iter;
-
-    for(iter = qm.begin(); iter != qm.end(); ++iter)
-    {
-        QVector3D vec = iter.value();
-        qDebug() << "Key: " << iter.key() << " Value: " << QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z());
-    }
-    */
-
-
-
-
-    /*
-    inStream >> samp1;
-
-    qDebug() << samp1.getName();
-
-    //jPositions seems to work
-    QMap<XnSkeletonJoint, XnSkeletonJointPosition> qm = samp1.getJPositions();
-
-    QMap<XnSkeletonJoint, XnSkeletonJointPosition>::iterator iter;
-
-    for(iter = qm.begin(); iter != qm.end(); ++iter)
-    {
-        XnSkeletonJointPosition sjp = iter.value();
-        qDebug() << "Key: " << iter.key() << " Confidence: "
-                 << sjp.fConfidence << " Position: " << QString("%1, %2, %3").arg(sjp.position.X).arg(sjp.position.Y).arg(sjp.position.Z);
-    }
-
-
-    QMap<SkeletonVector, QVector3D> jqm = samp1.getJVectors();
-
-    qDebug() << jqm.count() << " " << jqm.begin().key();
-
-    QMap<SkeletonVector, QVector3D>::iterator iter2;
-
-
-    for(iter2 = jqm.begin(); iter2 != jqm.end(); ++iter2)
-    {
-        QVector3D vec = iter2.value();
-        qDebug() << "Key: " << iter2.key() << " Value: " << QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z());
-    }
-    */
-
-
-    /*
-    QMap<XnSkeletonJoint, XnSkeletonJointPosition> qm;
-
-    inStream >> qm;
-
-    QMap<XnSkeletonJoint, XnSkeletonJointPosition>::iterator iter;
-
-    for(iter = qm.begin(); iter != qm.end(); ++iter)
-    {
-        XnSkeletonJointPosition sjp = iter.value();
-        qDebug() << "Key: " << iter.key() << " Confidence: "
-                 << sjp.fConfidence << " Position: " << QString("%1, %2, %3").arg(sjp.position.X).arg(sjp.position.Y).arg(sjp.position.Z);
-    }
-    */
-
-    /* this works
-    QMap<SkeletonVector, QVector3D> qm;
-
-    inStream >> qm;
-
-    QMap<SkeletonVector, QVector3D>::iterator iter;
-
-    for(iter = qm.begin(); iter != qm.end(); ++iter)
-    {
-        QVector3D vec = iter.value();
-        qDebug() << "Key: " << iter.key() << " Value: " << QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z());
-    }
-    */
-
-    /*
-    QMap<SkeletonVector, QVector3D> qm;
-
-    inStream >> qm;
-
-    QMap<SkeletonVector, QVector3D>::iterator iter;
-
-    for(iter = qm.begin(); iter != qm.end(); iter++)
-    {
-        SkeletonVector sv = iter.key();
-        QVector3D vec = iter.value();
-        qDebug() << "Key: " << sv << "Value: " << QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z());
-    }
-    */
-
-    /*
-    XnSkeletonJoint sj;
-    inStream >> sj;
-
-    qDebug() << "SJ: " << sj;
-    */
-    /*
-    XnSkeletonJointPosition sjp;
-
-    inStream >> sjp;
-
-    qDebug() << "SJP Vector: " << QString("%1, %2, %3").arg(sjp.position.X).arg(sjp.position.Y).arg(sjp.position.Z);
-    qDebug() << "SJP Confidence: " << sjp.fConfidence;
-    */
-
-    //Vector3 v;
-
-   // inStream >> v;
-
-   // qDebug() << v;
-
-    //inStream >> currentPose;
-
-    //qDebug() << currentPose.getMean().getName();
-    //qDebug() << currentPose.getStdDev().getName();
-    //qDebug() << currentPose.getSamples().count();
-
-    //QMap<QString, PoseSample>::iterator iter;
-
-
-    /*
-    for(iter = currentPose.getSamples().begin(); iter != currentPose.getSamples().end(); iter++)
-    {
-        qDebug() << iter.value().getName() << "blah";
-    }
-    */
-
-    //qDebug() << "ahh";
-
     inFile.close();
+
+    // clear sample list
+    ui->sampleList->clear();
+
+    // clear the sample table
+    ui->sampleTable->clearContents();
+    ui->sampleTable->setRowCount(0);
+
+    // clear the stats table
+    ui->statsTable->clearContents();
+
+    // add samples to list and table
+    QMap<QString, PoseSample> samples = currentPose.getSamples();
+    QMap<QString, PoseSample>::iterator sIter;
+
+    for(sIter = samples.begin(); sIter != samples.end(); ++sIter)
+    {
+        QListWidgetItem *wi = new QListWidgetItem(sIter.key(), ui->sampleList);
+        ui->sampleList->addItem(wi);
+
+        // add a row in the table
+        int row = ui->sampleTable->rowCount();
+        ui->sampleTable->insertRow(row);
+        ui->sampleTable->setVerticalHeaderItem(row, new QTableWidgetItem(sIter.key()));
+
+        // populate the columns
+        QTableWidgetItem *newItem;
+        for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+        {
+            QVector3D vec = sIter.value().getJVector(col);
+            newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+            ui->sampleTable->setItem(row, col, newItem);
+        }
+    }
+
+    // populate the columns
+    QTableWidgetItem *newItem;
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        QVector3D vec = currentPose.getMean().getJVector(col);
+        newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+        ui->statsTable->setItem(0, col, newItem);
+    }
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        QVector3D vec = currentPose.getStdDev().getJVector(col);
+        newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+        ui->statsTable->setItem(1, col, newItem);
+    }
 }
 
-// the stuff immediately below is for saving functionality, need to move the
-// vector names elsewhere
-
-const char *SkeletonVectorNames[] =
-{
-    "NECK_HEAD",
-    "SHOULDER_SHOULDER",
-    "HIP_HIP",
-    "L_SHOULDER_ELBOW",
-    "L_ELBOW_HAND",
-    "L_SHOULDER_WAIST",
-    "L_WAIST_HIP",
-    "L_HIP_KNEE",
-    "L_KNEE_FOOT",
-    "R_SHOULDER_ELBOW",
-    "R_ELBOW_HAND",
-    "R_SHOULDER_WAIST",
-    "R_WAIST_HIP",
-    "R_HIP_KNEE",
-    "R_KNEE_FOOT",
-    "SKEL_VEC_MAX"
-};
-
-void saveFile(QString filename)
+static void saveFile(QString filename)
 {
     QFile outFile(filename);
 
@@ -313,136 +188,8 @@ void saveFile(QString filename)
     }
 
     QDataStream outStream(&outFile);
-
     outStream << currentPose;
-
-    SkeletonVector sv = R_SHOULDER_ELBOW;
-    qDebug() << sv;
-   // qDebug() << R_SHOULDER_ELBOW;
-
-    /*
-    QMap<QString, QVector3D> qm;
-
-    qm.insert(QString("hello"), QVector3D(1, 11, 111));
-    qm.insert(QString("hey there"), QVector3D(2, 22, 222));
-
-    qDebug() << qm.count();
-
-    outStream << qm;
-    */
-
-    /*
-    PoseSample samp1;
-    samp1.setName("Sample 1");
-
-    //jPositions
-    QMap<XnSkeletonJoint, XnSkeletonJointPosition> qm;
-
-    XnSkeletonJointPosition pos1, pos2;
-
-    pos1.fConfidence = 0.1;
-    pos1.position.X = 1.0;
-    pos1.position.Y = 11.0;
-    pos1.position.Z = 111.0;
-
-    pos2.fConfidence = 0.2;
-    pos2.position.X = 2.0;
-    pos2.position.Y = 22.0;
-    pos2.position.Z = 222.0;
-
-    qm.insert(XN_SKEL_LEFT_COLLAR, pos1);
-    qm.insert(XN_SKEL_LEFT_HAND, pos2);
-
-    samp1.setJPositions(qm);
-
-    //jVectors
-    QMap<SkeletonVector, QVector3D> jqm;
-    jqm.insert(L_ELBOW_HAND, QVector3D(1.0, 11.0, 111.0));
-    jqm.insert(R_ELBOW_HAND, QVector3D(2.0, 22.0, 222.0));
-
-    samp1.setJVectors(jqm);
-
-    outStream << samp1;
-
-    //outStream << jqm;
-
-*/
-    /*
-    QMap<SkeletonVector, QVector3D> qm;
-
-    SkeletonVector sv1 = SHOULDER_SHOULDER;
-    QVector3D vec1(1.0, 11.0, 111.0);
-    qm.insert(sv1, vec1);
-
-    SkeletonVector sv2 = R_ELBOW_HAND;
-    QVector3D vec2(2.0, 22.0, 222.0);
-    qm.insert(sv2, vec2);
-    */
-
-    /*
-    QMap<XnSkeletonJoint, XnSkeletonJointPosition> qm;
-
-    XnSkeletonJointPosition pos1, pos2;
-
-    pos1.fConfidence = 0.1;
-    pos1.position.X = 1.0;
-    pos1.position.Y = 11.0;
-    pos1.position.Z = 111.0;
-
-    pos2.fConfidence = 0.2;
-    pos2.position.X = 2.0;
-    pos2.position.Y = 22.0;
-    pos2.position.Z = 222.0;
-
-    qm.insert(XN_SKEL_LEFT_COLLAR, pos1);
-    qm.insert(XN_SKEL_LEFT_HAND, pos2);
-
-    outStream << qm;
-    */
-
-    /*
-
-    XnSkeletonJoint sj = XN_SKEL_WAIST;
-
-    outStream << sj;
-
-    */
-    /*
-    XnVector3D v;
-    v.X = 33.2;
-    v.Y = 244.9;
-    v.Z = 34444.4;
-
-    XnSkeletonJointPosition sjp;
-    sjp.position = v;
-    sjp.fConfidence = 0.5;
-
-    outStream << sjp;
-    */
-
-   // Vector3 v(1.2, 2.9, 3.4);
-
-   // outStream << v;
-
-    //outStream << currentPose;
-
-    //QTextStream outStream(&outFile);
-    //QDomDocument outXML;
-
-    /*
-    QDomNode root = outXML.createElement("pose");
-    outXML.appendChild(root);
-
-    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
-    {
-        QDomNode vector = outXML.createElement(SkeletonVectorNames[col]);
-        root.appendChild(vector);
-    }
-
-    outXML.save(outStream, 0);
-    */
     outFile.close();
-
 }
 
 // File->Save
@@ -528,14 +275,14 @@ void MainWindow::calculateStats()
     {
         QVector3D vec = currentPose.getMean().getJVector(col);
         newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
-        ui->statsWidget->setItem(0, col, newItem);
+        ui->statsTable->setItem(0, col, newItem);
     }
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
         QVector3D vec = currentPose.getStdDev().getJVector(col);
         newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
-        ui->statsWidget->setItem(1, col, newItem);
+        ui->statsTable->setItem(1, col, newItem);
     }
 }
 
@@ -604,13 +351,13 @@ void MainWindow::on_buttonTakeSample_clicked()
         //image.save(path, "JPEG");
 
         // add the sample to the list
-        QListWidgetItem *wi = new QListWidgetItem(text, ui->listWidget);
-        ui->listWidget->addItem(wi);
+        QListWidgetItem *wi = new QListWidgetItem(text, ui->sampleList);
+        ui->sampleList->addItem(wi);
 
         // add a row in the table
-        int row = ui->tableWidget->rowCount();
-        ui->tableWidget->insertRow(row);
-        ui->tableWidget->setVerticalHeaderItem(row, new QTableWidgetItem(text));
+        int row = ui->sampleTable->rowCount();
+        ui->sampleTable->insertRow(row);
+        ui->sampleTable->setVerticalHeaderItem(row, new QTableWidgetItem(text));
 
         // populate the columns
         QTableWidgetItem *newItem;
@@ -618,7 +365,7 @@ void MainWindow::on_buttonTakeSample_clicked()
         {
             QVector3D vec = newSample.getJVector(col);
             newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
-            ui->tableWidget->setItem(row, col, newItem);
+            ui->sampleTable->setItem(row, col, newItem);
         }
 
         // add it to the sample collection for this pose
@@ -658,8 +405,8 @@ void MainWindow::on_buttonRemoveSample_clicked()
 
     // TODO: need check here to make sure something is actually selected
     // in the list widget
-    QListWidget *lw = ui->listWidget;
-    QTableWidget *tw = ui->tableWidget;
+    QListWidget *lw = ui->sampleList;
+    QTableWidget *tw = ui->sampleTable;
 
     // empty list
     if(!lw->count())
@@ -700,7 +447,7 @@ void MainWindow::on_buttonRemoveSample_clicked()
     else
     {
         tw->clearContents();
-        ui->statsWidget->clearContents();
+        ui->statsTable->clearContents();
     }
 }
 
@@ -721,8 +468,8 @@ Various Widget Actions
 */
 
 // User highlighted a different sample
-void MainWindow::on_listWidget_currentItemChanged
-(QListWidgetItem* current, QListWidgetItem* previous)
+void MainWindow::on_sampleList_currentItemChanged
+(QListWidgetItem *current, QListWidgetItem *previous)
 {
     QGraphicsScene *scene = new QGraphicsScene();
 
@@ -734,7 +481,7 @@ void MainWindow::on_listWidget_currentItemChanged
         return;
     }
 
-    QString name = ui->listWidget->currentItem()->text();
+    QString name = ui->sampleList->currentItem()->text();
     QImage image = currentPose.getSample(name).getImage();
     QSize size = QSize(ui->samplePreview->width()-2,
                        ui->samplePreview->height()-2);

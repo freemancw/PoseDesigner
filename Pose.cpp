@@ -38,12 +38,9 @@ void Pose::calculateStatistics()
     }
 }
 
-/*
 QDataStream &operator<<(QDataStream &out, Pose &p)
 {
-    qDebug() << "Outputting: Pose";
-
-    out << p.getMean() << p.getStdDev();
+    out << p.getMean() << p.getStdDev() << p.getSamples();
 
     return out;
 }
@@ -53,13 +50,11 @@ QDataStream &operator>>(QDataStream &in, Pose &p)
     PoseSample mean, stddev;
     QMap<QString, PoseSample> samples;
 
-    in >> mean >> stddev;
+    in >> mean >> stddev >> samples;
 
     p.getMean() = mean;
     p.getStdDev() = stddev;
-    qDebug() << p.getStdDev().getName();
-    //p.getSamples() = samples;
+    p.getSamples() = samples;
 
     return in;
 }
-*/

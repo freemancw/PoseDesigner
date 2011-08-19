@@ -28,6 +28,7 @@ Created:    May 13, 2011
 #include <KinectInfo.h>
 #include <Pose.h>
 #include <PoseSample.h>
+#include <SkeletonVector.h>
 
 static Pose currentPose;
 static QString currentFilename;
@@ -115,6 +116,142 @@ void MainWindow::on_actionOpen_triggered()
 
     QDataStream inStream(&inFile);
 
+    inStream >> currentPose;
+
+
+
+
+
+
+
+
+    /*
+    QMap<QString, QVector3D> qm;
+
+    inStream >> qm;
+
+    QMap<QString, QVector3D>::iterator iter;
+
+    qDebug() << qm.count();
+
+    for(iter = qm.begin(); iter != qm.end(); ++iter)
+    {
+        qDebug() << "Key: " << iter.key() << " Value: " << iter.value();
+    }
+    */
+
+
+    //PoseSample samp1;
+
+    /*
+    QMap<SkeletonVector, QVector3D> qm;
+
+    inStream >> qm;
+
+    QMap<SkeletonVector, QVector3D>::iterator iter;
+
+    for(iter = qm.begin(); iter != qm.end(); ++iter)
+    {
+        QVector3D vec = iter.value();
+        qDebug() << "Key: " << iter.key() << " Value: " << QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z());
+    }
+    */
+
+
+
+
+    /*
+    inStream >> samp1;
+
+    qDebug() << samp1.getName();
+
+    //jPositions seems to work
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> qm = samp1.getJPositions();
+
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition>::iterator iter;
+
+    for(iter = qm.begin(); iter != qm.end(); ++iter)
+    {
+        XnSkeletonJointPosition sjp = iter.value();
+        qDebug() << "Key: " << iter.key() << " Confidence: "
+                 << sjp.fConfidence << " Position: " << QString("%1, %2, %3").arg(sjp.position.X).arg(sjp.position.Y).arg(sjp.position.Z);
+    }
+
+
+    QMap<SkeletonVector, QVector3D> jqm = samp1.getJVectors();
+
+    qDebug() << jqm.count() << " " << jqm.begin().key();
+
+    QMap<SkeletonVector, QVector3D>::iterator iter2;
+
+
+    for(iter2 = jqm.begin(); iter2 != jqm.end(); ++iter2)
+    {
+        QVector3D vec = iter2.value();
+        qDebug() << "Key: " << iter2.key() << " Value: " << QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z());
+    }
+    */
+
+
+    /*
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> qm;
+
+    inStream >> qm;
+
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition>::iterator iter;
+
+    for(iter = qm.begin(); iter != qm.end(); ++iter)
+    {
+        XnSkeletonJointPosition sjp = iter.value();
+        qDebug() << "Key: " << iter.key() << " Confidence: "
+                 << sjp.fConfidence << " Position: " << QString("%1, %2, %3").arg(sjp.position.X).arg(sjp.position.Y).arg(sjp.position.Z);
+    }
+    */
+
+    /* this works
+    QMap<SkeletonVector, QVector3D> qm;
+
+    inStream >> qm;
+
+    QMap<SkeletonVector, QVector3D>::iterator iter;
+
+    for(iter = qm.begin(); iter != qm.end(); ++iter)
+    {
+        QVector3D vec = iter.value();
+        qDebug() << "Key: " << iter.key() << " Value: " << QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z());
+    }
+    */
+
+    /*
+    QMap<SkeletonVector, QVector3D> qm;
+
+    inStream >> qm;
+
+    QMap<SkeletonVector, QVector3D>::iterator iter;
+
+    for(iter = qm.begin(); iter != qm.end(); iter++)
+    {
+        SkeletonVector sv = iter.key();
+        QVector3D vec = iter.value();
+        qDebug() << "Key: " << sv << "Value: " << QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z());
+    }
+    */
+
+    /*
+    XnSkeletonJoint sj;
+    inStream >> sj;
+
+    qDebug() << "SJ: " << sj;
+    */
+    /*
+    XnSkeletonJointPosition sjp;
+
+    inStream >> sjp;
+
+    qDebug() << "SJP Vector: " << QString("%1, %2, %3").arg(sjp.position.X).arg(sjp.position.Y).arg(sjp.position.Z);
+    qDebug() << "SJP Confidence: " << sjp.fConfidence;
+    */
+
     //Vector3 v;
 
    // inStream >> v;
@@ -169,13 +306,119 @@ void saveFile(QString filename)
 {
     QFile outFile(filename);
 
-    if(!outFile.open(QIODevice::WriteOnly | QIODevice::Text))
+    if(!outFile.open(QIODevice::WriteOnly))
     {
         qDebug() << "Unable to write to file " << filename << ".";
         return;
     }
 
     QDataStream outStream(&outFile);
+
+    outStream << currentPose;
+
+    SkeletonVector sv = R_SHOULDER_ELBOW;
+    qDebug() << sv;
+   // qDebug() << R_SHOULDER_ELBOW;
+
+    /*
+    QMap<QString, QVector3D> qm;
+
+    qm.insert(QString("hello"), QVector3D(1, 11, 111));
+    qm.insert(QString("hey there"), QVector3D(2, 22, 222));
+
+    qDebug() << qm.count();
+
+    outStream << qm;
+    */
+
+    /*
+    PoseSample samp1;
+    samp1.setName("Sample 1");
+
+    //jPositions
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> qm;
+
+    XnSkeletonJointPosition pos1, pos2;
+
+    pos1.fConfidence = 0.1;
+    pos1.position.X = 1.0;
+    pos1.position.Y = 11.0;
+    pos1.position.Z = 111.0;
+
+    pos2.fConfidence = 0.2;
+    pos2.position.X = 2.0;
+    pos2.position.Y = 22.0;
+    pos2.position.Z = 222.0;
+
+    qm.insert(XN_SKEL_LEFT_COLLAR, pos1);
+    qm.insert(XN_SKEL_LEFT_HAND, pos2);
+
+    samp1.setJPositions(qm);
+
+    //jVectors
+    QMap<SkeletonVector, QVector3D> jqm;
+    jqm.insert(L_ELBOW_HAND, QVector3D(1.0, 11.0, 111.0));
+    jqm.insert(R_ELBOW_HAND, QVector3D(2.0, 22.0, 222.0));
+
+    samp1.setJVectors(jqm);
+
+    outStream << samp1;
+
+    //outStream << jqm;
+
+*/
+    /*
+    QMap<SkeletonVector, QVector3D> qm;
+
+    SkeletonVector sv1 = SHOULDER_SHOULDER;
+    QVector3D vec1(1.0, 11.0, 111.0);
+    qm.insert(sv1, vec1);
+
+    SkeletonVector sv2 = R_ELBOW_HAND;
+    QVector3D vec2(2.0, 22.0, 222.0);
+    qm.insert(sv2, vec2);
+    */
+
+    /*
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> qm;
+
+    XnSkeletonJointPosition pos1, pos2;
+
+    pos1.fConfidence = 0.1;
+    pos1.position.X = 1.0;
+    pos1.position.Y = 11.0;
+    pos1.position.Z = 111.0;
+
+    pos2.fConfidence = 0.2;
+    pos2.position.X = 2.0;
+    pos2.position.Y = 22.0;
+    pos2.position.Z = 222.0;
+
+    qm.insert(XN_SKEL_LEFT_COLLAR, pos1);
+    qm.insert(XN_SKEL_LEFT_HAND, pos2);
+
+    outStream << qm;
+    */
+
+    /*
+
+    XnSkeletonJoint sj = XN_SKEL_WAIST;
+
+    outStream << sj;
+
+    */
+    /*
+    XnVector3D v;
+    v.X = 33.2;
+    v.Y = 244.9;
+    v.Z = 34444.4;
+
+    XnSkeletonJointPosition sjp;
+    sjp.position = v;
+    sjp.fConfidence = 0.5;
+
+    outStream << sjp;
+    */
 
    // Vector3 v(1.2, 2.9, 3.4);
 
@@ -200,25 +443,6 @@ void saveFile(QString filename)
     */
     outFile.close();
 
-
-
-            /*
-    pugi::xml_document xmlDoc;
-    pugi::xml_node pose = xmlDoc.append_child("pose");
-
-    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
-    {
-        pugi::xml_node vector = pose.append_child(SkeletonVectorNames[col]);
-        pugi::xml_node mean = vector.append_child("mean");
-        pugi::xml_node mvalue = mean.append_child(pugi::node_pcdata);
-        mvalue.set_value(currentPose.getMean().getJVector(col).toString().c_str());
-        pugi::xml_node stddev = vector.append_child(("std_dev"));
-        pugi::xml_node sdvalue = stddev.append_child(pugi::node_pcdata);
-        sdvalue.set_value(currentPose.getStdDev().getJVector(col).toString().c_str());
-    }
-
-    xmlDoc.save_file(filename.toStdString().c_str());
-    */
 }
 
 // File->Save

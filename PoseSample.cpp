@@ -86,12 +86,16 @@ void PoseSample::calculateVectors()
     jVectors[R_KNEE_FOOT].normalize();
 }
 
-/*
+//XnVector3D
+QDebug operator<<(QDebug d, XnVector3D &v)
+{
+    d << QString("%1, %2, %3").arg(v.X).arg(v.Y).arg(v.Z);
+    return d;
+}
+
 QDataStream &operator<<(QDataStream &out, const XnVector3D &p)
 {
-    qDebug() << "Outputting: XnVector3D";
-
-    out << p.X << p.Y << p.Z;
+    out << (float)p.X << (float)p.Y << (float)p.Z;
     return out;
 }
 
@@ -101,12 +105,25 @@ QDataStream &operator>>(QDataStream &in, XnVector3D &p)
     return in;
 }
 
+//XnSkeletonJoint
+QDataStream &operator<<(QDataStream &out, XnSkeletonJoint &sj)
+{
+    out << quint32(sj);
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, XnSkeletonJoint &sj)
+{
+    quint32 sin;
+    in >> sin;
+    sj = (XnSkeletonJoint)sin;
+    return in;
+}
+
 //XnSkeletonJointPosition
 QDataStream &operator<<(QDataStream &out, const XnSkeletonJointPosition &sjp)
 {
-    qDebug() << "Outputting: XnSkeletonJointPosition";
-
-    out << sjp.position << sjp.fConfidence;
+    out << sjp.position << (float)sjp.fConfidence;
     return out;
 }
 
@@ -116,12 +133,10 @@ QDataStream &operator>>(QDataStream &in, XnSkeletonJointPosition &sjp)
     return in;
 }
 
+//PoseSample
 QDataStream &operator<<(QDataStream &out, const PoseSample &p)
 {
-    qDebug() << "Outputting: PoseSample, " << p.getName();
-
     out << p.getName() << p.getImage() << p.getJPositions() << p.getJVectors();
-
     return out;
 }
 
@@ -130,7 +145,7 @@ QDataStream &operator>>(QDataStream &in, PoseSample &p)
     QString name;
     QImage image;
     QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
-    QMap<SkeletonVector, Vector3> jVectors;
+    QMap<SkeletonVector, QVector3D> jVectors;
 
     in >> name >> image >> jPositions >> jVectors;
 
@@ -143,22 +158,4 @@ QDataStream &operator>>(QDataStream &in, PoseSample &p)
 
     return in;
 }
-
-//XnSkeletonJoint
-QDataStream &operator<<(QDataStream &out, XnSkeletonJoint &sj)
-{
-    qDebug() << "Outputting: XnSkeletonJoint";
-
-    out << quint32(sj);
-    return out;
-}
-
-QDataStream &operator>>(QDataStream &in, XnSkeletonJoint &sj)
-{
-    quint32 sin;
-    in >> sin;
-    sj = (XnSkeletonJoint)sin;
-    return in;
-}
-*/
 

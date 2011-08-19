@@ -88,15 +88,19 @@ inline XnSkeletonJoint& operator++(XnSkeletonJoint& sj, int)
     return sj = static_cast<XnSkeletonJoint>(++temp);
 }
 
+QDebug operator<<(QDebug, XnSkeletonJoint &);
 QDataStream &operator<<(QDataStream &, XnSkeletonJoint &);
 QDataStream &operator>>(QDataStream &, XnSkeletonJoint &);
 
-QDataStream &operator<<(QDataStream &, const XnVector3D &);
-QDataStream &operator>>(QDataStream &, XnVector3D &);
-
+QDebug operator<<(QDebug, XnSkeletonJointPosition &);
 QDataStream &operator<<(QDataStream &, const XnSkeletonJointPosition &);
 QDataStream &operator>>(QDataStream &, XnSkeletonJointPosition &);
 
+QDebug operator<<(QDebug, XnVector3D &);
+QDataStream &operator<<(QDataStream &, const XnVector3D &);
+QDataStream &operator>>(QDataStream &, XnVector3D &);
+
+QDebug operator<<(QDebug, PoseSample &);
 QDataStream &operator<<(QDataStream &, const PoseSample &);
 QDataStream &operator>>(QDataStream &, PoseSample &);
 

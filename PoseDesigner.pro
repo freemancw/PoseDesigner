@@ -24,7 +24,6 @@ SOURCES +=\
     KinectOptionsDialog.cpp \
     PoseSample.cpp \
     AboutDialog.cpp \
-    Vector3.cpp \
     Pose.cpp \
     HelpDialog.cpp \
     SkeletonVector.cpp
@@ -37,7 +36,6 @@ HEADERS  += \
     KinectOptionsDialog.h \
     PoseSample.h \
     AboutDialog.h \
-    Vector3.h \
     Pose.h \
     SkeletonVector.h \
     HelpDialog.h

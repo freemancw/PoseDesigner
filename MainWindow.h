@@ -65,6 +65,8 @@ private slots:
     void on_sampleList_currentItemChanged
     (QListWidgetItem *current, QListWidgetItem *previous);
 
+    void on_actionExport_triggered();
+
 private:
     Ui::MainWindow *ui;
     void calculateStats();

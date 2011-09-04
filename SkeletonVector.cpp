@@ -38,6 +38,12 @@ QDebug operator<<(QDebug d, SkeletonVector &sv)
     return d;
 }
 
+QString &operator<<(QString &s, SkeletonVector &sv)
+{
+    s = SkeletonVectorNames[sv];
+    return s;
+}
+
 QDataStream &operator<<(QDataStream &out, const SkeletonVector &sv)
 {
     out << quint32(sv);

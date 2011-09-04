@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
     splash.finish(&pdWindow);
 
-    //need to embed font, most systems will not have Pacifico
+    // need to embed font, most systems will not have Pacifico
     QFontDatabase::addApplicationFont(":/fonts/gui/fonts/Pacifico.ttf");
 
     return pdApp.exec();

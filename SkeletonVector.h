@@ -42,6 +42,7 @@ enum SkeletonVector
 };
 
 QDebug operator<<(QDebug, SkeletonVector &);
+QString &operator<<(QString&, SkeletonVector &);
 QDataStream &operator<<(QDataStream &, const SkeletonVector &);
 QDataStream &operator>>(QDataStream &, SkeletonVector &);
 

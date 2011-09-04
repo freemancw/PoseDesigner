@@ -121,6 +121,9 @@ void MainWindow::on_actionOpen_triggered()
     // should probably see if the current file has been modified before
     // continuing
 
+    currentFilename = filename;
+    this->setWindowTitle(filename + tr(" - PoseDesigner"));
+
     QDataStream inStream(&inFile);
     inStream >> currentPose;
     inFile.close();
@@ -214,6 +217,51 @@ void MainWindow::on_actionSaveAs_triggered()
 
     this->setWindowTitle(filename + " - PoseDesigner");
     currentFilename = filename;
+}
+
+// File->Export...
+void MainWindow::on_actionExport_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this,
+        tr("Export Pose"), "./", tr("Pose Files (*.pd)"));
+
+    if(filename.isEmpty())
+        return;
+
+    QFile exptFile(filename);
+
+    if(!exptFile.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Unable to export to file " << filename << ".";
+        return;
+    }
+
+    QTextStream ts(&exptFile);
+
+    QDomDocument expt("Pose");
+    QDomElement root = expt.createElement("pose");
+    expt.appendChild(root);
+
+    QDomElement mean = expt.createElement("mean");
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        QString s;
+        s << col;
+        qDebug() << s;
+        QDomElement skelVec = expt.createElement(s);
+        QDomText skelVecText = expt.createTextNode(s);
+        QVector3D vec = currentPose.getMean().getJVector(col);
+        skelVecText.setNodeValue(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+        skelVec.appendChild(skelVecText);
+        mean.appendChild(skelVec);
+    }
+
+    root.appendChild(mean);
+
+    expt.save(ts, 0);
+
+    exptFile.close();
 }
 
 // File->Exit

@@ -229,14 +229,11 @@ void MainWindow::on_actionExport_triggered()
         return;
 
     QFile exptFile(filename);
-
     if(!exptFile.open(QIODevice::WriteOnly))
     {
         qDebug() << "Unable to export to file " << filename << ".";
         return;
     }
-
-    QTextStream ts(&exptFile);
 
     QDomDocument expt("Pose");
     QDomElement root = expt.createElement("pose");
@@ -248,7 +245,6 @@ void MainWindow::on_actionExport_triggered()
     {
         QString s;
         s << col;
-        qDebug() << s;
         QDomElement skelVec = expt.createElement(s);
         QDomText skelVecText = expt.createTextNode(s);
         QVector3D vec = currentPose.getMean().getJVector(col);
@@ -256,10 +252,25 @@ void MainWindow::on_actionExport_triggered()
         skelVec.appendChild(skelVecText);
         mean.appendChild(skelVec);
     }
-
     root.appendChild(mean);
 
-    expt.save(ts, 0);
+    QDomElement stddev = expt.createElement("stddev");
+
+    for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
+    {
+        QString s;
+        s << col;
+        QDomElement skelVec = expt.createElement(s);
+        QDomText skelVecText = expt.createTextNode(s);
+        QVector3D vec = currentPose.getStdDev().getJVector(col);
+        skelVecText.setNodeValue(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+        skelVec.appendChild(skelVecText);
+        stddev.appendChild(skelVec);
+    }
+    root.appendChild(stddev);
+
+    QTextStream ts(&exptFile);
+    expt.save(ts, 2);
 
     exptFile.close();
 }

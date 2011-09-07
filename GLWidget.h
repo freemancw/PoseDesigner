@@ -1,12 +1,11 @@
-/*
-===============================================================================
-File:       GLWidget.h
-Author:     Clinton Freeman
-Created:    May 13, 2011
-
-Comments:   Nothing particularly exciting/useful here.
-===============================================================================
-*/
+/*!
+ *  @file GLWidget.h
+ *  @author Clinton Freeman
+ *  @date 5/13/2011
+ *
+ *  Widget for displaying Kinect data with OpenGL. Nothing particularly
+ *  interesting here.
+ */
 
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
@@ -14,6 +13,10 @@ Comments:   Nothing particularly exciting/useful here.
 // Qt
 #include <QGLWidget>
 
+/*!
+ *  @class GLWidget
+ *  Description goes here.
+ */
 class GLWidget : public QGLWidget
 {
     Q_OBJECT

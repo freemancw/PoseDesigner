@@ -1,12 +1,10 @@
-/*
-===============================================================================
-File:       KinectOptionsDialog.h
-Author:     Clinton Freeman
-Created:    May 13, 2011
-
-Comments:   This file is primarily updated by the GUI editor.
-===============================================================================
-*/
+/*!
+ *  @file KinectOptionsDialog.h
+ *  @author Clinton Freeman
+ *  @date 5/13/2011
+ *
+ *  This file is primarily updated by the GUI editor.
+ */
 
 #ifndef KINECTOPTIONSDIALOG_H
 #define KINECTOPTIONSDIALOG_H

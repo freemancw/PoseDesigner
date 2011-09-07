@@ -1,10 +1,10 @@
-/*
-===============================================================================
-File:       HelpDialog.cpp
-Author:     Clinton Freeman
-Created:    June 6, 2011
-===============================================================================
-*/
+/*!
+ *  @file HelpDialog.cpp
+ *  @author Clinton Freeman
+ *  @date 6/6/2011
+ *
+ *  Currently unused.
+ */
 
 // local
 #include <HelpDialog.h>

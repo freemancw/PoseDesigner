@@ -1,10 +1,10 @@
-/*
-===============================================================================
-File:       KinectDrawer.cpp
-Author:     Clinton Freeman
-Created:    May 15, 2011
-===============================================================================
-*/
+/*!
+ *  @file KinectDrawer.cpp
+ *  @author Clinton Freeman
+ *  @date 5/15/2011
+ *
+ *  Handles displaying Kinect data.
+ */
 
 // Qt
 #include <QtOpenGL>
@@ -90,7 +90,7 @@ void KinectDrawer::drawFrame()
     setupModelview();
     drawDepthMap(depthMD, sceneMD);
 
-    //glFlush();
+    glFlush();
 }
 
 char* pDepthTexBuf;

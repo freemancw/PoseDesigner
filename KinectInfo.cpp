@@ -1,10 +1,10 @@
-/*
-===============================================================================
-File:       KinectInfo.cpp
-Author:     Clinton Freeman
-Created:    May 14, 2011
-===============================================================================
-*/
+/*!
+ *  @file KinectInfo.cpp
+ *  @author Clinton Freeman
+ *  @date 5/14/2011
+ *
+ *  Initializes Kinect connection.
+ */
 
 // Qt
 #include <QDebug>

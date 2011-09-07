@@ -1,12 +1,10 @@
-/*
-===============================================================================
-File:       HelpDialog.h
-Author:     Clinton Freeman
-Created:    June 6, 2011
-
-Comments:   This file is primarily updated by the GUI editor.
-===============================================================================
-*/
+/*!
+ *  @file HelpDialog.h
+ *  @author Clinton Freeman
+ *  @date 6/6/2011
+ *
+ *  Currently unused.
+ */
 
 #ifndef HELPDIALOG_H
 #define HELPDIALOG_H

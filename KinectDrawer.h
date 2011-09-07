@@ -1,12 +1,10 @@
-/*
-===============================================================================
-File:       KinectDrawer.h
-Author:     Clinton Freeman
-Created:    May 15, 2011
-
-Comments:
-===============================================================================
-*/
+/*!
+ *  @file KinectDrawer.h
+ *  @author Clinton Freeman
+ *  @date 5/15/2011
+ *
+ *  Handles displaying Kinect data.
+ */
 
 #ifndef KINECTDRAWER_H
 #define KINECTDRAWER_H

@@ -1,10 +1,10 @@
-/*
-===============================================================================
-File:       PoseSample.cpp
-Author:     Clinton Freeman
-Created:    May 16, 2011
-===============================================================================
-*/
+/*!
+ *  @file PoseSample.cpp
+ *  @author Clinton Freeman
+ *  @date 5/16/2011
+ *
+ *  PoseSample implementation. See PoseSample.h for a detailed description.
+ */
 
 // Qt
 #include <QVector3D>

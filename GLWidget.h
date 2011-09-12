@@ -5,6 +5,8 @@
  *
  *  Widget for displaying Kinect data with OpenGL. Nothing particularly
  *  interesting here.
+ *
+ *  @brief Widget for displaying Kinect data
  */
 
 #ifndef GLWIDGET_H

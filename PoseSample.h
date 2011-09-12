@@ -1,34 +1,30 @@
-/*
-===============================================================================
-File:       PoseSample.h
-Author:     Clinton Freeman
-Created:    May 16, 2011
+/*!
+ *  @file PoseSample.h
+ *  @author Clinton Freeman
+ *  @date 5/16/2011
+ *
+ *  A PoseSample is composed of several things, the most important of which is
+ *  a collection of 3D vectors that go from a particular joint to another.
+ *
+ *  Operating under the assumption that the player has been recognized and his
+ *  skeleton is being tracked, the way a sample is taken is that each of the
+ *  joint positions are retrieved through OpenNI at the time of sampling and
+ *  stored in a std::map. These positions are identified by the XnSkeletonJoint
+ *  enumeration provided by OpenNI.
+ *
+ *  From the position data, the 3D vectors are then generated according to a
+ *  somewhat arbitrary convention (AFAICT it doesn't actually matter how this
+ *  is done). This convention is codified inside of the SkeletonVector
+ *  enumeration and elaborated inside comments in SkeletonVector.h. The vectors
+ *  are stored in a std::map, identified by the particular SkeletonVector that
+ *  they represent.
 
-Comments:   A PoseSample is composed of several things, the most important of
-            which is a collection of 3D vectors that go from a particular joint
-            to another.
-
-            Operating under the assumption that the player has been recognized
-            and his skeleton is being tracked, the way a sample is taken is
-            that each of the joint positions are retrieved through OpenNI at
-            the time of sampling and stored in a std::map. These positions are
-            identified by the XnSkeletonJoint enumeration provided by OpenNI.
-
-            From the position data, the 3D vectors are then generated according
-            to a somewhat arbitrary convention (AFAICT it doesn't actually
-            matter how this is done). This convention is codified inside of the
-            SkeletonVector enumeration and elaborated inside comments in that
-            file. The vectors are stored in a std::map, identified by the
-            particular SkeletonVector that they represent.
-
-            Additionally - primarily because Qt makes it so damned easy - an
-            image is "snapped" from the OpenGL framebuffer at sampling time
-            and is used so that the user can actually remember the pose they
-            are working on; this is especially useful for when you come back to
-            a pose after some time. Qt can also easily export this image to
-            a common image format, such as JPG.
-===============================================================================
-*/
+ *  Additionally - primarily because Qt makes it so damned easy - an image is
+ *  "snapped" from the OpenGL framebuffer at sampling time and is used so that
+ *  the user can actually remember the pose they are working on; this is
+ *  especially useful for when you come back to a pose after some time. Qt can
+ *  also easily export this image to a common image format, such as JPG or PNG.
+ */
 
 #ifndef POSESAMPLE_H
 #define POSESAMPLE_H

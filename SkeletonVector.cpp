@@ -1,12 +1,13 @@
-/*
-===============================================================================
-File:       SkeletonVector.cpp
-Author:     Clinton Freeman
-Created:    August 17, 2011
-===============================================================================
-*/
+/*!
+ *  @file SkeletonVector.cpp
+ *  @author Clinton Freeman
+ *  @date 8/20/2011
+ *
+ *  SkeletonVector implementation. See SkeletonVector.h for a detailed
+ *  description.
+ */
 
-//
+// Qt
 #include <QtCore>
 
 // local

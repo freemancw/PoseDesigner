@@ -1,10 +1,13 @@
-/*
-===============================================================================
-File:       Pose.cpp
-Author:     Clinton Freeman
-Created:    May 19, 2011
-===============================================================================
-*/
+/*!
+ *  @file Pose.cpp
+ *  @author Clinton Freeman
+ *  @date 5/19/2011
+ *
+ *  Pose implementation. See Pose.h for detailed description.
+ *
+ *  @todo Since individual samples are identified by their names we need to
+ *  check for when the user chooses the same name twice.
+ */
 
 // system
 #include <math.h>

@@ -5,6 +5,8 @@
  *
  *  Widget that provides an OpenGL context to draw Kinect data. Hands off
  *  most of the actual work to a KinectDrawer object.
+ *
+ *  @brief Widget for displaying Kinect data (implementation)
  */
 
 // Qt

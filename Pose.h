@@ -1,25 +1,19 @@
-/*
-===============================================================================
-File:       Pose.h
-Author:     Clinton Freeman
-Created:    May 19, 2011
-
-Comments:   A Pose is composed of some number of PoseSamples, which is
-            represented as a std::map in which individual samples are
-            identified by whatever string the user entered as its name when the
-            sample was taken.
-
-            In addition to the map of PoseSamples, a number of specifically
-            numerated statistical PoseSamples are defined as private member
-            variables: currently just the mean and standard deviation.
-
-            The user can add and remove samples and statistical values are
-            generated when they do so.
-
-            Bug: Since individual samples are identified by their names we need
-            to check for when the user chooses the same name twice.
-===============================================================================
-*/
+/*!
+ *  @file Pose.h
+ *  @author Clinton Freeman
+ *  @date 5/19/2011
+ *
+ *  A Pose is composed of some number of PoseSample, which is represented as a
+ *  map in which individual samples are identified by whatever string the user
+ *  entered as its name when the sample was taken.
+ *
+ *  In addition to the map of PoseSample, a number of specifically numerated
+ *  statistical PoseSample are defined as private member variables: currently
+ *  just the mean and standard deviation.
+ *
+ *  The user can add and remove samples and statistical values are generated
+ *  when they do so.
+ */
 
 #ifndef POSE_H
 #define POSE_H

@@ -51,6 +51,8 @@ RESOURCES += \
 OTHER_FILES += \
     iconresource.rc \
     tasklist.tasks \
-    posedesigner.ico
+    posedesigner.ico \
+    README.txt
 
 RC_FILE = iconresource.rc
+

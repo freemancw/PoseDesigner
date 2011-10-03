@@ -35,9 +35,14 @@ void Pose::calculateStatistics()
         }
 
         stddev.getJVector(sv) /= samples.size();
+        /*
         stddev.getJVector(sv).setX(sqrt(stddev.getJVector(sv).x()));
         stddev.getJVector(sv).setY(sqrt(stddev.getJVector(sv).y()));
         stddev.getJVector(sv).setZ(sqrt(stddev.getJVector(sv).z()));
+        */
+        stddev.getJVector(sv).setX(0.5);
+        stddev.getJVector(sv).setY(0.5);
+        stddev.getJVector(sv).setZ(0.8);
     }
 }
 

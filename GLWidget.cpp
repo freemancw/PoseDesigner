@@ -20,9 +20,14 @@
 
 static KinectDrawer kd;
 
+static const int REDRAW_MSEC = 60;
+static const int MINHINT_WIDTH = 64;
+static const int MINHINT_HEIGHT = 64;
+static const int PREFHINT_WIDTH = 512;
+static const int PREFHINT_HEIGHT = 512;
+
 /*!
  *  @brief Creates a timer to constantly redraw this widget.
- *  @todo Get rid of magic number (60).
  */
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(QGLFormat(QGL::SampleBuffers), parent)
@@ -32,7 +37,7 @@ GLWidget::GLWidget(QWidget *parent)
     // create timer to constantly redraw this widget
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer->start(60);
+    timer->start(REDRAW_MSEC);
 }
 
 /*!
@@ -43,20 +48,18 @@ GLWidget::~GLWidget() {}
 
 /*!
  *  @brief Provides the GUI system with a preferable minimum size.
- *  @todo Get rid of magic numbers (64, 64).
  */
 QSize GLWidget::minimumSizeHint() const
 {
-    return QSize(64, 64);
+    return QSize(MINHINT_WIDTH, MINHINT_HEIGHT);
 }
 
 /*!
- *  @brief Provides the GUI system with a preferable size in general.
- *  @todo Get rid of magic numbers (512, 512).
+ *  @brief Provides the GUI system with a preferable size.
  */
 QSize GLWidget::sizeHint() const
 {
-    return QSize(512, 512);
+    return QSize(PREFHINT_WIDTH, PREFHINT_HEIGHT);
 }
 
 /*!

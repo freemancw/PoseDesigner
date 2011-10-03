@@ -49,6 +49,7 @@ public:
     inline void addSample(QString name, PoseSample& sample)
     { samples[name] = sample; }
     inline void removeSample(QString name) { samples.remove(name); }
+    inline void reset() { samples.clear(); }
 };
 
 QDebug operator<<(QDebug, Pose &);

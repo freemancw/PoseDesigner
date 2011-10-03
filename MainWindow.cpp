@@ -109,6 +109,7 @@ void MainWindow::on_actionNew_triggered()
         ui->statsTable->clearContents();
         currentFilename = QString();
         this->setWindowTitle(tr("untitled.pose - PoseDesigner"));
+        currentPose.reset();
     }
 }
 
@@ -419,8 +420,7 @@ void MainWindow::on_buttonTakeSample_clicked()
     if(sc.IsTracking(1))
     {
         // defined the ++ operator for XnSkeletonJoint in PoseSample.h...
-        // OpenNI was not kind enough to do this, or to at least add a
-        // SKEL_MAX ending marker to their enum :|
+        // OpenNI was not kind enough to do this
         for(XnSkeletonJoint sj = XN_SKEL_HEAD; sj <= XN_SKEL_RIGHT_FOOT; sj++)
         {
             qDebug("%d", sj);

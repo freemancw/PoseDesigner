@@ -25,6 +25,7 @@
         <file>gui/textures/darkbackground.png</file>
         <file>gui/logos/boogie.png</file>
         <file>gui/icons/export.png</file>
+        <file>gui/textures/texturedbackground.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>gui/fonts/Pacifico.ttf</file>

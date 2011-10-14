@@ -15,6 +15,7 @@ Comments:   This file doesn't really do much in terms of useful functionality.
 #include <QtGui/QApplication>
 #include <QSplashScreen>
 #include <QCleanlooksStyle>
+#include <QPlastiqueStyle>
 
 // local
 #include <MainWindow.h>
@@ -25,6 +26,8 @@ static const char* splashText  = "Initializing Kinect...";
 int main(int argc, char *argv[])
 {
     QApplication pdApp(argc, argv);
+    //pdApp.setStyle(new QPlastiqueStyle());
+    pdApp.setStyleSheet("QHeaderView::section{background-color: red }");
 
     QPixmap splashGraphic(":/images/gui/splash/splash.png");
     QSplashScreen splash(splashGraphic);

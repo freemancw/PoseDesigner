@@ -37,6 +37,16 @@
 #include <KinectInfo.h>
 #include <SkeletonVector.h>
 
+struct SphericalCoords
+{
+    float theta, phi;
+};
+
+struct TorsoFrame
+{
+    QVector3D u, r, t;
+};
+
 class PoseSample
 {
 private:
@@ -45,6 +55,8 @@ private:
 
     QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
     QMap<SkeletonVector, QVector3D> jVectors;
+    QMap<SkeletonVector, SphericalCoords> jCoords;
+    TorsoFrame torsoFrame;
 
 public:
     void calculateVectors();

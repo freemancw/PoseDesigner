@@ -171,26 +171,28 @@ void MainWindow::on_actionOpen_triggered()
         QTableWidgetItem *newItem;
         for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
         {
-            QVector3D vec = sIter.value().getJVector(col);
-            newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+            SphericalCoords sc = sIter.value().getJCoord(col);
+            newItem = new QTableWidgetItem(QString("Phi: %1, Theta: %2").arg(sc.phi).arg(sc.theta));
             ui->sampleTable->setItem(row, col, newItem);
         }
     }
 
-    // populate the columns
+    // display the new mean and tolerance in their respective rows
+    //! @todo magic numbers 0 and 1
+    //! @todo maybe a populateRow fcn to remove duplicate code
     QTableWidgetItem *newItem;
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        QVector3D vec = currentPose.getMean().getJVector(col);
-        newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+        SphericalCoords sc = currentPose.getMean().getJCoord(col);
+        newItem = new QTableWidgetItem(QString("Phi: %1, Theta: %2").arg(sc.phi).arg(sc.theta));
         ui->statsTable->setItem(0, col, newItem);
     }
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        QVector3D vec = currentPose.getStdDev().getJVector(col);
-        newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+        SphericalCoords sc = currentPose.getStdDev().getJCoord(col);
+        newItem = new QTableWidgetItem(QString("Phi: %1, Theta: %2").arg(sc.phi).arg(sc.theta));
         ui->statsTable->setItem(1, col, newItem);
     }
 }
@@ -391,6 +393,7 @@ void MainWindow::on_buttonTakeSample_clicked()
     xn::SkeletonCapability sc = kinectInfo.userGenerator.GetSkeletonCap();
 
     // make sure we actually have data to sample, otherwise inform user
+    //! @todo customize look w/ css
     if(!sc.IsTracking(1))
     {
         QMessageBox msgBox;
@@ -428,6 +431,7 @@ void MainWindow::on_buttonTakeSample_clicked()
         }
 
         newSample.calculateVectors();
+        //newSample.calculateCoords();
     }
 
     // prompt user for sample name

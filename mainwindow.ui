@@ -220,7 +220,7 @@ border: 0;</string>
            <item>
             <widget class="QTableWidget" name="sampleTable">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -533,7 +533,7 @@ border: 0;</string>
               <number>0</number>
              </property>
              <property name="columnCount">
-              <number>15</number>
+              <number>9</number>
              </property>
              <attribute name="horizontalHeaderCascadingSectionResizes">
               <bool>false</bool>
@@ -560,32 +560,12 @@ border: 0;</string>
              </column>
              <column>
               <property name="text">
-               <string>Shoulder to Shoulder</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Hip to Hip</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
                <string>(L) Shoulder to Elbow</string>
               </property>
              </column>
              <column>
               <property name="text">
                <string>(L) Elbow to Hand</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>(L) Shoulder to Waist</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>(L) Waist to Hip</string>
               </property>
              </column>
              <column>
@@ -606,16 +586,6 @@ border: 0;</string>
              <column>
               <property name="text">
                <string>(R) Elbow to Hand</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>(R) Shoulder to Waist</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>(R) Waist to Hip</string>
               </property>
              </column>
              <column>
@@ -668,22 +638,12 @@ border: 0;</string>
              </row>
              <row>
               <property name="text">
-               <string>Standard Deviation</string>
+               <string>Tolerance</string>
               </property>
              </row>
              <column>
               <property name="text">
                <string>Neck to Head</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Shoulder to Shoulder</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Hip to Hip</string>
               </property>
              </column>
              <column>
@@ -694,16 +654,6 @@ border: 0;</string>
              <column>
               <property name="text">
                <string>(L) Elbow to Hand</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>(L) Shoulder to Waist</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>(L) Waist to Hip</string>
               </property>
              </column>
              <column>
@@ -724,16 +674,6 @@ border: 0;</string>
              <column>
               <property name="text">
                <string>(R) Elbow to Hand</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>(R) Shoulder to Waist</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>(R) Waist to Hip</string>
               </property>
              </column>
              <column>

@@ -23,40 +23,41 @@ static QVector3D vecFromJoints(XnSkeletonJointPosition to, XnSkeletonJointPositi
     return vA - vB;
 }
 
-static QVector3D createPerpendicular(QVector3D& v)
+static QVector3D createPerpVec(QVector3D const& v)
 {
     float min = v.x();
-    QVector3D cardinalAxis(1, 0, 0);
+    QVector3D cardinalAxis(1.0, 0.0, 0.0);
 
     if(v.y() < min)
     {
         min = v.y();
-        cardinalAxis = QVector3D(0, 1, 0);
+        cardinalAxis = QVector3D(0.0, 1.0, 0.0);
     }
 
     if(v.z() < min)
     {
         min = v.z();
-        cardinalAxis = QVector3D(0, 0, 1);
+        cardinalAxis = QVector3D(0.0, 0.0, 1.0);
     }
 
     return QVector3D::crossProduct(v, cardinalAxis);
 }
 
-static QVector3D projVecOnPlane(QVector3D& v, QVector3D& norm)
+static QVector3D projVecOnPlane(QVector3D const& v, QVector3D const& norm)
 {
-    QVector3D perp1 = createPerpendicular(norm);
+    QVector3D perp1 = createPerpVec(norm);
     perp1.normalize();
+
     QVector3D perp2 = QVector3D::crossProduct(norm, perp1);
     perp2.normalize();
 
     float proj1 = QVector3D::dotProduct(perp1, v);
     float proj2 = QVector3D::dotProduct(perp2, v);
-    QVector3D out = (perp1 * proj1) + (perp2 * proj2);
-    return out;
+
+    return (perp1 * proj1) + (perp2 * proj2);
 }
 
-static float angBetweenVecs(QVector3D& a, QVector3D& b)
+static float angBetweenVecs(QVector3D const& a, QVector3D const& b)
 {
     return acos(QVector3D::dotProduct(a, b));
 }
@@ -65,8 +66,8 @@ void PoseSample::calculateCoords()
 {
     // "The first principal component u is always aligned with the longer
     // dimension of the torso and we can canonically orient it top-down..."
-    //! @todo might want to choose a point between the hips because it might
-    //! work better...
+    /*! @todo might want to choose a point between the hips because it might
+        work better... */
     torsoFrame.u = vecFromJoints(jPositions[XN_SKEL_WAIST],
                                 jPositions[XN_SKEL_NECK]);
     torsoFrame.u.normalize();

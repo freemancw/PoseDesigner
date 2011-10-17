@@ -82,6 +82,12 @@ public:
     inline QVector3D& getJVector(SkeletonVector sv)
     { return jVectors[sv]; }
 
+    inline QMap<SkeletonVector, SphericalCoords> const & getJCoords() const
+    { return jCoords; }
+
+    inline SphericalCoords& getJCoord(SkeletonVector sv)
+    { return jCoords[sv]; }
+
     // setters
     inline void setName(QString const &name) { this->name = name; }
     inline void setImage(QImage const &image) { this->image = image; }

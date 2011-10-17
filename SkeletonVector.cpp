@@ -16,18 +16,12 @@
 static const QString SkeletonVectorNames[] =
 {
     "NECK_HEAD",
-    "SHOULDER_SHOULDER",
-    "HIP_HIP",
     "L_SHOULDER_ELBOW",
     "L_ELBOW_HAND",
-    "L_SHOULDER_WAIST",
-    "L_WAIST_HIP",
     "L_HIP_KNEE",
     "L_KNEE_FOOT",
     "R_SHOULDER_ELBOW",
     "R_ELBOW_HAND",
-    "R_SHOULDER_WAIST",
-    "R_WAIST_HIP",
     "R_HIP_KNEE",
     "R_KNEE_FOOT",
     "SKEL_VEC_MAX"

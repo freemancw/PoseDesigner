@@ -43,7 +43,7 @@ static QVector3D createPerpendicular(QVector3D& v)
     return QVector3D::crossProduct(v, cardinalAxis);
 }
 
-static QVector3D projectVectorOnPlane(QVector3D& v, QVector3D& norm)
+static QVector3D projVecOnPlane(QVector3D& v, QVector3D& norm)
 {
     QVector3D perp1 = createPerpendicular(norm);
     perp1.normalize();
@@ -56,7 +56,12 @@ static QVector3D projectVectorOnPlane(QVector3D& v, QVector3D& norm)
     return out;
 }
 
-void PoseSample::calculateVectors()
+static float angBetweenVecs(QVector3D& a, QVector3D& b)
+{
+    return acos(QVector3D::dotProduct(a, b));
+}
+
+void PoseSample::calculateCoords()
 {
     // "The first principal component u is always aligned with the longer
     // dimension of the torso and we can canonically orient it top-down..."
@@ -90,82 +95,80 @@ void PoseSample::calculateVectors()
     head.normalize();
 
     // inclination theta is the angle between u and the vector
-    jCoords[NECK_HEAD].theta = acos(QVector3D::dotProduct(torsoFrame.u, head));
+    jCoords[NECK_HEAD].theta = angBetweenVecs(torsoFrame.u, head);
 
     // azimuth phi is the angle between r and the projection of the vector
     // onto the plane whose normal is u
-    jCoords[NECK_HEAD].phi = acos(QVector3D::dotProduct(torsoFrame.r, projectVectorOnPlane(head, torsoFrame.u)));
-
+    jCoords[NECK_HEAD].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(head, torsoFrame.u));
 
     //LEFT ELBOW
     QVector3D lElbow = vecFromJoints(jPositions[XN_SKEL_LEFT_ELBOW],
                                      jPositions[XN_SKEL_LEFT_SHOULDER]);
     lElbow.normalize();
 
-    jCoords[L_SHOULDER_ELBOW].theta = acos(QVector3D::dotProduct(torsoFrame.u, lElbow));
-    jCoords[L_SHOULDER_ELBOW].phi = acos(QVector3D::dotProduct(torsoFrame.r, projectVectorOnPlane(lElbow, torsoFrame.u)));
+    jCoords[L_SHOULDER_ELBOW].theta = angBetweenVecs(torsoFrame.u, lElbow);
+    jCoords[L_SHOULDER_ELBOW].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(lElbow, torsoFrame.u));
 
+    //LEFT KNEE
+    QVector3D lKnee = vecFromJoints(jPositions[XN_SKEL_LEFT_KNEE],
+                                    jPositions[XN_SKEL_LEFT_HIP]);
+    lKnee.normalize();
 
+    jCoords[L_HIP_KNEE].theta = angBetweenVecs(torsoFrame.u, lElbow);
+    jCoords[L_HIP_KNEE].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(lKnee, torsoFrame.u));
 
-    jVectors[NECK_HEAD] = vecFromJoints(jPositions[XN_SKEL_HEAD],
-                                        jPositions[XN_SKEL_NECK]);
-    jVectors[NECK_HEAD].normalize();
+    //RIGHT ELBOW
+    QVector3D rElbow = vecFromJoints(jPositions[XN_SKEL_RIGHT_ELBOW],
+                                     jPositions[XN_SKEL_RIGHT_SHOULDER]);
+    rElbow.normalize();
 
-    jVectors[SHOULDER_SHOULDER] = vecFromJoints(jPositions[XN_SKEL_RIGHT_SHOULDER],
-                                                jPositions[XN_SKEL_LEFT_SHOULDER]);
-    jVectors[SHOULDER_SHOULDER].normalize();
+    jCoords[R_SHOULDER_ELBOW].theta = angBetweenVecs(torsoFrame.u, rElbow);
+    jCoords[R_SHOULDER_ELBOW].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(rElbow, torsoFrame.u));
 
-    jVectors[HIP_HIP] = vecFromJoints(jPositions[XN_SKEL_RIGHT_HIP],
-                                      jPositions[XN_SKEL_LEFT_HIP]);
-    jVectors[HIP_HIP].normalize();
+    //RIGHT KNEE
+    QVector3D rKnee = vecFromJoints(jPositions[XN_SKEL_RIGHT_KNEE],
+                                    jPositions[XN_SKEL_RIGHT_HIP]);
+    rKnee.normalize();
 
-    jVectors[L_SHOULDER_ELBOW] = vecFromJoints(jPositions[XN_SKEL_LEFT_ELBOW],
-                                               jPositions[XN_SKEL_LEFT_SHOULDER]);
-    jVectors[L_SHOULDER_ELBOW].normalize();
+    jCoords[R_HIP_KNEE].theta = angBetweenVecs(torsoFrame.u, rElbow);
+    jCoords[R_HIP_KNEE].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(rKnee, torsoFrame.u));
 
-    jVectors[L_ELBOW_HAND] = vecFromJoints(jPositions[XN_SKEL_LEFT_HAND],
-                                           jPositions[XN_SKEL_LEFT_ELBOW]);
-    jVectors[L_ELBOW_HAND].normalize();
+    //LEFT HAND
+    QVector3D lHand = vecFromJoints(jPositions[XN_SKEL_LEFT_HAND],
+                                    jPositions[XN_SKEL_LEFT_ELBOW]);
+    lHand.normalize();
 
-    jVectors[L_SHOULDER_WAIST] = vecFromJoints(jPositions[XN_SKEL_WAIST],
-                                               jPositions[XN_SKEL_LEFT_SHOULDER]);
-    jVectors[L_SHOULDER_WAIST].normalize();
+    jCoords[L_ELBOW_HAND].theta = angBetweenVecs(lElbow, lHand);
+    jCoords[L_ELBOW_HAND].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, lElbow), lHand);
 
-    jVectors[L_WAIST_HIP] = vecFromJoints(jPositions[XN_SKEL_LEFT_HIP],
-                                          jPositions[XN_SKEL_WAIST]);
-    jVectors[L_WAIST_HIP].normalize();
+    //LEFT FOOT
+    QVector3D lFoot = vecFromJoints(jPositions[XN_SKEL_LEFT_FOOT],
+                                    jPositions[XN_SKEL_LEFT_KNEE]);
+    lFoot.normalize();
 
-    jVectors[L_HIP_KNEE] = vecFromJoints(jPositions[XN_SKEL_LEFT_KNEE],
-                                         jPositions[XN_SKEL_LEFT_HIP]);
-    jVectors[L_HIP_KNEE].normalize();
+    jCoords[L_KNEE_FOOT].theta = angBetweenVecs(lKnee, lFoot);
+    jCoords[L_KNEE_FOOT].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, lKnee), lFoot);
 
-    jVectors[L_KNEE_FOOT] = vecFromJoints(jPositions[XN_SKEL_LEFT_FOOT],
-                                          jPositions[XN_SKEL_LEFT_KNEE]);
-    jVectors[L_KNEE_FOOT].normalize();
+    //RIGHT HAND
+    QVector3D rHand = vecFromJoints(jPositions[XN_SKEL_RIGHT_HAND],
+                                    jPositions[XN_SKEL_RIGHT_ELBOW]);
+    rHand.normalize();
 
-    jVectors[R_SHOULDER_ELBOW] = vecFromJoints(jPositions[XN_SKEL_RIGHT_ELBOW],
-                                               jPositions[XN_SKEL_RIGHT_SHOULDER]);
-    jVectors[R_SHOULDER_ELBOW].normalize();
+    jCoords[R_ELBOW_HAND].theta = angBetweenVecs(rElbow, rHand);
+    jCoords[R_ELBOW_HAND].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, rElbow), rHand);
 
-    jVectors[R_ELBOW_HAND] = vecFromJoints(jPositions[XN_SKEL_RIGHT_HAND],
-                                           jPositions[XN_SKEL_RIGHT_ELBOW]);
-    jVectors[R_ELBOW_HAND].normalize();
+    //RIGHT FOOT
+    QVector3D rFoot = vecFromJoints(jPositions[XN_SKEL_RIGHT_FOOT],
+                                    jPositions[XN_SKEL_RIGHT_KNEE]);
+    rFoot.normalize();
 
-    jVectors[R_SHOULDER_WAIST] = vecFromJoints(jPositions[XN_SKEL_WAIST],
-                                               jPositions[XN_SKEL_RIGHT_SHOULDER]);
-    jVectors[R_SHOULDER_WAIST].normalize();
+    jCoords[R_KNEE_FOOT].theta = angBetweenVecs(rKnee, rFoot);
+    jCoords[R_KNEE_FOOT].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, rKnee), rFoot);
+}
 
-    jVectors[R_WAIST_HIP] = vecFromJoints(jPositions[XN_SKEL_RIGHT_HIP],
-                                          jPositions[XN_SKEL_WAIST]);
-    jVectors[R_WAIST_HIP].normalize();
+void PoseSample::calculateVectors()
+{
 
-    jVectors[R_HIP_KNEE] = vecFromJoints(jPositions[XN_SKEL_RIGHT_KNEE],
-                                         jPositions[XN_SKEL_RIGHT_HIP]);
-    jVectors[R_HIP_KNEE].normalize();
-
-    jVectors[R_KNEE_FOOT] = vecFromJoints(jPositions[XN_SKEL_RIGHT_FOOT],
-                                          jPositions[XN_SKEL_RIGHT_KNEE]);
-    jVectors[R_KNEE_FOOT].normalize();
 }
 
 //XnVector3D

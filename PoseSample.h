@@ -53,13 +53,15 @@ private:
     QString name;
     QImage image;
 
-    QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
-    QMap<SkeletonVector, QVector3D> jVectors;
-    QMap<SkeletonVector, SphericalCoords> jCoords;
     TorsoFrame torsoFrame;
+
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
+    QMap<SkeletonVector, SphericalCoords> jCoords;
+    QMap<SkeletonVector, QVector3D> jVectors; //! @todo remove this
 
 public:
     void calculateVectors();
+    void calculateCoords();
 
     // getters
     inline QString getName() const

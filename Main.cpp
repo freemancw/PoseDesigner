@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 {
     QApplication pdApp(argc, argv);
     //pdApp.setStyle(new QPlastiqueStyle());
-    pdApp.setStyleSheet("QHeaderView::section{background-color: red }");
+    pdApp.setStyleSheet("QHeaderView::section{color: #fff; padding: 4px; border: 1px solid #444; background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 rgba(80, 80, 80, 255), stop:1 rgba(90, 90, 90, 255)); }");
 
     QPixmap splashGraphic(":/images/gui/splash/splash.png");
     QSplashScreen splash(splashGraphic);

@@ -62,6 +62,7 @@ private:
 public:
     void calculateVectors();
     void calculateCoords();
+    static void unitTest();
 
     // getters
     inline QString getName() const

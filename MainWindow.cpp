@@ -292,6 +292,7 @@ void MainWindow::on_actionExport_triggered()
     }
     root.appendChild(stddev);
 
+    //! @todo magic number 2
     QTextStream ts(&exptFile);
     expt.save(ts, 2);
 
@@ -445,7 +446,7 @@ void MainWindow::on_buttonTakeSample_clicked()
         newSample.setName(text);
         newSample.setImage(image);
 
-        // expand upon this
+        //! @todo expand upon this
         //QString path = "C:/kinect/" + text + ".jpg";
         //image.save(path, "JPEG");
 
@@ -485,6 +486,7 @@ void MainWindow::on_buttonTakeSampleTimer_clicked()
         return;
 
     bool accept;
+    //! @todo customize look w/ css
     int time = QInputDialog::getInt(this, tr("Timed Sample"),
                                     tr("How long to wait:"),
                                     0, 0, 60, 1, &accept);

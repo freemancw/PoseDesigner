@@ -15,6 +15,9 @@
 // local
 #include <PoseSample.h>
 
+#include <assert.h>
+#include <math.h>
+
 static QVector3D vecFromJoints(XnSkeletonJointPosition to, XnSkeletonJointPosition from)
 {
     QVector3D vA(to.position.X, to.position.Y, to.position.Z);
@@ -25,16 +28,17 @@ static QVector3D vecFromJoints(XnSkeletonJointPosition to, XnSkeletonJointPositi
 
 static QVector3D createPerpVec(QVector3D const& v)
 {
-    float min = v.x();
+    // find out in which axial direction v's magnitude is least
+    float min = fabs(v.x());
     QVector3D cardinalAxis(1.0, 0.0, 0.0);
 
-    if(v.y() < min)
+    if(fabs(v.y()) < min)
     {
         min = v.y();
         cardinalAxis = QVector3D(0.0, 1.0, 0.0);
     }
 
-    if(v.z() < min)
+    if(fabs(v.z()) < min)
     {
         min = v.z();
         cardinalAxis = QVector3D(0.0, 0.0, 1.0);
@@ -59,7 +63,26 @@ static QVector3D projVecOnPlane(QVector3D const& v, QVector3D const& norm)
 
 static float angBetweenVecs(QVector3D const& a, QVector3D const& b)
 {
-    return acos(QVector3D::dotProduct(a, b));
+    QVector3D aNorm = a; aNorm.normalize();
+    QVector3D bNorm = b; bNorm.normalize();
+    return acos(QVector3D::dotProduct(aNorm, bNorm));
+}
+
+void PoseSample::unitTest()
+{
+    float const eps = 0.001;
+
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0)) <= (M_PI/2.0 + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0)) >= (M_PI/2.0 - eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0)) <= (M_PI/4.0 + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0)) >= (M_PI/4.0 - eps));
+    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0)) <= (M_PI/4.0 + eps));
+    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0)) >= (M_PI/4.0 - eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)) <= (M_PI + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)) >= (M_PI - eps));
+    //assert(angBetweenVecs(QVector3D(1.0, 2.0, 3.0), QVector3D(4.0, 5.0, 6.0)) <= (0.236379849 + eps));
+    //assert(angBetweenVecs(QVector3D(1.0, 2.0, 3.0), QVector3D(4.0, 5.0, 6.0)) >= (0.236379849 - eps));
+    //qDebug() << angBetweenVecs(QVector3D(1.0, 2.0, 3.0), QVector3D(4.0, 5.0, 6.0));
 }
 
 void PoseSample::calculateCoords()

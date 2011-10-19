@@ -49,6 +49,8 @@ static QVector3D createPerpVec(QVector3D const& v)
 
 static QVector3D projVecOnPlane(QVector3D const& v, QVector3D const& norm)
 {
+    // really verbose way
+    /*
     QVector3D perp1 = createPerpVec(norm);
     perp1.normalize();
 
@@ -59,6 +61,14 @@ static QVector3D projVecOnPlane(QVector3D const& v, QVector3D const& norm)
     float proj2 = QVector3D::dotProduct(perp2, v);
 
     return (perp1 * proj1) + (perp2 * proj2);
+    */
+
+    // nice easy way
+    QVector3D nNorm = norm;
+    nNorm.normalize();
+
+    float nProj = QVector3D::dotProduct(nNorm, v);
+    return v - (nNorm * nProj);
 }
 
 static float angBetweenVecs(QVector3D const& a, QVector3D const& b)

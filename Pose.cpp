@@ -24,30 +24,24 @@ Pose Creation
 
 void Pose::calculateStatistics()
 {
-
     for(SkeletonVector sv = NECK_HEAD; sv < SKEL_VEC_MAX; sv++)
     {
-
-        mean.getJVector(sv) = stddev.getJVector(sv) = QVector3D();
         QMap<QString, PoseSample>::iterator iter;
 
         for(iter = samples.begin(); iter != samples.end(); iter++)
-            mean.getJVector(sv) += iter.value().getJVector(sv);
+            mean.getJCoord(sv) += iter.value().getJCoord(sv);
 
-        mean.getJVector(sv) /= samples.size();
+        mean.getJCoord(sv) /= samples.size();
+        stddev.getJCoord(sv).phi = 0.05; // about 3 degrees
+        stddev.getJCoord(sv).theta = 0.05;
 
-        for(iter = samples.begin(); iter != samples.end(); iter++)
-        {
-            stddev.getJVector(sv) += (iter.value().getJVector(sv) - mean.getJVector(sv)) *
-                                     (iter.value().getJVector(sv) - mean.getJVector(sv));
-        }
-
+        /*
         stddev.getJVector(sv) /= samples.size();
         stddev.getJVector(sv).setX(0.5);
         stddev.getJVector(sv).setY(0.5);
         stddev.getJVector(sv).setZ(0.8);
+        */
     }
-
 }
 
 /*

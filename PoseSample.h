@@ -40,6 +40,30 @@
 struct SphericalCoords
 {
     float theta, phi;
+
+    inline SphericalCoords operator +(SphericalCoords const& other) const
+    {
+        SphericalCoords t;
+        t.theta = other.theta + this->theta;
+        t.phi = other.phi + this->phi;
+        return t;
+    }
+
+    inline SphericalCoords& operator +=(SphericalCoords const& other)
+    {
+        this->theta += other.theta;
+        this->phi += other.phi;
+
+        return *this;
+    }
+
+    inline SphericalCoords& operator /=(float const& other)
+    {
+        this->theta /= other;
+        this->phi /= other;
+
+        return *this;
+    }
 };
 
 struct TorsoFrame
@@ -96,7 +120,12 @@ public:
     { this->jPositions = jPositions; }
     inline void setJVectors(QMap<SkeletonVector, QVector3D> const &jVectors)
     { this->jVectors = jVectors; }
-    inline void setJVector(SkeletonVector sv, QVector3D const &v) { jVectors[sv] = v; }
+    inline void setJVector(SkeletonVector sv, QVector3D const &v)
+    { jVectors[sv] = v; }
+    inline void setJCoords(QMap<SkeletonVector, SphericalCoords> const &jCoords)
+    { this->jCoords = jCoords; }
+    inline void setJCoord(SkeletonVector sv, SphericalCoords const &c)
+    { jCoords[sv] = c; }
 };
 
 inline XnSkeletonJoint& operator++(XnSkeletonJoint& sj, int)

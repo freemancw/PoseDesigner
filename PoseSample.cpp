@@ -19,7 +19,8 @@
 #include <assert.h>
 #include <math.h>
 
-static QVector3D vecFromJoints(XnSkeletonJointPosition, XnSkeletonJointPosition);
+static QVector3D vecFromJoints(XnSkeletonJointPosition,
+                               XnSkeletonJointPosition);
 static QVector3D createPerpVec(const QVector3D&);
 static QVector3D projVecOnPlane(const QVector3D&, const QVector3D&);
 static float angBetweenVecs(QVector3D const&, QVector3D const&);
@@ -52,43 +53,53 @@ void PoseSample::calculateCoords()
     head.normalize();
 
     // inclination theta is the angle between u and the vector
-    jCoords[NECK_HEAD].theta = angBetweenVecs(torsoFrame.u, head);
+    jCoords[NECK_HEAD].theta
+            = angBetweenVecs(torsoFrame.u, head);
 
     // azimuth phi is the angle between r and the projection of the vector
     // onto the plane whose normal is u
-    jCoords[NECK_HEAD].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(head, torsoFrame.u));
+    jCoords[NECK_HEAD].phi
+            = angBetweenVecs(torsoFrame.r, projVecOnPlane(head, torsoFrame.u));
 
     //LEFT ELBOW
     QVector3D lElbow = vecFromJoints(jPositions[XN_SKEL_LEFT_ELBOW],
                                      jPositions[XN_SKEL_LEFT_SHOULDER]);
     lElbow.normalize();
 
-    jCoords[L_SHOULDER_ELBOW].theta = angBetweenVecs(torsoFrame.u, lElbow);
-    jCoords[L_SHOULDER_ELBOW].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(lElbow, torsoFrame.u));
+    jCoords[L_SHOULDER_ELBOW].theta
+            = angBetweenVecs(torsoFrame.u, lElbow);
+    jCoords[L_SHOULDER_ELBOW].phi
+            = angBetweenVecs(torsoFrame.r, projVecOnPlane(lElbow, torsoFrame.u));
 
     //LEFT KNEE
     QVector3D lKnee = vecFromJoints(jPositions[XN_SKEL_LEFT_KNEE],
                                     jPositions[XN_SKEL_LEFT_HIP]);
     lKnee.normalize();
 
-    jCoords[L_HIP_KNEE].theta = angBetweenVecs(torsoFrame.u, lElbow);
-    jCoords[L_HIP_KNEE].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(lKnee, torsoFrame.u));
+    jCoords[L_HIP_KNEE].theta
+            = angBetweenVecs(torsoFrame.u, lKnee);
+    jCoords[L_HIP_KNEE].phi
+            = angBetweenVecs(torsoFrame.r, projVecOnPlane(lKnee, torsoFrame.u));
 
     //RIGHT ELBOW
     QVector3D rElbow = vecFromJoints(jPositions[XN_SKEL_RIGHT_ELBOW],
                                      jPositions[XN_SKEL_RIGHT_SHOULDER]);
     rElbow.normalize();
 
-    jCoords[R_SHOULDER_ELBOW].theta = angBetweenVecs(torsoFrame.u, rElbow);
-    jCoords[R_SHOULDER_ELBOW].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(rElbow, torsoFrame.u));
+    jCoords[R_SHOULDER_ELBOW].theta
+            = angBetweenVecs(torsoFrame.u, rElbow);
+    jCoords[R_SHOULDER_ELBOW].phi
+            = angBetweenVecs(torsoFrame.r, projVecOnPlane(rElbow, torsoFrame.u));
 
     //RIGHT KNEE
     QVector3D rKnee = vecFromJoints(jPositions[XN_SKEL_RIGHT_KNEE],
                                     jPositions[XN_SKEL_RIGHT_HIP]);
     rKnee.normalize();
 
-    jCoords[R_HIP_KNEE].theta = angBetweenVecs(torsoFrame.u, rElbow);
-    jCoords[R_HIP_KNEE].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(rKnee, torsoFrame.u));
+    jCoords[R_HIP_KNEE].theta
+            = angBetweenVecs(torsoFrame.u, rKnee);
+    jCoords[R_HIP_KNEE].phi
+            = angBetweenVecs(torsoFrame.r, projVecOnPlane(rKnee, torsoFrame.u));
 
     // calculate second degree joints
 
@@ -97,32 +108,40 @@ void PoseSample::calculateCoords()
                                     jPositions[XN_SKEL_LEFT_ELBOW]);
     lHand.normalize();
 
-    jCoords[L_ELBOW_HAND].theta = angBetweenVecs(lElbow, lHand);
-    jCoords[L_ELBOW_HAND].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, lElbow), lHand);
+    jCoords[L_ELBOW_HAND].theta
+            = angBetweenVecs(lElbow, lHand);
+    jCoords[L_ELBOW_HAND].phi
+            = angBetweenVecs(projVecOnPlane(torsoFrame.r, lElbow), lHand);
 
     //LEFT FOOT
     QVector3D lFoot = vecFromJoints(jPositions[XN_SKEL_LEFT_FOOT],
                                     jPositions[XN_SKEL_LEFT_KNEE]);
     lFoot.normalize();
 
-    jCoords[L_KNEE_FOOT].theta = angBetweenVecs(lKnee, lFoot);
-    jCoords[L_KNEE_FOOT].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, lKnee), lFoot);
+    jCoords[L_KNEE_FOOT].theta
+            = angBetweenVecs(lKnee, lFoot);
+    jCoords[L_KNEE_FOOT].phi
+            = angBetweenVecs(projVecOnPlane(torsoFrame.r, lKnee), lFoot);
 
     //RIGHT HAND
     QVector3D rHand = vecFromJoints(jPositions[XN_SKEL_RIGHT_HAND],
                                     jPositions[XN_SKEL_RIGHT_ELBOW]);
     rHand.normalize();
 
-    jCoords[R_ELBOW_HAND].theta = angBetweenVecs(rElbow, rHand);
-    jCoords[R_ELBOW_HAND].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, rElbow), rHand);
+    jCoords[R_ELBOW_HAND].theta
+            = angBetweenVecs(rElbow, rHand);
+    jCoords[R_ELBOW_HAND].phi
+            = angBetweenVecs(projVecOnPlane(torsoFrame.r, rElbow), rHand);
 
     //RIGHT FOOT
     QVector3D rFoot = vecFromJoints(jPositions[XN_SKEL_RIGHT_FOOT],
                                     jPositions[XN_SKEL_RIGHT_KNEE]);
     rFoot.normalize();
 
-    jCoords[R_KNEE_FOOT].theta = angBetweenVecs(rKnee, rFoot);
-    jCoords[R_KNEE_FOOT].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, rKnee), rFoot);
+    jCoords[R_KNEE_FOOT].theta
+            = angBetweenVecs(rKnee, rFoot);
+    jCoords[R_KNEE_FOOT].phi
+            = angBetweenVecs(projVecOnPlane(torsoFrame.r, rKnee), rFoot);
 }
 
 void PoseSample::calculateVectors(){}
@@ -137,14 +156,22 @@ void PoseSample::unitTest()
 {
     float const eps = 0.001;
 
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0)) <= (M_PI/2.0 + eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0)) >= (M_PI/2.0 - eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0)) <= (M_PI/4.0 + eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0)) >= (M_PI/4.0 - eps));
-    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0)) <= (M_PI/4.0 + eps));
-    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0)) >= (M_PI/4.0 - eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)) <= (M_PI + eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)) >= (M_PI - eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0))
+           <= (M_PI/2.0 + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0))
+           >= (M_PI/2.0 - eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0))
+           <= (M_PI/4.0 + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0))
+           >= (M_PI/4.0 - eps));
+    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0))
+           <= (M_PI/4.0 + eps));
+    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0))
+           >= (M_PI/4.0 - eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0))
+           <= (M_PI + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0))
+           >= (M_PI - eps));
 }
 
 static const QString XnSkeletonJointNames[] =
@@ -283,11 +310,29 @@ QDataStream &operator>>(QDataStream &in, XnSkeletonJointPosition &sjp)
 }
 
 /*!
+ * SphericalCoords out
+ */
+QDataStream &operator <<(QDataStream &out, const SphericalCoords &s)
+{
+    out << (float)s.phi << (float)s.theta;
+    return out;
+}
+
+/*!
+ * SphericalCoords in
+ */
+QDataStream &operator >>(QDataStream &in, SphericalCoords &s)
+{
+    in >> s.phi >> s.theta;
+    return in;
+}
+
+/*!
  * PoseSample out
  */
 QDataStream &operator<<(QDataStream &out, const PoseSample &p)
 {
-    out << p.getName() << p.getImage() << p.getJPositions() << p.getJVectors();
+    out << p.getName() << p.getImage() << p.getJPositions() << p.getJCoords();
     return out;
 }
 
@@ -299,14 +344,14 @@ QDataStream &operator>>(QDataStream &in, PoseSample &p)
     QString name;
     QImage image;
     QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
-    QMap<SkeletonVector, QVector3D> jVectors;
+    QMap<SkeletonVector, SphericalCoords> jCoords;
 
-    in >> name >> image >> jPositions >> jVectors;
+    in >> name >> image >> jPositions >> jCoords;
 
     p.setName(name);
     p.setImage(image);
     p.setJPositions(jPositions);
-    p.setJVectors(jVectors);
+    p.setJCoords(jCoords);
 
     return in;
 }
@@ -317,7 +362,8 @@ Convenience Functions
 ===============================================================================
 */
 
-static QVector3D vecFromJoints(XnSkeletonJointPosition to, XnSkeletonJointPosition from)
+static QVector3D vecFromJoints(XnSkeletonJointPosition to,
+                               XnSkeletonJointPosition from)
 {
     QVector3D vA(to.position.X, to.position.Y, to.position.Z);
     QVector3D vB(from.position.X, from.position.Y, from.position.Z);

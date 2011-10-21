@@ -268,12 +268,13 @@ void MainWindow::on_actionExport_triggered()
     {
         QString s;
         s << col;
-        QDomElement skelVec = expt.createElement(s);
-        QDomText skelVecText = expt.createTextNode(s);
-        QVector3D vec = currentPose.getMean().getJVector(col);
-        skelVecText.setNodeValue(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
-        skelVec.appendChild(skelVecText);
-        mean.appendChild(skelVec);
+        QDomElement skelSC = expt.createElement(s);
+        QDomText skelSCText = expt.createTextNode(s);
+        //QVector3D vec = currentPose.getMean().getJVector(col);
+        SphericalCoords sc = currentPose.getMean().getJCoord(col);
+        skelSCText.setNodeValue(QString("%1, %2").arg(sc.phi).arg(sc.theta));
+        skelSC.appendChild(skelSCText);
+        mean.appendChild(skelSC);
     }
     root.appendChild(mean);
 
@@ -283,12 +284,13 @@ void MainWindow::on_actionExport_triggered()
     {
         QString s;
         s << col;
-        QDomElement skelVec = expt.createElement(s);
-        QDomText skelVecText = expt.createTextNode(s);
-        QVector3D vec = currentPose.getStdDev().getJVector(col);
-        skelVecText.setNodeValue(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
-        skelVec.appendChild(skelVecText);
-        stddev.appendChild(skelVec);
+        QDomElement skelSC = expt.createElement(s);
+        QDomText skelSCText = expt.createTextNode(s);
+        //QVector3D vec = currentPose.getStdDev().getJVector(col);
+        SphericalCoords sc = currentPose.getStdDev().getJCoord(col);
+        skelSCText.setNodeValue(QString("%1, %2").arg(sc.phi).arg(sc.theta));
+        skelSC.appendChild(skelSCText);
+        stddev.appendChild(skelSC);
     }
     root.appendChild(stddev);
 

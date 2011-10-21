@@ -15,113 +15,36 @@
 // local
 #include <PoseSample.h>
 
+// system
 #include <assert.h>
 #include <math.h>
 
-static QVector3D vecFromJoints(XnSkeletonJointPosition to, XnSkeletonJointPosition from)
-{
-    QVector3D vA(to.position.X, to.position.Y, to.position.Z);
-    QVector3D vB(from.position.X, from.position.Y, from.position.Z);
+static QVector3D vecFromJoints(XnSkeletonJointPosition, XnSkeletonJointPosition);
+static QVector3D createPerpVec(const QVector3D&);
+static QVector3D projVecOnPlane(const QVector3D&, const QVector3D&);
+static float angBetweenVecs(QVector3D const&, QVector3D const&);
 
-    return vA - vB;
-}
-
-static QVector3D createPerpVec(QVector3D const& v)
-{
-    // find out in which axial direction v's magnitude is least
-    float min = fabs(v.x());
-    QVector3D cardinalAxis(1.0, 0.0, 0.0);
-
-    if(fabs(v.y()) < min)
-    {
-        min = v.y();
-        cardinalAxis = QVector3D(0.0, 1.0, 0.0);
-    }
-
-    if(fabs(v.z()) < min)
-    {
-        min = v.z();
-        cardinalAxis = QVector3D(0.0, 0.0, 1.0);
-    }
-
-    return QVector3D::crossProduct(v, cardinalAxis);
-}
-
-static QVector3D projVecOnPlane(QVector3D const& v, QVector3D const& norm)
-{
-    // really verbose way
-    /*
-    QVector3D perp1 = createPerpVec(norm);
-    perp1.normalize();
-
-    QVector3D perp2 = QVector3D::crossProduct(norm, perp1);
-    perp2.normalize();
-
-    float proj1 = QVector3D::dotProduct(perp1, v);
-    float proj2 = QVector3D::dotProduct(perp2, v);
-
-    return (perp1 * proj1) + (perp2 * proj2);
-    */
-
-    // nice easy way
-    QVector3D nNorm = norm;
-    nNorm.normalize();
-
-    float nProj = QVector3D::dotProduct(nNorm, v);
-    return v - (nNorm * nProj);
-}
-
-static float angBetweenVecs(QVector3D const& a, QVector3D const& b)
-{
-    QVector3D aNorm = a; aNorm.normalize();
-    QVector3D bNorm = b; bNorm.normalize();
-    return acos(QVector3D::dotProduct(aNorm, bNorm));
-}
-
-void PoseSample::unitTest()
-{
-    float const eps = 0.001;
-
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0)) <= (M_PI/2.0 + eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0)) >= (M_PI/2.0 - eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0)) <= (M_PI/4.0 + eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0)) >= (M_PI/4.0 - eps));
-    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0)) <= (M_PI/4.0 + eps));
-    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0)) >= (M_PI/4.0 - eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)) <= (M_PI + eps));
-    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)) >= (M_PI - eps));
-    //assert(angBetweenVecs(QVector3D(1.0, 2.0, 3.0), QVector3D(4.0, 5.0, 6.0)) <= (0.236379849 + eps));
-    //assert(angBetweenVecs(QVector3D(1.0, 2.0, 3.0), QVector3D(4.0, 5.0, 6.0)) >= (0.236379849 - eps));
-    //qDebug() << angBetweenVecs(QVector3D(1.0, 2.0, 3.0), QVector3D(4.0, 5.0, 6.0));
-}
+/*
+===============================================================================
+Sample Creation
+===============================================================================
+*/
 
 void PoseSample::calculateCoords()
 {
-    // "The first principal component u is always aligned with the longer
-    // dimension of the torso and we can canonically orient it top-down..."
-    /*! @todo might want to choose a point between the hips because it might
-        work better... */
+    // calculate torso frame
     torsoFrame.u = vecFromJoints(jPositions[XN_SKEL_WAIST],
                                 jPositions[XN_SKEL_NECK]);
     torsoFrame.u.normalize();
 
-    // "In contrast, the second principal component r, aligned with the line
-    // that connects the shoulders... we must rely on the 'left-right' skeleton
-    // orientation inferred by the STA..."
     torsoFrame.r = vecFromJoints(jPositions[XN_SKEL_RIGHT_SHOULDER],
                                 jPositions[XN_SKEL_LEFT_SHOULDER]);
-
     torsoFrame.r.normalize();
 
-    // "Finally, the last axis of the orthonormal basis is computed as a
-    // cross product of the first two principal components..."
     torsoFrame.t = QVector3D::crossProduct(torsoFrame.u, torsoFrame.r);
     torsoFrame.t.normalize();
 
-    // "We denote all joints adjacent to the torso as first-degree joints -
-    // these include elbows, knees, and the head. We represent these points
-    // relative to the adjacent joint in the torso in a coordinate system
-    // derived from the torso frame."
+    // calculate first degree joints
 
     //HEAD
     QVector3D head = vecFromJoints(jPositions[XN_SKEL_NECK],
@@ -167,6 +90,8 @@ void PoseSample::calculateCoords()
     jCoords[R_HIP_KNEE].theta = angBetweenVecs(torsoFrame.u, rElbow);
     jCoords[R_HIP_KNEE].phi = angBetweenVecs(torsoFrame.r, projVecOnPlane(rKnee, torsoFrame.u));
 
+    // calculate second degree joints
+
     //LEFT HAND
     QVector3D lHand = vecFromJoints(jPositions[XN_SKEL_LEFT_HAND],
                                     jPositions[XN_SKEL_LEFT_ELBOW]);
@@ -200,31 +125,28 @@ void PoseSample::calculateCoords()
     jCoords[R_KNEE_FOOT].phi = angBetweenVecs(projVecOnPlane(torsoFrame.r, rKnee), rFoot);
 }
 
-void PoseSample::calculateVectors()
-{
+void PoseSample::calculateVectors(){}
 
+/*
+===============================================================================
+Debugging / Unit Tests
+===============================================================================
+*/
+
+void PoseSample::unitTest()
+{
+    float const eps = 0.001;
+
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0)) <= (M_PI/2.0 + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0)) >= (M_PI/2.0 - eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0)) <= (M_PI/4.0 + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(1.0, 1.0, 0.0)) >= (M_PI/4.0 - eps));
+    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0)) <= (M_PI/4.0 + eps));
+    assert(angBetweenVecs(QVector3D(0.0, 1.0, 0.0), QVector3D(1.0, 1.0, 0.0)) >= (M_PI/4.0 - eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)) <= (M_PI + eps));
+    assert(angBetweenVecs(QVector3D(1.0, 0.0, 0.0), QVector3D(-1.0, 0.0, 0.0)) >= (M_PI - eps));
 }
 
-//XnVector3D
-QDebug operator<<(QDebug d, XnVector3D &v)
-{
-    d << QString("%1, %2, %3").arg(v.X).arg(v.Y).arg(v.Z);
-    return d;
-}
-
-QDataStream &operator<<(QDataStream &out, const XnVector3D &p)
-{
-    out << (float)p.X << (float)p.Y << (float)p.Z;
-    return out;
-}
-
-QDataStream &operator>>(QDataStream &in, XnVector3D &p)
-{
-    in >> p.X >> p.Y >> p.Z;
-    return in;
-}
-
-//XnSkeletonJoint
 static const QString XnSkeletonJointNames[] =
 {
     "XN_SKEL_HEAD",
@@ -257,46 +179,24 @@ static const QString XnSkeletonJointNames[] =
     "XN_SKEL_RIGHT_FOOT"
 };
 
+QDebug operator<<(QDebug d, XnVector3D &v)
+{
+    d << QString("%1, %2, %3").arg(v.X).arg(v.Y).arg(v.Z);
+    return d;
+}
+
 QDebug operator<<(QDebug d, XnSkeletonJoint &sj)
 {
     d << XnSkeletonJointNames[sj];
     return d;
 }
 
-QDataStream &operator<<(QDataStream &out, XnSkeletonJoint &sj)
-{
-    out << quint32(sj);
-    return out;
-}
-
-QDataStream &operator>>(QDataStream &in, XnSkeletonJoint &sj)
-{
-    quint32 sin;
-    in >> sin;
-    sj = (XnSkeletonJoint)sin;
-    return in;
-}
-
-//XnSkeletonJointPosition
 QDebug operator<<(QDebug d, XnSkeletonJointPosition &sjp)
 {
     d << "fConfidence: " << sjp.fConfidence << ", Position: " << sjp.position;
     return d;
 }
 
-QDataStream &operator<<(QDataStream &out, const XnSkeletonJointPosition &sjp)
-{
-    out << sjp.position << (float)sjp.fConfidence;
-    return out;
-}
-
-QDataStream &operator>>(QDataStream &in, XnSkeletonJointPosition &sjp)
-{
-    in >> sjp.position >> sjp.fConfidence;
-    return in;
-}
-
-//PoseSample
 QDebug operator<<(QDebug d, PoseSample &p)
 {
     d << "Name: " << p.getName();
@@ -320,12 +220,80 @@ QDebug operator<<(QDebug d, PoseSample &p)
     return d;
 }
 
+/*
+===============================================================================
+Object Serialization
+===============================================================================
+*/
+
+/*!
+ * XnVector3D out
+ */
+QDataStream &operator<<(QDataStream &out, const XnVector3D &p)
+{
+    out << (float)p.X << (float)p.Y << (float)p.Z;
+    return out;
+}
+
+/*!
+ * XnVector3D in
+ */
+QDataStream &operator>>(QDataStream &in, XnVector3D &p)
+{
+    in >> p.X >> p.Y >> p.Z;
+    return in;
+}
+
+/*!
+ * XnSkeletonJoint out
+ */
+QDataStream &operator<<(QDataStream &out, XnSkeletonJoint &sj)
+{
+    out << quint32(sj);
+    return out;
+}
+
+/*!
+ * XnSkeletonJoint in
+ */
+QDataStream &operator>>(QDataStream &in, XnSkeletonJoint &sj)
+{
+    quint32 sin;
+    in >> sin;
+    sj = (XnSkeletonJoint)sin;
+    return in;
+}
+
+/*!
+ * XnSkeletonJointPosition out
+ */
+QDataStream &operator<<(QDataStream &out, const XnSkeletonJointPosition &sjp)
+{
+    out << sjp.position << (float)sjp.fConfidence;
+    return out;
+}
+
+/*!
+ * XnSkeletonJointPosition in
+ */
+QDataStream &operator>>(QDataStream &in, XnSkeletonJointPosition &sjp)
+{
+    in >> sjp.position >> sjp.fConfidence;
+    return in;
+}
+
+/*!
+ * PoseSample out
+ */
 QDataStream &operator<<(QDataStream &out, const PoseSample &p)
 {
     out << p.getName() << p.getImage() << p.getJPositions() << p.getJVectors();
     return out;
 }
 
+/*!
+ * PoseSample in
+ */
 QDataStream &operator>>(QDataStream &in, PoseSample &p)
 {
     QString name;
@@ -335,13 +303,62 @@ QDataStream &operator>>(QDataStream &in, PoseSample &p)
 
     in >> name >> image >> jPositions >> jVectors;
 
-    //qDebug() << name;
-
     p.setName(name);
     p.setImage(image);
     p.setJPositions(jPositions);
     p.setJVectors(jVectors);
 
     return in;
+}
+
+/*
+===============================================================================
+Convenience Functions
+===============================================================================
+*/
+
+static QVector3D vecFromJoints(XnSkeletonJointPosition to, XnSkeletonJointPosition from)
+{
+    QVector3D vA(to.position.X, to.position.Y, to.position.Z);
+    QVector3D vB(from.position.X, from.position.Y, from.position.Z);
+
+    return vA - vB;
+}
+
+static QVector3D createPerpVec(QVector3D const& v)
+{
+    // find out in which axial direction v's magnitude is least
+    float min = fabs(v.x());
+    QVector3D cardinalAxis(1.0, 0.0, 0.0);
+
+    if(fabs(v.y()) < min)
+    {
+        min = v.y();
+        cardinalAxis = QVector3D(0.0, 1.0, 0.0);
+    }
+
+    if(fabs(v.z()) < min)
+    {
+        min = v.z();
+        cardinalAxis = QVector3D(0.0, 0.0, 1.0);
+    }
+
+    return QVector3D::crossProduct(v, cardinalAxis);
+}
+
+static QVector3D projVecOnPlane(QVector3D const& v, QVector3D const& norm)
+{
+    QVector3D nNorm = norm;
+    nNorm.normalize();
+
+    float nProj = QVector3D::dotProduct(nNorm, v);
+    return v - (nNorm * nProj);
+}
+
+static float angBetweenVecs(QVector3D const& a, QVector3D const& b)
+{
+    QVector3D aNorm = a; aNorm.normalize();
+    QVector3D bNorm = b; bNorm.normalize();
+    return acos(QVector3D::dotProduct(aNorm, bNorm));
 }
 

@@ -370,15 +370,16 @@ void MainWindow::calculateStats()
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        QVector3D vec = currentPose.getMean().getJVector(col);
-        newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+        //QVector3D vec = currentPose.getMean().getJVector(col);
+        SphericalCoords sc = currentPose.getMean().getJCoord(col);
+        newItem = new QTableWidgetItem(QString("phi: %1, theta: %2").arg(sc.phi).arg(sc.theta));
         ui->statsTable->setItem(0, col, newItem);
     }
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        QVector3D vec = currentPose.getStdDev().getJVector(col);
-        newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+        SphericalCoords sc = currentPose.getStdDev().getJCoord(col);
+        newItem = new QTableWidgetItem(QString("phi: %1, theta: %2").arg(sc.phi).arg(sc.theta));
         ui->statsTable->setItem(1, col, newItem);
     }
 }
@@ -431,8 +432,8 @@ void MainWindow::on_buttonTakeSample_clicked()
             sc.GetSkeletonJointPosition(1, sj, newSample.getJPositions_nc()[sj]); // gross hack to get around const
         }
 
-        newSample.calculateVectors();
-        //newSample.calculateCoords();
+        //newSample.calculateVectors();
+        newSample.calculateCoords();
     }
 
     // prompt user for sample name
@@ -463,8 +464,8 @@ void MainWindow::on_buttonTakeSample_clicked()
         QTableWidgetItem *newItem;
         for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
         {
-            QVector3D vec = newSample.getJVector(col);
-            newItem = new QTableWidgetItem(QString("%1, %2, %3").arg(vec.x()).arg(vec.y()).arg(vec.z()));
+            SphericalCoords coord = newSample.getJCoord(col);
+            newItem = new QTableWidgetItem(QString("phi: %1, theta: %2").arg(coord.phi).arg(coord.theta));
             ui->sampleTable->setItem(row, col, newItem);
         }
 

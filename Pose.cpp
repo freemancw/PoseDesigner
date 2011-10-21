@@ -16,10 +16,18 @@
 #include <Pose.h>
 #include <PoseSample.h>
 
+/*
+===============================================================================
+Pose Creation
+===============================================================================
+*/
+
 void Pose::calculateStatistics()
 {
+
     for(SkeletonVector sv = NECK_HEAD; sv < SKEL_VEC_MAX; sv++)
     {
+
         mean.getJVector(sv) = stddev.getJVector(sv) = QVector3D();
         QMap<QString, PoseSample>::iterator iter;
 
@@ -35,16 +43,18 @@ void Pose::calculateStatistics()
         }
 
         stddev.getJVector(sv) /= samples.size();
-        /*
-        stddev.getJVector(sv).setX(sqrt(stddev.getJVector(sv).x()));
-        stddev.getJVector(sv).setY(sqrt(stddev.getJVector(sv).y()));
-        stddev.getJVector(sv).setZ(sqrt(stddev.getJVector(sv).z()));
-        */
         stddev.getJVector(sv).setX(0.5);
         stddev.getJVector(sv).setY(0.5);
         stddev.getJVector(sv).setZ(0.8);
     }
+
 }
+
+/*
+===============================================================================
+Debugging / Unit Tests
+===============================================================================
+*/
 
 QDebug operator<<(QDebug d, Pose &p)
 {
@@ -64,6 +74,12 @@ QDebug operator<<(QDebug d, Pose &p)
 
     return d;
 }
+
+/*
+===============================================================================
+Object Serialization
+===============================================================================
+*/
 
 QDataStream &operator<<(QDataStream &out, Pose &p)
 {

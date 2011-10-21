@@ -13,6 +13,12 @@
 // local
 #include <SkeletonVector.h>
 
+/*
+===============================================================================
+Debugging / Unit Tests
+===============================================================================
+*/
+
 static const QString SkeletonVectorNames[] =
 {
     "NECK_HEAD",
@@ -38,6 +44,12 @@ QString &operator<<(QString &s, SkeletonVector &sv)
     s = SkeletonVectorNames[sv];
     return s;
 }
+
+/*
+===============================================================================
+Object Serialization
+===============================================================================
+*/
 
 QDataStream &operator<<(QDataStream &out, const SkeletonVector &sv)
 {

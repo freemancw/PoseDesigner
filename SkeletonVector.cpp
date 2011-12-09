@@ -61,6 +61,6 @@ QDataStream &operator>>(QDataStream &in, SkeletonVector &sv)
 {
     quint32 sin;
     in >> sin;
-    sv = (SkeletonVector)sin;
+    sv = static_cast<SkeletonVector>(sin);
     return in;
 }

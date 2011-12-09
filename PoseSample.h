@@ -114,8 +114,10 @@ public:
     { return jCoords[sv]; }
 
     // setters
-    inline void setName(QString const &name) { this->name = name; }
-    inline void setImage(QImage const &image) { this->image = image; }
+    inline void setName(QString const &name)
+    { this->name = name; }
+    inline void setImage(QImage const &image)
+    { this->image = image; }
     inline void setJPositions(QMap<XnSkeletonJoint, XnSkeletonJointPosition> const &jPositions)
     { this->jPositions = jPositions; }
     inline void setJVectors(QMap<SkeletonVector, QVector3D> const &jVectors)
@@ -126,6 +128,10 @@ public:
     { this->jCoords = jCoords; }
     inline void setJCoord(SkeletonVector sv, SphericalCoords const &c)
     { jCoords[sv] = c; }
+    inline void setJCoordPhi(SkeletonVector sv, float phi)
+    { jCoords[sv].phi = phi; }
+    inline void setJCoordTheta(SkeletonVector sv, float theta)
+    { jCoords[sv].theta = theta; }
 };
 
 inline XnSkeletonJoint& operator++(XnSkeletonJoint& sj, int)

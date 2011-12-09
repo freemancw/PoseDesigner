@@ -24,23 +24,34 @@ Pose Creation
 
 void Pose::calculateStatistics()
 {
+    PoseSample max, min;
+
     for(SkeletonVector sv = NECK_HEAD; sv < SKEL_VEC_MAX; sv++)
     {
         QMap<QString, PoseSample>::iterator iter;
 
+        max.setJCoord(sv, samples.begin().value().getJCoord(sv));
+        min.setJCoord(sv, samples.begin().value().getJCoord(sv));
         for(iter = samples.begin(); iter != samples.end(); iter++)
+        {
+            if(iter.value().getJCoord(sv).phi < min.getJCoord(sv).phi)
+                min.setJCoordPhi(sv, iter.value().getJCoord(sv).phi);
+
+            if(iter.value().getJCoord(sv).theta < min.getJCoord(sv).theta)
+                min.setJCoordTheta(sv, iter.value().getJCoord(sv).theta);
+
+            if(iter.value().getJCoord(sv).phi > max.getJCoord(sv).phi)
+                max.setJCoordPhi(sv, iter.value().getJCoord(sv).phi);
+
+            if(iter.value().getJCoord(sv).theta > max.getJCoord(sv).theta)
+                max.setJCoordTheta(sv, iter.value().getJCoord(sv).theta);
+
             mean.getJCoord(sv) += iter.value().getJCoord(sv);
+        }
 
         mean.getJCoord(sv) /= samples.size();
-        stddev.getJCoord(sv).phi = 0.05; // about 3 degrees
-        stddev.getJCoord(sv).theta = 0.05;
-
-        /*
-        stddev.getJVector(sv) /= samples.size();
-        stddev.getJVector(sv).setX(0.5);
-        stddev.getJVector(sv).setY(0.5);
-        stddev.getJVector(sv).setZ(0.8);
-        */
+        stddev.getJCoord(sv).phi = (max.getJCoord(sv).phi - min.getJCoord(sv).phi)*2;
+        stddev.getJCoord(sv).theta = (max.getJCoord(sv).theta - min.getJCoord(sv).theta)*2;
     }
 }
 

@@ -69,6 +69,8 @@ QGroupBox {
 	padding-top: 14px;
 }
 
+
+
 QGroupBox::title {
 	color: #fff;
     padding-top: 6px;
@@ -123,7 +125,7 @@ QScrollBar {
             <x>0</x>
             <y>0</y>
             <width>449</width>
-            <height>666</height>
+            <height>729</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -220,7 +222,7 @@ border: 0;</string>
            <item>
             <widget class="QTableWidget" name="sampleTable">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -506,7 +508,11 @@ border: 0;</string>
               <bool>false</bool>
              </property>
              <property name="styleSheet">
-              <string notr="true"/>
+              <string notr="true">QHeaderView {
+  border: 0;
+}
+
+</string>
              </property>
              <property name="verticalScrollBarPolicy">
               <enum>Qt::ScrollBarAsNeeded</enum>
@@ -614,10 +620,17 @@ border: 0;</string>
            <item>
             <widget class="QTableWidget" name="statsTable">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QHeaderView {
+  border: 0;
+}
+
+</string>
              </property>
              <property name="gridStyle">
               <enum>Qt::SolidLine</enum>

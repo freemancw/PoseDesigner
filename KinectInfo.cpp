@@ -47,7 +47,6 @@ static const char * XMLPATH =
 "./data/config.xml";
 //"C:/Program Files (x86)/OpenNI/Data/SamplesConfig.xml";
 
-
 void initKinect()
 {
     qDebug() << QDir::currentPath();

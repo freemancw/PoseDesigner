@@ -33,6 +33,8 @@ Sample Creation
 
 void PoseSample::calculateCoords()
 {
+    //! @note this basis is supposed to be orthonormal in order to calculate
+    //! euler angles relative to kinect's basis
     // calculate torso frame
     torsoFrame.u = vecFromJoints(jPositions[XN_SKEL_WAIST],
                                 jPositions[XN_SKEL_NECK]);
@@ -47,7 +49,7 @@ void PoseSample::calculateCoords()
 
     // calculate first degree joints
 
-    //HEAD
+    // HEAD
     QVector3D head = vecFromJoints(jPositions[XN_SKEL_NECK],
                                    jPositions[XN_SKEL_HEAD]);
     head.normalize();
@@ -61,7 +63,7 @@ void PoseSample::calculateCoords()
     jCoords[NECK_HEAD].phi
             = angBetweenVecs(torsoFrame.r, projVecOnPlane(head, torsoFrame.u));
 
-    //LEFT ELBOW
+    // LEFT ELBOW
     QVector3D lElbow = vecFromJoints(jPositions[XN_SKEL_LEFT_ELBOW],
                                      jPositions[XN_SKEL_LEFT_SHOULDER]);
     lElbow.normalize();
@@ -71,7 +73,7 @@ void PoseSample::calculateCoords()
     jCoords[L_SHOULDER_ELBOW].phi
             = angBetweenVecs(torsoFrame.r, projVecOnPlane(lElbow, torsoFrame.u));
 
-    //LEFT KNEE
+    // LEFT KNEE
     QVector3D lKnee = vecFromJoints(jPositions[XN_SKEL_LEFT_KNEE],
                                     jPositions[XN_SKEL_LEFT_HIP]);
     lKnee.normalize();
@@ -81,7 +83,7 @@ void PoseSample::calculateCoords()
     jCoords[L_HIP_KNEE].phi
             = angBetweenVecs(torsoFrame.r, projVecOnPlane(lKnee, torsoFrame.u));
 
-    //RIGHT ELBOW
+    // RIGHT ELBOW
     QVector3D rElbow = vecFromJoints(jPositions[XN_SKEL_RIGHT_ELBOW],
                                      jPositions[XN_SKEL_RIGHT_SHOULDER]);
     rElbow.normalize();
@@ -91,7 +93,7 @@ void PoseSample::calculateCoords()
     jCoords[R_SHOULDER_ELBOW].phi
             = angBetweenVecs(torsoFrame.r, projVecOnPlane(rElbow, torsoFrame.u));
 
-    //RIGHT KNEE
+    // RIGHT KNEE
     QVector3D rKnee = vecFromJoints(jPositions[XN_SKEL_RIGHT_KNEE],
                                     jPositions[XN_SKEL_RIGHT_HIP]);
     rKnee.normalize();
@@ -103,7 +105,7 @@ void PoseSample::calculateCoords()
 
     // calculate second degree joints
 
-    //LEFT HAND
+    // LEFT HAND
     QVector3D lHand = vecFromJoints(jPositions[XN_SKEL_LEFT_HAND],
                                     jPositions[XN_SKEL_LEFT_ELBOW]);
     lHand.normalize();
@@ -111,9 +113,9 @@ void PoseSample::calculateCoords()
     jCoords[L_ELBOW_HAND].theta
             = angBetweenVecs(lElbow, lHand);
     jCoords[L_ELBOW_HAND].phi
-            = angBetweenVecs(projVecOnPlane(torsoFrame.r, lElbow), lHand);
+            = angBetweenVecs(projVecOnPlane(torsoFrame.r, lElbow), projVecOnPlane(lHand, lElbow));
 
-    //LEFT FOOT
+    // LEFT FOOT
     QVector3D lFoot = vecFromJoints(jPositions[XN_SKEL_LEFT_FOOT],
                                     jPositions[XN_SKEL_LEFT_KNEE]);
     lFoot.normalize();
@@ -121,9 +123,9 @@ void PoseSample::calculateCoords()
     jCoords[L_KNEE_FOOT].theta
             = angBetweenVecs(lKnee, lFoot);
     jCoords[L_KNEE_FOOT].phi
-            = angBetweenVecs(projVecOnPlane(torsoFrame.r, lKnee), lFoot);
+            = angBetweenVecs(projVecOnPlane(torsoFrame.r, lKnee), projVecOnPlane(lFoot, lKnee));
 
-    //RIGHT HAND
+    // RIGHT HAND
     QVector3D rHand = vecFromJoints(jPositions[XN_SKEL_RIGHT_HAND],
                                     jPositions[XN_SKEL_RIGHT_ELBOW]);
     rHand.normalize();
@@ -131,9 +133,9 @@ void PoseSample::calculateCoords()
     jCoords[R_ELBOW_HAND].theta
             = angBetweenVecs(rElbow, rHand);
     jCoords[R_ELBOW_HAND].phi
-            = angBetweenVecs(projVecOnPlane(torsoFrame.r, rElbow), rHand);
+            = angBetweenVecs(projVecOnPlane(torsoFrame.r, rElbow), projVecOnPlane(rHand, rElbow));
 
-    //RIGHT FOOT
+    // RIGHT FOOT
     QVector3D rFoot = vecFromJoints(jPositions[XN_SKEL_RIGHT_FOOT],
                                     jPositions[XN_SKEL_RIGHT_KNEE]);
     rFoot.normalize();
@@ -141,7 +143,7 @@ void PoseSample::calculateCoords()
     jCoords[R_KNEE_FOOT].theta
             = angBetweenVecs(rKnee, rFoot);
     jCoords[R_KNEE_FOOT].phi
-            = angBetweenVecs(projVecOnPlane(torsoFrame.r, rKnee), rFoot);
+            = angBetweenVecs(projVecOnPlane(torsoFrame.r, rKnee), projVecOnPlane(rFoot, rKnee));
 }
 
 void PoseSample::calculateVectors(){}
@@ -258,7 +260,8 @@ Object Serialization
  */
 QDataStream &operator<<(QDataStream &out, const XnVector3D &p)
 {
-    out << (float)p.X << (float)p.Y << (float)p.Z;
+    out << static_cast<float>(p.X) << static_cast<float>(p.Y)
+        << static_cast<float>(p.Z);
     return out;
 }
 
@@ -287,7 +290,7 @@ QDataStream &operator>>(QDataStream &in, XnSkeletonJoint &sj)
 {
     quint32 sin;
     in >> sin;
-    sj = (XnSkeletonJoint)sin;
+    sj = static_cast<XnSkeletonJoint>(sin);
     return in;
 }
 
@@ -296,7 +299,7 @@ QDataStream &operator>>(QDataStream &in, XnSkeletonJoint &sj)
  */
 QDataStream &operator<<(QDataStream &out, const XnSkeletonJointPosition &sjp)
 {
-    out << sjp.position << (float)sjp.fConfidence;
+    out << sjp.position << static_cast<float>(sjp.fConfidence);
     return out;
 }
 
@@ -314,7 +317,7 @@ QDataStream &operator>>(QDataStream &in, XnSkeletonJointPosition &sjp)
  */
 QDataStream &operator <<(QDataStream &out, const SphericalCoords &s)
 {
-    out << (float)s.phi << (float)s.theta;
+    out << s.phi << s.theta;
     return out;
 }
 

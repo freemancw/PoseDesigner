@@ -82,6 +82,14 @@ void MainWindow::on_actionNew_triggered()
     // the current document. the only way a user can modify a document is
     // to add or remove samples.
 
+    /*
+    if(!currentPose.isModified())
+    {
+        setWindowTitle(tr("untitled.pose - PoseDesigner"));
+        return;
+    }
+    */
+
     if(!ui->sampleList->count())
     {
         this->setWindowTitle(tr("untitled.pose - PoseDesigner"));
@@ -108,7 +116,7 @@ void MainWindow::on_actionNew_triggered()
         ui->sampleTable->setRowCount(0);
         ui->statsTable->clearContents();
         currentFilename = QString();
-        this->setWindowTitle(tr("untitled.pose - PoseDesigner"));
+        setWindowTitle(tr("untitled.pose - PoseDesigner"));
         currentPose.reset();
     }
 }
@@ -119,6 +127,11 @@ void MainWindow::on_actionNew_triggered()
  */
 void MainWindow::on_actionOpen_triggered()
 {
+    if(currentPose.isModified())
+    {
+
+    }
+
     QString filename = QFileDialog::getOpenFileName(this,
         tr("Open Pose"), "./", tr("Pose Files (*.pose)"));
 
@@ -372,17 +385,16 @@ void MainWindow::calculateStats()
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        //QVector3D vec = currentPose.getMean().getJVector(col);
         SphericalCoords sc = currentPose.getMean().getJCoord(col);
         newItem = new QTableWidgetItem(QString("phi: %1, theta: %2").arg(sc.phi).arg(sc.theta));
-        ui->statsTable->setItem(0, col, newItem);
+        ui->statsTable->setItem(0, col, newItem); //! @todo magic number
     }
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
         SphericalCoords sc = currentPose.getStdDev().getJCoord(col);
         newItem = new QTableWidgetItem(QString("phi: %1, theta: %2").arg(sc.phi).arg(sc.theta));
-        ui->statsTable->setItem(1, col, newItem);
+        ui->statsTable->setItem(1, col, newItem); //! @todo magic number
     }
 }
 
@@ -430,7 +442,7 @@ void MainWindow::on_buttonTakeSample_clicked()
         // OpenNI was not kind enough to do this
         for(XnSkeletonJoint sj = XN_SKEL_HEAD; sj <= XN_SKEL_RIGHT_FOOT; sj++)
         {
-            qDebug("%d", sj);
+            //qDebug("%d", sj);
             sc.GetSkeletonJointPosition(1, sj, newSample.getJPositions_nc()[sj]); // gross hack to get around const
         }
 

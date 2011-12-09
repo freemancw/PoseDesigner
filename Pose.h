@@ -28,11 +28,13 @@ class Pose
 {
 private:
     QMap<QString, PoseSample> samples;
-    PoseSample mean, stddev;
+    PoseSample mean, stddev; //! @todo rename to tolerance or something
+    bool bModified;
 
 public:
     inline Pose()
     {
+        bModified = false;
         mean.setName("Mean");
         stddev.setName("Standard Deviation");
     }
@@ -44,12 +46,14 @@ public:
     inline QMap<QString, PoseSample>& getSamples() { return samples; }
     inline PoseSample& getMean() { return mean; }
     inline PoseSample& getStdDev() { return stddev; }
+    inline bool isModified() { return bModified; }
 
     // setters/modifiers
     inline void addSample(QString name, PoseSample& sample)
     { samples[name] = sample; }
     inline void removeSample(QString name) { samples.remove(name); }
     inline void reset() { samples.clear(); }
+    inline void setModified(bool b) { bModified = b; }
 };
 
 QDebug operator<<(QDebug, Pose &);

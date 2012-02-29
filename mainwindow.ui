@@ -53,6 +53,7 @@ QTableView::item {
 	background: #444;
 	border-right: 1px solid #222;
 	border-bottom: 1px solid #222;
+	color: #fff;
 }
 
 QTableWidget {
@@ -283,6 +284,9 @@ border: 0;</string>
                </property>
                <property name="selectionMode">
                 <enum>QAbstractItemView::SingleSelection</enum>
+               </property>
+               <property name="modelColumn">
+                <number>0</number>
                </property>
               </widget>
              </item>

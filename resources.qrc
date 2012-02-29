@@ -30,6 +30,7 @@
         <file>gui/icons/downarrow.png</file>
         <file>gui/icons/rightarrow.png</file>
         <file>gui/icons/uparrow.png</file>
+        <file>gui/icons/nosample.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>gui/fonts/Pacifico.ttf</file>

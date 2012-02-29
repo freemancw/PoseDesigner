@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     //kinectInfo = KinectInfo::getInstance();
 
     ui->setupUi(this);
+    on_sampleList_currentItemChanged(NULL, NULL);
 }
 
 /*!
@@ -58,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
  */
 MainWindow::~MainWindow()
 {
-    kinectInfo.context.Shutdown();
+    kinectInfo.context.Release();
 
     // new way
     //KinectInfo::destroyInstance();
@@ -386,14 +387,14 @@ void MainWindow::calculateStats()
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
         SphericalCoords sc = currentPose.getMean().getJCoord(col);
-        newItem = new QTableWidgetItem(QString("phi: %1, theta: %2").arg(sc.phi).arg(sc.theta));
+        newItem = new QTableWidgetItem(QString("%3: %1, %4: %2").arg(sc.phi).arg(sc.theta).arg(QChar(0x03A6)).arg(QChar(0x03B8)));
         ui->statsTable->setItem(0, col, newItem); //! @todo magic number
     }
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
         SphericalCoords sc = currentPose.getStdDev().getJCoord(col);
-        newItem = new QTableWidgetItem(QString("phi: %1, theta: %2").arg(sc.phi).arg(sc.theta));
+        newItem = new QTableWidgetItem(QString("%3: %1, %4: %2").arg(sc.phi).arg(sc.theta).arg(QChar(0x03A6)).arg(QChar(0x03B8)));
         ui->statsTable->setItem(1, col, newItem); //! @todo magic number
     }
 }
@@ -479,7 +480,7 @@ void MainWindow::on_buttonTakeSample_clicked()
         for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
         {
             SphericalCoords coord = newSample.getJCoord(col);
-            newItem = new QTableWidgetItem(QString("phi: %1, theta: %2").arg(coord.phi).arg(coord.theta));
+            newItem = new QTableWidgetItem(QString("%3: %1, %4: %2").arg(coord.phi).arg(coord.theta).arg(QChar(0x03A6)).arg(QChar(0x03B8)));
             ui->sampleTable->setItem(row, col, newItem);
         }
 
@@ -602,7 +603,11 @@ void MainWindow::on_sampleList_currentItemChanged
 
     if(current == NULL)
     {
-        scene->setBackgroundBrush(Qt::NoBrush);
+        QImage image(":/images/gui/icons/nosample.png");
+        //scene->setBackgroundBrush(Qt::NoBrush);
+        QSize size = QSize(ui->samplePreview->width()-2,
+                           ui->samplePreview->height()-2);
+        scene->addPixmap(QPixmap::fromImage(image.scaled(size)));
         ui->samplePreview->setScene(scene);
         ui->samplePreview->update();
         return;

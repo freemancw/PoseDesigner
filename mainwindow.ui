@@ -44,6 +44,17 @@
 	padding: 0;
 }
 
+QListView::item {
+	background: #444;
+	color: #fff;
+	padding: 2px;
+}
+
+QListView::item:selected {
+	background: #6c7787;
+	border: 0;
+}
+
 QTableView {
 	background: orange;
 	border: 0;
@@ -54,6 +65,11 @@ QTableView::item {
 	border-right: 1px solid #222;
 	border-bottom: 1px solid #222;
 	color: #fff;
+	padding: 0px 4px;
+}
+
+QTableView::item:selected {
+	background: #6c7787;
 }
 
 QTableWidget {
@@ -651,8 +667,14 @@ border: 0;</string>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="styleSheet">
               <string notr="true"/>
+             </property>
+             <property name="horizontalScrollMode">
+              <enum>QAbstractItemView::ScrollPerItem</enum>
              </property>
              <property name="showGrid">
               <bool>false</bool>

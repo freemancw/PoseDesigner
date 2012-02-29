@@ -50,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     //kinectInfo = KinectInfo::getInstance();
 
     ui->setupUi(this);
+    // trigger a change so that the "no sample selected" will be up by
+    // default
     on_sampleList_currentItemChanged(NULL, NULL);
 }
 

@@ -32,8 +32,8 @@ enum SkeletonVector
     SKEL_VEC_MAX
 };
 
-QDebug operator<<(QDebug, SkeletonVector &);
-QString &operator<<(QString&, SkeletonVector &);
+QDebug operator<<(QDebug, SkeletonVector const &);
+QString &operator<<(QString&, SkeletonVector const &);
 QDataStream &operator<<(QDataStream &, const SkeletonVector &);
 QDataStream &operator>>(QDataStream &, SkeletonVector &);
 

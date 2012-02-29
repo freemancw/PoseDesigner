@@ -26,6 +26,10 @@
         <file>gui/logos/boogie.png</file>
         <file>gui/icons/export.png</file>
         <file>gui/textures/texturedbackground.png</file>
+        <file>gui/icons/leftarrow.png</file>
+        <file>gui/icons/downarrow.png</file>
+        <file>gui/icons/rightarrow.png</file>
+        <file>gui/icons/uparrow.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>gui/fonts/Pacifico.ttf</file>

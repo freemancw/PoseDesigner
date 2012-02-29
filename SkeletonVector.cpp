@@ -19,7 +19,7 @@ Debugging / Unit Tests
 ===============================================================================
 */
 
-static const QString SkeletonVectorNames[] =
+static QString const SkeletonVectorNames[] =
 {
     "NECK_HEAD",
     "L_SHOULDER_ELBOW",
@@ -33,13 +33,13 @@ static const QString SkeletonVectorNames[] =
     "SKEL_VEC_MAX"
 };
 
-QDebug operator<<(QDebug d, SkeletonVector &sv)
+QDebug operator<<(QDebug d, SkeletonVector const &sv)
 {
     d << SkeletonVectorNames[sv];
     return d;
 }
 
-QString &operator<<(QString &s, SkeletonVector &sv)
+QString &operator<<(QString &s, SkeletonVector const &sv)
 {
     s = SkeletonVectorNames[sv];
     return s;
@@ -51,7 +51,7 @@ Object Serialization
 ===============================================================================
 */
 
-QDataStream &operator<<(QDataStream &out, const SkeletonVector &sv)
+QDataStream &operator<<(QDataStream &out, SkeletonVector const &sv)
 {
     out << quint32(sv);
     return out;

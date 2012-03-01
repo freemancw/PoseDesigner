@@ -26,7 +26,8 @@ SOURCES +=\
     AboutDialog.cpp \
     Pose.cpp \
     HelpDialog.cpp \
-    SkeletonVector.cpp
+    SkeletonVector.cpp \
+    SCoord.cpp
 
 HEADERS  += \
     GLWidget.h \
@@ -38,7 +39,8 @@ HEADERS  += \
     AboutDialog.h \
     Pose.h \
     SkeletonVector.h \
-    HelpDialog.h
+    HelpDialog.h \
+    SCoord.h
 
 FORMS    += mainwindow.ui \
     kinectoptionsdialog.ui \
@@ -55,6 +57,12 @@ OTHER_FILES += \
     README.txt
 
 RC_FILE = iconresource.rc
+
+
+
+
+
+
 
 
 

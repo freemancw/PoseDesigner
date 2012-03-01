@@ -16,13 +16,28 @@
 #include <Pose.h>
 #include <PoseSample.h>
 
+using PSD::Pose;
+using PSD::PoseSample;
+
+/*
+===============================================================================
+Constructors/Destructors
+===============================================================================
+*/
+
+Pose::Pose() : bModified(false)
+{
+    mean.setName("Mean");
+    stddev.setName("Standard Deviation");
+}
+
 /*
 ===============================================================================
 Pose Creation
 ===============================================================================
 */
 
-void Pose::calculateStatistics()
+void Pose::calcStats()
 {
     PoseSample max, min;
 
@@ -46,22 +61,122 @@ void Pose::calculateStatistics()
             if(iter.value().getJCoord(sv).theta > max.getJCoord(sv).theta)
                 max.setJCoordTheta(sv, iter.value().getJCoord(sv).theta);
 
-            mean.getJCoord(sv) += iter.value().getJCoord(sv);
+            mean.setJCoord(sv, mean.getJCoord(sv) + iter.value().getJCoord(sv));
         }
 
-        mean.getJCoord(sv) /= samples.size();
-        stddev.getJCoord(sv).phi = (max.getJCoord(sv).phi - min.getJCoord(sv).phi)*2;
-        stddev.getJCoord(sv).theta = (max.getJCoord(sv).theta - min.getJCoord(sv).theta)*2;
+        mean.setJCoord(sv, mean.getJCoord(sv) / samples.size());
+
+        qreal phiTolerance = (max.getJCoord(sv).phi - min.getJCoord(sv).phi) * 2.0;
+        stddev.setJCoordPhi(sv, phiTolerance);
+        qreal thetaTolerance = (max.getJCoord(sv).theta - min.getJCoord(sv).theta) * 2.0;
+        stddev.setJCoordTheta(sv, thetaTolerance);
     }
 }
 
 /*
 ===============================================================================
-Debugging / Unit Tests
+Getters/Setters
 ===============================================================================
 */
 
-QDebug operator<<(QDebug d, Pose &p)
+QMap<QString, PoseSample> const& Pose::getSamples() const
+{
+    return samples;
+}
+
+PoseSample const Pose::getSample(QString const name) const
+{
+    return samples[name];
+}
+
+PoseSample const& Pose::getMean() const
+{
+    return mean;
+}
+
+PoseSample const& Pose::getStdDev() const
+{
+    return stddev;
+}
+
+bool const Pose::isModified() const
+{
+    return bModified;
+}
+
+void Pose::addSample(QString const &name, PoseSample const &sample)
+{
+    samples[name] = sample;
+}
+
+void Pose::setSample(QString const &name, PoseSample const &sample)
+{
+    samples[name] = sample;
+}
+
+void Pose::removeSample(QString const &name)
+{
+    samples.remove(name);
+}
+
+void Pose::clearSamples()
+{
+    samples.clear();
+}
+
+void Pose::setSamples(QMap<QString, PoseSample> const &samples)
+{
+    this->samples = samples;
+}
+
+void Pose::setModified(bool const bModified)
+{
+    this->bModified = bModified;
+}
+
+void Pose::setMean(PoseSample const& mean)
+{
+    this->mean = mean;
+}
+
+void Pose::setStdDev(PoseSample const& stddev)
+{
+    this->stddev = stddev;
+}
+
+/*
+===============================================================================
+Object Serialization
+===============================================================================
+*/
+
+QDataStream& operator<<(QDataStream &out, Pose const &p)
+{
+    out << p.getMean() << p.getStdDev() << p.getSamples();
+    return out;
+}
+
+QDataStream& operator>>(QDataStream &in, Pose &p)
+{
+    PoseSample mean, stddev;
+    QMap<QString, PoseSample> samples;
+
+    in >> mean >> stddev >> samples;
+
+    p.setMean(mean);
+    p.setStdDev(stddev);
+    p.setSamples(samples);
+
+    return in;
+}
+
+/*
+===============================================================================
+Debugging
+===============================================================================
+*/
+
+QDebug operator<<(QDebug d, Pose const &p)
 {
     d << "Mean: ";
     d << p.getMean();
@@ -78,31 +193,4 @@ QDebug operator<<(QDebug d, Pose &p)
     }
 
     return d;
-}
-
-/*
-===============================================================================
-Object Serialization
-===============================================================================
-*/
-
-QDataStream &operator<<(QDataStream &out, Pose &p)
-{
-    out << p.getMean() << p.getStdDev() << p.getSamples();
-
-    return out;
-}
-
-QDataStream &operator>>(QDataStream &in, Pose &p)
-{
-    PoseSample mean, stddev;
-    QMap<QString, PoseSample> samples;
-
-    in >> mean >> stddev >> samples;
-
-    p.getMean() = mean;
-    p.getStdDev() = stddev;
-    p.getSamples() = samples;
-
-    return in;
 }

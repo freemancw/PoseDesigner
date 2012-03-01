@@ -2,28 +2,6 @@
  *  @file PoseSample.h
  *  @author Clinton Freeman
  *  @date 5/16/2011
- *
- *  A PoseSample is composed of several things, the most important of which is
- *  a collection of 3D vectors that go from a particular joint to another.
- *
- *  Operating under the assumption that the player has been recognized and his
- *  skeleton is being tracked, the way a sample is taken is that each of the
- *  joint positions are retrieved through OpenNI at the time of sampling and
- *  stored in a std::map. These positions are identified by the XnSkeletonJoint
- *  enumeration provided by OpenNI.
- *
- *  From the position data, the 3D vectors are then generated according to a
- *  somewhat arbitrary convention (AFAICT it doesn't actually matter how this
- *  is done). This convention is codified inside of the SkeletonVector
- *  enumeration and elaborated inside comments in SkeletonVector.h. The vectors
- *  are stored in a std::map, identified by the particular SkeletonVector that
- *  they represent.
-
- *  Additionally - primarily because Qt makes it so damned easy - an image is
- *  "snapped" from the OpenGL framebuffer at sampling time and is used so that
- *  the user can actually remember the pose they are working on; this is
- *  especially useful for when you come back to a pose after some time. Qt can
- *  also easily export this image to a common image format, such as JPG or PNG.
  */
 
 #ifndef POSESAMPLE_H
@@ -35,36 +13,11 @@
 
 // local
 #include <KinectInfo.h>
+#include <SCoord.h>
 #include <SkeletonVector.h>
 
-struct SphericalCoords
+namespace PSD
 {
-    float theta, phi;
-
-    inline SphericalCoords operator +(SphericalCoords const& other) const
-    {
-        SphericalCoords t;
-        t.theta = other.theta + this->theta;
-        t.phi = other.phi + this->phi;
-        return t;
-    }
-
-    inline SphericalCoords& operator +=(SphericalCoords const& other)
-    {
-        this->theta += other.theta;
-        this->phi += other.phi;
-
-        return *this;
-    }
-
-    inline SphericalCoords& operator /=(float const& other)
-    {
-        this->theta /= other;
-        this->phi /= other;
-
-        return *this;
-    }
-};
 
 struct TorsoFrame
 {
@@ -73,88 +26,56 @@ struct TorsoFrame
 
 class PoseSample
 {
+public:
+    PoseSample();
+    void calcCoords();
+    QString const& getName() const;
+    QImage const& getImage() const;
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition> const& getJPositions() const;
+    QMap<XnSkeletonJoint, XnSkeletonJointPosition>& getJPositions_nc(); // OpenNI is dumb
+    XnSkeletonJointPosition const getJPosition(XnSkeletonJoint const sj) const;
+    QMap<SkeletonVector, SCoord> const& getJCoords() const;
+    SCoord const getJCoord(SkeletonVector const sv) const;
+    void setName(QString const &name);
+    void setImage(QImage const &image);
+    void setJPositions(QMap<XnSkeletonJoint, XnSkeletonJointPosition> const &jPositions);
+    void setJPosition(XnSkeletonJoint const sj, XnSkeletonJointPosition const &jp);
+    void setJCoords(QMap<SkeletonVector, SCoord> const &jCoords);
+    void setJCoord(SkeletonVector const sv, SCoord const &c);
+    void setJCoordPhi(SkeletonVector const sv, qreal const phi);
+    void setJCoordTheta(SkeletonVector const sv, qreal const theta);
+
 private:
     QString name;
     QImage image;
-
     TorsoFrame torsoFrame;
-
     QMap<XnSkeletonJoint, XnSkeletonJointPosition> jPositions;
-    QMap<SkeletonVector, SphericalCoords> jCoords;
-    QMap<SkeletonVector, QVector3D> jVectors; //! @todo remove this
-
-public:
-    void calculateVectors();
-    void calculateCoords();
-    static void unitTest();
-
-    // getters
-    inline QString getName() const
-    { return name; }
-
-    inline QImage getImage() const
-    { return image; }
-
-    inline QMap<XnSkeletonJoint, XnSkeletonJointPosition> const & getJPositions() const
-    { return jPositions; }
-
-    inline QMap<XnSkeletonJoint, XnSkeletonJointPosition>& getJPositions_nc()
-    { return jPositions; }
-
-    inline QMap<SkeletonVector, QVector3D> const & getJVectors() const
-    { return jVectors; }
-
-    inline QVector3D& getJVector(SkeletonVector sv)
-    { return jVectors[sv]; }
-
-    inline QMap<SkeletonVector, SphericalCoords> const & getJCoords() const
-    { return jCoords; }
-
-    inline SphericalCoords& getJCoord(SkeletonVector sv)
-    { return jCoords[sv]; }
-
-    // setters
-    inline void setName(QString const &name)
-    { this->name = name; }
-    inline void setImage(QImage const &image)
-    { this->image = image; }
-    inline void setJPositions(QMap<XnSkeletonJoint, XnSkeletonJointPosition> const &jPositions)
-    { this->jPositions = jPositions; }
-    inline void setJVectors(QMap<SkeletonVector, QVector3D> const &jVectors)
-    { this->jVectors = jVectors; }
-    inline void setJVector(SkeletonVector sv, QVector3D const &v)
-    { jVectors[sv] = v; }
-    inline void setJCoords(QMap<SkeletonVector, SphericalCoords> const &jCoords)
-    { this->jCoords = jCoords; }
-    inline void setJCoord(SkeletonVector sv, SphericalCoords const &c)
-    { jCoords[sv] = c; }
-    inline void setJCoordPhi(SkeletonVector sv, float phi)
-    { jCoords[sv].phi = phi; }
-    inline void setJCoordTheta(SkeletonVector sv, float theta)
-    { jCoords[sv].theta = theta; }
+    QMap<SkeletonVector, SCoord> jCoords;
 };
 
+}
+
+// Debugging
+QDebug operator<<(QDebug d, XnSkeletonJoint const &sj);
+QDebug operator<<(QDebug d, XnSkeletonJointPosition const &jp);
+QDebug operator<<(QDebug d, XnVector3D const &v);
+QDebug operator<<(QDebug d, PSD::PoseSample const &ps);
+
+// Serialization
+QDataStream& operator<<(QDataStream &out, XnSkeletonJoint const &sj);
+QDataStream& operator>>(QDataStream &in, XnSkeletonJoint &sj);
+QDataStream& operator<<(QDataStream &out, XnSkeletonJointPosition const &jp);
+QDataStream& operator>>(QDataStream &in, XnSkeletonJointPosition &jp);
+QDataStream& operator<<(QDataStream &out, XnVector3D const &v);
+QDataStream& operator>>(QDataStream &in, XnVector3D &v);
+QDataStream& operator<<(QDataStream &out, PSD::PoseSample const &ps);
+QDataStream& operator>>(QDataStream &in, PSD::PoseSample &ps);
+
+// Misc
 inline XnSkeletonJoint& operator++(XnSkeletonJoint& sj, int)
 {
     int temp = sj;
     return sj = static_cast<XnSkeletonJoint>(++temp);
 }
-
-QDebug operator<<(QDebug, XnSkeletonJoint &);
-QDataStream &operator<<(QDataStream &, XnSkeletonJoint &);
-QDataStream &operator>>(QDataStream &, XnSkeletonJoint &);
-
-QDebug operator<<(QDebug, XnSkeletonJointPosition &);
-QDataStream &operator<<(QDataStream &, const XnSkeletonJointPosition &);
-QDataStream &operator>>(QDataStream &, XnSkeletonJointPosition &);
-
-QDebug operator<<(QDebug, XnVector3D &);
-QDataStream &operator<<(QDataStream &, const XnVector3D &);
-QDataStream &operator>>(QDataStream &, XnVector3D &);
-
-QDebug operator<<(QDebug, PoseSample &);
-QDataStream &operator<<(QDataStream &, const PoseSample &);
-QDataStream &operator>>(QDataStream &, PoseSample &);
-
 
 #endif // POSESAMPLE_H

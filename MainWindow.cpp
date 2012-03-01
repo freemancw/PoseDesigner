@@ -31,6 +31,10 @@
 #include <PoseSample.h>
 #include <SkeletonVector.h>
 
+using PSD::Pose;
+using PSD::PoseSample;
+using PSD::SCoord;
+
 static Pose currentPose;
 static QString currentFilename;
 
@@ -120,7 +124,7 @@ void MainWindow::on_actionNew_triggered()
         ui->statsTable->clearContents();
         currentFilename = QString();
         setWindowTitle(tr("untitled.pose - PoseDesigner"));
-        currentPose.reset();
+        currentPose.clearSamples();
     }
 }
 
@@ -187,7 +191,7 @@ void MainWindow::on_actionOpen_triggered()
         QTableWidgetItem *newItem;
         for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
         {
-            SphericalCoords sc = sIter.value().getJCoord(col);
+            SCoord sc = sIter.value().getJCoord(col);
             newItem = new QTableWidgetItem(QString("Phi: %1, Theta: %2").arg(sc.phi).arg(sc.theta));
             ui->sampleTable->setItem(row, col, newItem);
         }
@@ -200,14 +204,14 @@ void MainWindow::on_actionOpen_triggered()
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        SphericalCoords sc = currentPose.getMean().getJCoord(col);
+        SCoord sc = currentPose.getMean().getJCoord(col);
         newItem = new QTableWidgetItem(QString("Phi: %1, Theta: %2").arg(sc.phi).arg(sc.theta));
         ui->statsTable->setItem(0, col, newItem);
     }
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        SphericalCoords sc = currentPose.getStdDev().getJCoord(col);
+        SCoord sc = currentPose.getStdDev().getJCoord(col);
         newItem = new QTableWidgetItem(QString("Phi: %1, Theta: %2").arg(sc.phi).arg(sc.theta));
         ui->statsTable->setItem(1, col, newItem);
     }
@@ -287,7 +291,7 @@ void MainWindow::on_actionExport_triggered()
         QDomElement skelSC = expt.createElement(s);
         QDomText skelSCText = expt.createTextNode(s);
         //QVector3D vec = currentPose.getMean().getJVector(col);
-        SphericalCoords sc = currentPose.getMean().getJCoord(col);
+        SCoord sc = currentPose.getMean().getJCoord(col);
         skelSCText.setNodeValue(QString("%1, %2").arg(sc.phi).arg(sc.theta));
         skelSC.appendChild(skelSCText);
         mean.appendChild(skelSC);
@@ -303,7 +307,7 @@ void MainWindow::on_actionExport_triggered()
         QDomElement skelSC = expt.createElement(s);
         QDomText skelSCText = expt.createTextNode(s);
         //QVector3D vec = currentPose.getStdDev().getJVector(col);
-        SphericalCoords sc = currentPose.getStdDev().getJCoord(col);
+        SCoord sc = currentPose.getStdDev().getJCoord(col);
         skelSCText.setNodeValue(QString("%1, %2").arg(sc.phi).arg(sc.theta));
         skelSC.appendChild(skelSCText);
         stddev.appendChild(skelSC);
@@ -321,11 +325,43 @@ void MainWindow::on_actionExport_triggered()
  *  File->Exit
  *  @todo Implement
  */
-void MainWindow::on_actionExit_triggered(){}
+void MainWindow::on_actionExit_triggered()
+{
+    if(currentPose.isModified())
+    {
+        QMessageBox msgBox;
+        msgBox.setText("The document has been modified.");
+        msgBox.setInformativeText("Do you want to save your changes?");
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard |
+                                  QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        switch (ret)
+        {
+        case QMessageBox::Save:
+            // Save was clicked
+            on_actionSave_triggered();
+            break;
+        case QMessageBox::Discard:
+            // Don't Save was clicked, skip to exit
+            break;
+        case QMessageBox::Cancel:
+            // Cancel was clicked, abort exit
+            return;
+        default:
+            // should never be reached
+            break;
+        }
+    }
+
+    QApplication::exit(0);
+}
 
 /*!
  *  Edit->Cut
  *  @todo Implement
+ *  @note This isn't really applicable anywhere...
  */
 void MainWindow::on_actionCut_triggered(){}
 
@@ -381,21 +417,21 @@ void MainWindow::on_actionAbout_PoseDesigner_triggered()
 // Helper for adding and removing samples
 void MainWindow::calculateStats()
 {
-    currentPose.calculateStatistics();
+    currentPose.calcStats();
 
     // populate the columns
     QTableWidgetItem *newItem;
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        SphericalCoords sc = currentPose.getMean().getJCoord(col);
+        SCoord sc = currentPose.getMean().getJCoord(col);
         newItem = new QTableWidgetItem(QString("%3: %1, %4: %2").arg(sc.phi).arg(sc.theta).arg(QChar(0x03A6)).arg(QChar(0x03B8)));
         ui->statsTable->setItem(0, col, newItem); //! @todo magic number
     }
 
     for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
     {
-        SphericalCoords sc = currentPose.getStdDev().getJCoord(col);
+        SCoord sc = currentPose.getStdDev().getJCoord(col);
         newItem = new QTableWidgetItem(QString("%3: %1, %4: %2").arg(sc.phi).arg(sc.theta).arg(QChar(0x03A6)).arg(QChar(0x03B8)));
         ui->statsTable->setItem(1, col, newItem); //! @todo magic number
     }
@@ -449,8 +485,7 @@ void MainWindow::on_buttonTakeSample_clicked()
             sc.GetSkeletonJointPosition(1, sj, newSample.getJPositions_nc()[sj]); // gross hack to get around const
         }
 
-        //newSample.calculateVectors();
-        newSample.calculateCoords();
+        newSample.calcCoords();
     }
 
     // prompt user for sample name
@@ -470,6 +505,7 @@ void MainWindow::on_buttonTakeSample_clicked()
 
         // add the sample to the list
         QListWidgetItem *wi = new QListWidgetItem(text, ui->sampleList);
+        wi->setFlags(wi->flags() | Qt::ItemIsEditable);
         ui->sampleList->addItem(wi);
 
         // add a row in the table
@@ -481,7 +517,8 @@ void MainWindow::on_buttonTakeSample_clicked()
         QTableWidgetItem *newItem;
         for(SkeletonVector col = NECK_HEAD; col < SKEL_VEC_MAX; col++)
         {
-            SphericalCoords coord = newSample.getJCoord(col);
+            SCoord coord = newSample.getJCoord(col);
+            //! @todo this is really ugly... r
             newItem = new QTableWidgetItem(QString("%3: %1, %4: %2").arg(coord.phi).arg(coord.theta).arg(QChar(0x03A6)).arg(QChar(0x03B8)));
             ui->sampleTable->setItem(row, col, newItem);
         }

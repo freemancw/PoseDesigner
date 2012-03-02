@@ -54,9 +54,11 @@ OTHER_FILES += \
     iconresource.rc \
     tasklist.tasks \
     posedesigner.ico \
-    README.markdown
+    README.markdown \
+    installer/installer_script.nsi
 
 RC_FILE = iconresource.rc
+
 
 
 

@@ -293,7 +293,6 @@ void MainWindow::on_actionExport_triggered()
         s << col;
         QDomElement skelSC = expt.createElement(s);
         QDomText skelSCText = expt.createTextNode(s);
-        //QVector3D vec = currentPose.getMean().getJVector(col);
         SCoord sc = currentPose.getMean().getJCoord(col);
         skelSCText.setNodeValue(QString("%1, %2").arg(sc.phi).arg(sc.theta));
         skelSC.appendChild(skelSCText);
@@ -309,7 +308,6 @@ void MainWindow::on_actionExport_triggered()
         s << col;
         QDomElement skelSC = expt.createElement(s);
         QDomText skelSCText = expt.createTextNode(s);
-        //QVector3D vec = currentPose.getStdDev().getJVector(col);
         SCoord sc = currentPose.getStdDev().getJCoord(col);
         skelSCText.setNodeValue(QString("%1, %2").arg(sc.phi).arg(sc.theta));
         skelSC.appendChild(skelSCText);

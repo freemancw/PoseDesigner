@@ -208,7 +208,7 @@ QListWidget, QGraphicsView, QTableWidget {
 </string>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0" rowspan="5">
+    <item row="0" column="0" rowspan="6">
      <widget class="QGroupBox" name="poseInfoBox">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -802,7 +802,7 @@ border: 0;</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="2" rowspan="5">
+    <item row="0" column="2" rowspan="6">
      <widget class="GLWidget" name="kinectWidget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -874,7 +874,7 @@ border: 0;</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="4" column="1" rowspan="2">
      <widget class="QToolButton" name="buttonKinectSettings">
       <property name="toolTip">
        <string>Adjust Kinect Settings</string>
@@ -899,6 +899,19 @@ border: 0;</string>
        </size>
       </property>
      </widget>
+    </item>
+    <item row="3" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>

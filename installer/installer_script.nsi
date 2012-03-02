@@ -15,7 +15,7 @@
   OutFile "posedesigner-setup-0.2.exe"
   BrandingText " "
   !define MUI_ICON "pd.ico"
-  !define MUI_HEADERIMAGE_BITMAP "test.bmp"
+  !define MUI_HEADERIMAGE_BITMAP "header.bmp"
   !define MUI_BGCOLOR d9e9ff
   !define MUI_HEADERIMAGE_BITMAP_NOSTRETCH
   !define MUI_HEADERIMAGE

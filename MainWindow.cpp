@@ -263,6 +263,9 @@ void MainWindow::on_actionSaveAs_triggered()
 /*!
  *  File->Export...
  */
+
+static int const INDENT = 2;
+
 void MainWindow::on_actionExport_triggered()
 {
     QString filename = QFileDialog::getSaveFileName(this,
@@ -314,9 +317,8 @@ void MainWindow::on_actionExport_triggered()
     }
     root.appendChild(stddev);
 
-    //! @todo magic number 2
     QTextStream ts(&exptFile);
-    expt.save(ts, 2);
+    expt.save(ts, INDENT);
 
     exptFile.close();
 }

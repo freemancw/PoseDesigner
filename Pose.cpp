@@ -9,6 +9,9 @@
  *  check for when the user chooses the same name twice.
  */
 
+// Qt
+#include <QtGui>
+
 // system
 #include <math.h>
 
@@ -37,6 +40,8 @@ Pose Creation
 ===============================================================================
 */
 
+static qreal const MINTOLERANCE = 0.15;
+
 void Pose::calcStats()
 {
     PoseSample max, min;
@@ -44,6 +49,11 @@ void Pose::calcStats()
     for(SkeletonVector sv = NECK_HEAD; sv < SKEL_VEC_MAX; sv++)
     {
         QMap<QString, PoseSample>::iterator iter;
+
+        mean.setJCoordPhi(sv, 0.0);
+        mean.setJCoordTheta(sv, 0.0);
+        stddev.setJCoordPhi(sv, 0.0);
+        stddev.setJCoordTheta(sv, 0.0);
 
         max.setJCoord(sv, samples.begin().value().getJCoord(sv));
         min.setJCoord(sv, samples.begin().value().getJCoord(sv));
@@ -67,8 +77,11 @@ void Pose::calcStats()
         mean.setJCoord(sv, mean.getJCoord(sv) / samples.size());
 
         qreal phiTolerance = (max.getJCoord(sv).phi - min.getJCoord(sv).phi) * 2.0;
+        if(phiTolerance < MINTOLERANCE) phiTolerance = MINTOLERANCE;
         stddev.setJCoordPhi(sv, phiTolerance);
+
         qreal thetaTolerance = (max.getJCoord(sv).theta - min.getJCoord(sv).theta) * 2.0;
+        if(thetaTolerance < MINTOLERANCE) thetaTolerance = MINTOLERANCE;
         stddev.setJCoordTheta(sv, thetaTolerance);
     }
 }

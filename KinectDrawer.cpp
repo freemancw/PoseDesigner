@@ -27,7 +27,7 @@ static int nColors = 10;
 static float Colors[][3] =
 {
     {0.0, 1.0, 1.0},
-    {0.0, 0.42, 0.99},
+    {0.0, 0.42, 1.0},
     {0.0, 1.0, 0.0},
     {1.0, 1.0, 0.0},
     {1.0, 0.0, 0.0},
@@ -54,6 +54,7 @@ void KinectDrawer::initializeGL()
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glShadeModel(GL_SMOOTH);
     glEnable(GL_MULTISAMPLE);
+    glLineWidth(2.0f);
 
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
@@ -273,9 +274,10 @@ void KinectDrawer::drawDepthMap
         {
             glBegin(GL_LINES);
 
-            glColor4f(1.0 - Colors[aUsers[i]%nColors][0],
+            /*glColor4f(1.0 - Colors[aUsers[i]%nColors][0],
                       1.0 - Colors[aUsers[i]%nColors][1],
-                      1.0 - Colors[aUsers[i]%nColors][2], 1);
+                      1.0 - Colors[aUsers[i]%nColors][2], 1);*/
+            glColor3f(1.0f, 1.0f, 1.0f);
 
             drawLimb(aUsers[i], XN_SKEL_HEAD, XN_SKEL_NECK);
 

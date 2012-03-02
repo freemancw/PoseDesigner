@@ -47,6 +47,8 @@ void PoseSample::calcCoords()
     //! @todo this basis is supposed to be orthonormal in order to calculate
     //! euler angles relative to kinect's basis
     // calculate torso frame
+    // "u is always aligned with the longer dimension of the torso,
+    // and we can canonically orient it (top-down)"
     torsoFrame.u = vecFromJoints(jPositions[XN_SKEL_WAIST],
                                  jPositions[XN_SKEL_NECK]);
     torsoFrame.u.normalize();

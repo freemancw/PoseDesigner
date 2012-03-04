@@ -27,7 +27,20 @@ SOURCES +=\
     Pose.cpp \
     HelpDialog.cpp \
     SkeletonVector.cpp \
-    SCoord.cpp
+    SCoord.cpp \
+    ALGLIB/statistics.cpp \
+    ALGLIB/specialfunctions.cpp \
+    ALGLIB/solvers.cpp \
+    ALGLIB/optimization.cpp \
+    ALGLIB/linalg.cpp \
+    ALGLIB/interpolation.cpp \
+    ALGLIB/integration.cpp \
+    ALGLIB/fasttransforms.cpp \
+    ALGLIB/diffequations.cpp \
+    ALGLIB/dataanalysis.cpp \
+    ALGLIB/ap.cpp \
+    ALGLIB/alglibmisc.cpp \
+    ALGLIB/alglibinternal.cpp
 
 HEADERS  += \
     GLWidget.h \
@@ -40,7 +53,21 @@ HEADERS  += \
     Pose.h \
     SkeletonVector.h \
     HelpDialog.h \
-    SCoord.h
+    SCoord.h \
+    ALGLIB/dataanalysis.h \
+    ALGLIB/stdafx.h \
+    ALGLIB/statistics.h \
+    ALGLIB/specialfunctions.h \
+    ALGLIB/solvers.h \
+    ALGLIB/optimization.h \
+    ALGLIB/linalg.h \
+    ALGLIB/interpolation.h \
+    ALGLIB/integration.h \
+    ALGLIB/fasttransforms.h \
+    ALGLIB/diffequations.h \
+    ALGLIB/ap.h \
+    ALGLIB/alglibmisc.h \
+    ALGLIB/alglibinternal.h
 
 FORMS    += mainwindow.ui \
     kinectoptionsdialog.ui \
@@ -59,6 +86,9 @@ OTHER_FILES += \
     installer/gpl.txt
 
 RC_FILE = iconresource.rc
+
+
+
 
 
 

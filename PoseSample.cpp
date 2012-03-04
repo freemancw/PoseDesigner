@@ -14,6 +14,7 @@
 
 // local
 #include <PoseSample.h>
+#include <ALGLIB/dataanalysis.h>
 
 // system
 #include <assert.h>

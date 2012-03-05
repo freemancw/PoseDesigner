@@ -1,6 +1,4 @@
-<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-
-<h1 style="font-family: Pacifico;">PoseDesigner</h1>
+## PoseDesigner
 
 *PoseDesigner* is an application designed to make pose generation and
 recognition easy for developers working with the Xbox Kinect. While the

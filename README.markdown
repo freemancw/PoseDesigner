@@ -7,7 +7,9 @@ the framework is designed to be easily extended to include dynamic gestures
 or short movement clips.
 
 The software will consist of two pieces: the GUI designer and a library that
-can be linked into your program to expose the recognition functionality.
+can be linked into your program to expose the recognition functionality. This
+repository contains the GUI editor files - a sister repository will be created
+when the recognition library is mature enough.
 
 Currently, only OpenNI driven programs are supported. It is possible that
 future versions will also support the official Microsoft SDK.

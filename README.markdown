@@ -1,3 +1,6 @@
+<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<style type='text/css'>h1{ font-family: 'Pacifico'; }</style>
+
 # PoseDesigner
 
 *PoseDesigner* is an application designed to make pose generation and

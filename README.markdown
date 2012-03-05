@@ -13,3 +13,10 @@ when the recognition library is mature enough.
 
 Currently, only OpenNI driven programs are supported. It is possible that
 future versions will also support the official Microsoft SDK.
+
+### Current Features
+
+* Take multiple samples of a pose to automatically generate a profile.
+* Timed sampling for individual developers.
+* Export data to XML based format.
+* Each sample has corresponding image for easy recollection of what you were doing.

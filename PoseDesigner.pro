@@ -109,9 +109,20 @@ OTHER_FILES += \
     gui/icons/delete.png \
     gui/icons/cut.png \
     gui/icons/copy.png \
-    gui/icons/add.png
+    gui/icons/add.png \
+    gui/logos/posedesigner.png \
+    gui/logos/boogie.png \
+    gui/psd/splash.psd \
+    gui/psd/icon.psd \
+    gui/psd/icon.png \
+    gui/splash/splash.png \
+    gui/textures/texturedbackground.png
 
 RC_FILE = iconresource.rc
+
+
+
+
 
 
 

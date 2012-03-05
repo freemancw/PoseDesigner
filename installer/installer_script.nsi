@@ -26,6 +26,7 @@
     !define MUI_HEADERIMAGE_BITMAP_NOSTRETCH
     !define MUI_HEADERIMAGE
     !define MUI_HEADERIMAGE_RIGHT
+    !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome.bmp"
 
     ;Default installation folder
     InstallDir "$PROGRAMFILES\PoseDesigner"
@@ -44,9 +45,21 @@
 ;==============================================================================
 ;Pages
 
+    Var StartMenuFolder
+
+    !insertmacro MUI_PAGE_WELCOME
     !insertmacro MUI_PAGE_LICENSE "gpl.txt"
     !insertmacro MUI_PAGE_COMPONENTS
     !insertmacro MUI_PAGE_DIRECTORY
+
+    ;Start Menu Folder Page Configuration
+    !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
+    !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\PoseDesigner"
+    !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
+
+
+    !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
+
     !insertmacro MUI_PAGE_INSTFILES
 
     !insertmacro MUI_UNPAGE_CONFIRM
@@ -77,6 +90,15 @@
 
         ;Create uninstaller
         WriteUninstaller "$INSTDIR\Uninstall.exe"
+
+        !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+
+        ;Create shortcuts
+        CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
+        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+
+        !insertmacro MUI_STARTMENU_WRITE_END
+
     SectionEnd
 
     Section "OpenNI" SecOpenNI

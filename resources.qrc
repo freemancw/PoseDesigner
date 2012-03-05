@@ -7,7 +7,6 @@
         <file>gui/icons/exit.png</file>
         <file>gui/icons/information.png</file>
         <file>gui/icons/kinect.png</file>
-        <file>gui/icons/logo.png</file>
         <file>gui/icons/math.png</file>
         <file>gui/icons/new.png</file>
         <file>gui/icons/open.png</file>
@@ -22,15 +21,15 @@
         <file>gui/icons/undo.png</file>
         <file>gui/logos/posedesigner.png</file>
         <file>gui/splash/splash.png</file>
-        <file>gui/textures/darkbackground.png</file>
         <file>gui/logos/boogie.png</file>
         <file>gui/icons/export.png</file>
-        <file>gui/textures/texturedbackground.png</file>
         <file>gui/icons/leftarrow.png</file>
         <file>gui/icons/downarrow.png</file>
         <file>gui/icons/rightarrow.png</file>
         <file>gui/icons/uparrow.png</file>
         <file>gui/icons/nosample.png</file>
+        <file>gui/textures/texturedbackground.png</file>
+        <file>gui/textures/texturedbackground_grey.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>gui/fonts/Pacifico.ttf</file>

@@ -17,17 +17,6 @@
     ;Remove Nullsoft text at bottom of screen
     BrandingText " "
 
-    ;Customize icon and header area
-    ;Note: annoying that you can't change header text color easily, so
-    ;we're stuck with black text for now...
-    !define MUI_ICON "pd.ico"
-    !define MUI_HEADERIMAGE_BITMAP "header.bmp"
-    !define MUI_BGCOLOR d9e9ff
-    !define MUI_HEADERIMAGE_BITMAP_NOSTRETCH
-    !define MUI_HEADERIMAGE
-    !define MUI_HEADERIMAGE_RIGHT
-    !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome.bmp"
-
     ;Default installation folder
     InstallDir "$PROGRAMFILES\PoseDesigner"
   
@@ -42,28 +31,21 @@
 
     !define MUI_ABORTWARNING
 
-;==============================================================================
-;Pages
-
-    Var StartMenuFolder
-
-    !insertmacro MUI_PAGE_WELCOME
-    !insertmacro MUI_PAGE_LICENSE "gpl.txt"
-    !insertmacro MUI_PAGE_COMPONENTS
-    !insertmacro MUI_PAGE_DIRECTORY
+    ;Customize icon and header area
+    ;Note: annoying that you can't change header text color easily, so
+    ;we're stuck with black text for now...
+    !define MUI_ICON "pd.ico"
+    !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome.bmp"
+    !define MUI_HEADERIMAGE_BITMAP "header.bmp"
+    !define MUI_BGCOLOR d9e9ff
+    !define MUI_HEADERIMAGE_BITMAP_NOSTRETCH
+    !define MUI_HEADERIMAGE_RIGHT
+    !define MUI_HEADERIMAGE
 
     ;Start Menu Folder Page Configuration
     !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
     !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\PoseDesigner"
     !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
-
-
-    !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
-
-    !insertmacro MUI_PAGE_INSTFILES
-
-    !insertmacro MUI_UNPAGE_CONFIRM
-    !insertmacro MUI_UNPAGE_INSTFILES
 
     Function finishpageaction
         CreateShortcut "$desktop\PoseDesigner.lnk" "$INSTDIR\PoseDesigner.exe"
@@ -73,7 +55,23 @@
     !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
     !define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcut"
     !define MUI_FINISHPAGE_SHOWREADME_FUNCTION finishpageaction
-  
+
+;==============================================================================
+;Pages
+
+    Var StartMenuFolder
+
+    !insertmacro MUI_PAGE_WELCOME
+    !insertmacro MUI_PAGE_LICENSE "gpl.txt"
+    !insertmacro MUI_PAGE_COMPONENTS
+    !insertmacro MUI_PAGE_DIRECTORY
+    !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
+    !insertmacro MUI_PAGE_INSTFILES
+    !insertmacro MUI_PAGE_FINISH
+
+    !insertmacro MUI_UNPAGE_CONFIRM
+    !insertmacro MUI_UNPAGE_INSTFILES
+
 ;==============================================================================
 ;Languages
  
@@ -101,7 +99,23 @@
 
     SectionEnd
 
+    Section "PoseDesigner" SecPoseDesigner
+        File "PoseDesigner.exe"
+        File "QtCore4.dll"
+        File "QtGui4.dll"
+        File "QtOpenGL4.dll"
+        File "QtXml4.dll"
+        File "OpenNI.dll"
+        SetOutPath "$INSTDIR\data"
+        File "data\config.xml"
+        SetOutPath "$INSTDIR"
+        ;createShortCut "$SMPROGRAMS\PoseDesigner.lnk" "$INSTDIR\PoseDesigner.exe"
+    SectionEnd
+
+    SectionGroup "Dependencies" SecDep
+
     Section "OpenNI" SecOpenNI
+        AddSize 15752
         ;Make an internet connection (if no connection available)
         Call ConnectInternet
         StrCpy $2 "$TEMP\OpenNI-Win32-1.3.2.3-Dev.msi"
@@ -118,6 +132,7 @@
     SectionEnd
 
     Section "NITE" SecNITE
+        AddSize 37520
         ;Make an internet connection (if no connection available)
         Call ConnectInternet
         StrCpy $2 "$TEMP\NITE-Win32-1.4.1.2-Dev.msi"
@@ -134,6 +149,7 @@
     SectionEnd
 
     Section "Kinect Driver" SecSensorKinect
+        AddSize 4240
         ;Make an internet connection (if no connection available)
         Call ConnectInternet
 
@@ -150,18 +166,7 @@
             Delete "$TEMP\SensorKinect-Win-OpenSource32-5.0.3.4.msi"
     SectionEnd
 
-    Section "PoseDesigner" SecPoseDesigner
-        File "PoseDesigner.exe"
-        File "QtCore4.dll"
-        File "QtGui4.dll"
-        File "QtOpenGL4.dll"
-        File "QtXml4.dll"
-        File "OpenNI.dll"
-        SetOutPath "$INSTDIR\data"
-        File "data\config.xml"
-        SetOutPath "$INSTDIR"
-        createShortCut "$SMPROGRAMS\PoseDesigner.lnk" "$INSTDIR\PoseDesigner.exe"
-    SectionEnd
+    SectionGroupEnd
 
     Function ConnectInternet
         Push $R0

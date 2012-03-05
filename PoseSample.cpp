@@ -50,6 +50,25 @@ void PoseSample::calcCoords()
     // calculate torso frame
     // "u is always aligned with the longer dimension of the torso,
     // and we can canonically orient it (top-down)"
+
+    double jPoints[21] = {
+        jPositions[XN_SKEL_NECK].position.X, jPositions[XN_SKEL_NECK].position.Y, jPositions[XN_SKEL_NECK].position.Z,
+        jPositions[XN_SKEL_TORSO].position.X, jPositions[XN_SKEL_TORSO].position.Y, jPositions[XN_SKEL_TORSO].position.Z,
+        jPositions[XN_SKEL_WAIST].position.X, jPositions[XN_SKEL_WAIST].position.Y, jPositions[XN_SKEL_WAIST].position.Z,
+        jPositions[XN_SKEL_LEFT_SHOULDER].position.X, jPositions[XN_SKEL_LEFT_SHOULDER].position.Y, jPositions[XN_SKEL_LEFT_SHOULDER].position.Z,
+        jPositions[XN_SKEL_RIGHT_SHOULDER].position.X, jPositions[XN_SKEL_RIGHT_SHOULDER].position.Y, jPositions[XN_SKEL_RIGHT_SHOULDER].position.Z,
+        jPositions[XN_SKEL_LEFT_HIP].position.X, jPositions[XN_SKEL_LEFT_HIP].position.Y, jPositions[XN_SKEL_LEFT_HIP].position.Z,
+        jPositions[XN_SKEL_RIGHT_HIP].position.X, jPositions[XN_SKEL_RIGHT_HIP].position.Y, jPositions[XN_SKEL_RIGHT_HIP].position.Z};
+
+    alglib::real_2d_array ptInput;
+    ptInput.setcontent(7, 3, jPoints);
+
+    alglib::ae_int_t info;
+    alglib::real_1d_array s2;
+    alglib::real_2d_array v;
+    pcabuildbasis(ptInput, 7, 3, info, s2, v);
+
+
     torsoFrame.u = vecFromJoints(jPositions[XN_SKEL_WAIST],
                                  jPositions[XN_SKEL_NECK]);
     torsoFrame.u.normalize();

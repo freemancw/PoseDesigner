@@ -83,9 +83,37 @@ OTHER_FILES += \
     posedesigner.ico \
     README.markdown \
     installer/installer_script.nsi \
-    installer/gpl.txt
+    installer/gpl.txt \
+    gui/fonts/Pacifico.ttf \
+    gui/icons/uparrow.png \
+    gui/icons/undo.png \
+    gui/icons/timer.png \
+    gui/icons/selectall.png \
+    gui/icons/saveas.png \
+    gui/icons/save.png \
+    gui/icons/rightarrow.png \
+    gui/icons/remove.png \
+    gui/icons/redo.png \
+    gui/icons/question.png \
+    gui/icons/paste.png \
+    gui/icons/open.png \
+    gui/icons/nosample.png \
+    gui/icons/new.png \
+    gui/icons/math.png \
+    gui/icons/leftarrow.png \
+    gui/icons/kinect.png \
+    gui/icons/information.png \
+    gui/icons/export.png \
+    gui/icons/exit.png \
+    gui/icons/downarrow.png \
+    gui/icons/delete.png \
+    gui/icons/cut.png \
+    gui/icons/copy.png \
+    gui/icons/add.png
 
 RC_FILE = iconresource.rc
+
+
 
 
 
